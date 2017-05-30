@@ -1,0 +1,12 @@
+before_script:
+  - which python
+  - docker info
+
+tester:
+  script:
+    - webapps34/manage.py test
+
+dockerbuild:
+  script:
+    - docker build -t intune .
+    - docker run -p 8000:8000 intune
