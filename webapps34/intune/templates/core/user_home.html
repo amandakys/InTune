@@ -1,0 +1,8 @@
+{% if composition_list %}
+    <p>{{ composition_list.all }}</p>
+    <ul>
+        {% for composition in composition_list %}
+            <li>{{ composition.title }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
