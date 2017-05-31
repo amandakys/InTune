@@ -5,8 +5,10 @@ from django.views import generic
 from .models import Composition
 
 
+
 class UserHomeView(generic.ListView):
-    model = Composition
+    def get_queryset(self):
+        return self.request.user.profile.composition_set.all()
 
     def get_context_data(self, **kwargs):
         context = super(UserHomeView, self).get_context_data(**kwargs)

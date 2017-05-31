@@ -19,8 +19,8 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^intune/', include('intune.urls')),
-    url(r'^$', auth_views.login, {'template_name': 'intune/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/login/$', auth_views.login, {'template_name': 'intune/login.html'}, name="login"),
+    url(r'^accounts/logout/$', auth_views.logout_then_login, name="logout"),
+    url(r'^', include('intune.urls')),
 ]
