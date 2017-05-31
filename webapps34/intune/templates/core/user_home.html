@@ -4,7 +4,7 @@
     <ul>
         <h2>Your compositions:</h2>
         {% for composition in composition_list %}
-            <li><a href="/song={{ composition.id }}">{{ composition.title }}</a></li>
+            <li><a href="{% url 'song' composition.id  %}">{{ composition.title }}</a></li>
         {% endfor %}
     </ul>
 {% else %}
