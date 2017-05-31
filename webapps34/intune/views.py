@@ -16,11 +16,18 @@ class UserHomeView(generic.ListView):
 
 
 class MusicScoreOverview(TemplateView):
-    def get(self, request, composition_id, **kwargs):
+    @staticmethod
+    def can_view(user, composition):
+        shared = (shared_u == user for shared_u in composition.users.all())
+        return composition.owner == user or any(shared)
 
+    def get(self, request, composition_id, **kwargs):
         try:
             composition = Composition.objects.get(id=composition_id)
             context = {'composition': composition}
         except Composition.DoesNotExist:
             raise Http404("Composition does not exit")
-        return render(request, 'intune/music_score.html', context)
+        if self.can_view(request.user, composition):
+            return render(request, 'intune/music_score.html', context)
+        else:
+            return render(request, 'intune/unauthorised_view.html')
