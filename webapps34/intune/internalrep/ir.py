@@ -1,10 +1,15 @@
-from intune.internalrep.irdefs import Accidental, Octave, Pitch
+from intune.internalrep.irdefs import Accidental, Pitch
 
 
 class Note:
     # TODO: Refactor to ABC class
 
     def __init__(self, duration):
+        """
+        Standard constructor for all notes
+        :param duration: Length of note to be played
+        :type duration: int
+        """
         self.duration = duration
 
     def modulate(self, semitones, keysig):
@@ -21,6 +26,14 @@ class RestNote(Note):
 
 
 class RegNote(Note):
+    SEMITONES = 12
+    MIN_PITCH = 0
+    MAX_PITCH = 11
+    MIN_OCTAVE = 0
+    MAX_OCTAVE = 8
+    DEFAULT_DURATION = 1
+    DEFAULT_PITCH = Pitch.C
+    DEFAULT_OCTAVE = 4
 
     def __init__(self, duration, pitch, octave):
         """
@@ -34,12 +47,63 @@ class RegNote(Note):
         """
         Note.__init__(self, duration)
         self.pitch = pitch
-        self.octave = Octave(octave)
-        self.accidental = Accidental.NONE
+        self.octave = RegNote.__boundoctave(octave)
+        self.accidental = Accidental.NAT
 
     @classmethod
     def defaultconstruct(cls):
-        return cls(1, Pitch.C, 4, Accidental.NONE)
+        return cls(RegNote.DEFAULT_DURATION,
+                   RegNote.DEFAULT_PITCH,
+                   RegNote.DEFAULT_OCTAVE)
+
+    @staticmethod
+    def __boundoctave(octave):
+        """
+
+        :param octave:
+        :type octave: int
+        :return:
+        :rtype: int
+        """
+        if octave < RegNote.MIN_OCTAVE:
+            octave = RegNote.MIN_OCTAVE
+        elif octave > RegNote.MAX_OCTAVE:
+            octave = RegNote.MAX_OCTAVE
+
+        return octave
+
+    def modoctave(self, diff):
+        """
+
+        :param diff:
+        :type diff: int
+        """
+        octave = self.octave + diff
+        self.octave = RegNote.__boundoctave(octave)
+
+    def setpitch(self, pitch):
+        """
+        Sets the new pitch explicitly
+        :param pitch: New pitch
+        :type pitch: Pitch
+        """
+        self.pitch = pitch
+
+    def setoctave(self, octave):
+        """
+        Sets the new octave explicitly
+        :param octave: New octave
+        :type octave: int
+        """
+        self.octave = RegNote.__boundoctave(octave)
+
+    def setaccidental(self, accidental):
+        """
+        Sets accidental explicitly
+        :param accidental: New accidental
+        :type accidental: Accidental
+        """
+        self.accidental = accidental
 
     def modulate(self, semitones, keysig):
         """
@@ -48,6 +112,21 @@ class RegNote(Note):
         :param semitones: int (+/-) number of semitones to change
         :return: self
         """
+
+        # pitch = self.pitch
+        # cand = pitch.value + semitones
+        # # Max pitch reached
+        # if cand > RegNote.MAX_PITCH:
+        #     if self.octave.value >= Octave.MAX:
+        #         self.pitch = Pitch.B
+        #     else:
+        #         octavechange = int(semitones / RegNote.SEMITONES)
+        #         self.octave.mod(octavechange)
+        #
+        #     pitchchange = semitones % RegNote.SEMITONES
+        #
+        # else:
+        #     self.pitch = Pitch(cand)
 
         # TODO: Do actual modulation
         return self
@@ -72,6 +151,10 @@ class Segment:
         self.notes = []
 
         Segment.segCount += 1
+
+    @classmethod
+    def defaultconstruct(cls):
+        return cls()
 
     # Segment functions #
 
@@ -102,4 +185,30 @@ class Segment:
         # Rest placeholder
         self.notes.insert(index, placeholder)
         return self
+
+
+class Composition:
+    DEFAULT_TILE = "Untitled"
+    DEFAULT_COMPOSER = "Unknown"
+    DEFAULT_ARRANGER = "Unknown"
+
+    def __init__(self, title, composer, arranger):
+        self.segments = [Segment()]
+
+    @classmethod
+    def defaultconstruct(cls):
+        """
+        Default Constructor
+        :return: Composition object with default values
+        :rtype: Composition
+        """
+        return cls(Composition.DEFAULT_TILE,
+                   Composition.DEFAULT_COMPOSER,
+                   Composition.DEFAULT_ARRANGER)
+
+    def addsegment(self, segment):
+        self.segments.append(segment)
+
+    def delsegment(self, index):
+        del self.segments[index]
 
