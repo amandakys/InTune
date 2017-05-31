@@ -9,25 +9,25 @@ class Pitch(IntEnum):
     # Refer to https://en.wikipedia.org/wiki/Piano_key_frequencies
 
     C = 0
-    DFLAT = 1
-    CSHARP = 1
+    D_FLAT = 1
+    C_SHARP = 1
     D = 2
-    EFLAT = 3
-    DSHARP = 3
+    E_FLAT = 3
+    D_SHARP = 3
     E = 4
-    FFLAT = 4
+    F_FLAT = 4
     F = 5
-    ESHARP = 5
-    GFLAT = 6
-    FSHARP = 6
+    E_SHARP = 5
+    G_FLAT = 6
+    F_SHARP = 6
     G = 7
-    AFLAT = 8
-    GSHARP = 8
+    A_FLAT = 8
+    G_SHARP = 8
     A = 9
-    BFLAT = 10
-    ASHARP = 10
+    B_FLAT = 10
+    A_SHARP = 10
     B = 11
-    BSHARP = 0
+    B_SHARP = 0
 
 
 class Accidental(Enum):
@@ -36,7 +36,7 @@ class Accidental(Enum):
     # the true tone of that note
     NAT = "n"
     SHARP = "#"
-    DSHARP = "##"
+    DB_SHARP = "##"
     FLAT = "b"
-    DFLAT = "bb"
+    DB_FLAT = "bb"
 

@@ -8,7 +8,7 @@ class RegNoteBasicTestCase(unittest.TestCase):
 
     def setUp(self):
         # Default Note: C4-1
-        self.note = RegNote.defaultconstruct()
+        self.note = RegNote.default_construct()
 
     def test_defaultconstructor(self):
         # Attribute Checks
@@ -30,32 +30,32 @@ class RegNoteBasicTestCase(unittest.TestCase):
 
     def test_octavelowerbound(self):
         note = RegNote(1, Pitch.C, RegNote.MIN_OCTAVE)
-        note.modoctave(-1)
+        note.mod_octave(-1)
         self.assertTrue(note.octave >= RegNote.MIN_OCTAVE)
 
     def test_octaveupperbound(self):
         note = RegNote(1, Pitch.C, RegNote.MAX_OCTAVE)
-        note.modoctave(1)
+        note.mod_octave(1)
         self.assertTrue(note.octave <= RegNote.MAX_OCTAVE)
 
     def test_setoctave(self):
         test = 2
-        self.note.setoctave(test)
+        self.note.set_octave(test)
         self.assertEqual(self.note.octave, test)
 
     def test_setpitch(self):
         test = Pitch.D
-        self.note.setpitch(test)
+        self.note.set_pitch(test)
         self.assertEqual(self.note.pitch, test)
 
     def test_setaccidental(self):
         test = Accidental.FLAT
-        self.note.setaccidental(test)
+        self.note.set_accidental(test)
         self.assertEqual(self.note.accidental, test)
 
     def test_delnote(self):
         initduration = self.note.duration
-        note = self.note.delnote()
+        note = self.note.del_note()
         self.assertTrue(isinstance(note, RestNote))
         self.assertEqual(note.duration, initduration)
 
@@ -67,11 +67,11 @@ class RegNoteAdvTestCase(unittest.TestCase):
 class SegmentBasicTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.composition = Composition.defaultconstruct()
+        self.composition = Composition.default_construct()
 
     def test_addsegment(self):
         segment = Segment()
-        self.composition.addsegment(segment)
+        self.composition.add_seg(segment)
         self.assertTrue(segment in self.composition.segments)
 
     def test_delsegment(self):
@@ -83,29 +83,29 @@ class SegmentBasicTestCase(unittest.TestCase):
         seglist = [seg1, seg2, seg3]
         test = [seg0, seg1, seg3]
         self.composition.segments += seglist
-        self.composition.delsegment(2)
+        self.composition.del_seg(2)
         self.assertTrue(all(x in self.composition.segments for x in test))
 
 
 class SegmentNotesTestCase(SegmentBasicTestCase):
 
     def setUp(self):
-        self.composition = Composition.defaultconstruct()
-        note = RegNote.defaultconstruct()
+        self.composition = Composition.default_construct()
+        note = RegNote.default_construct()
         segments = self.composition.segments
-        segments[0].addnote(0, note)
+        segments[0].add_note(0, note)
 
     def test_addnotetoseg0(self):
-        note = RegNote.defaultconstruct()
-        note.setpitch(Pitch.D)
-        self.composition.segments[0].addnote(1, note)
+        note = RegNote.default_construct()
+        note.set_pitch(Pitch.D)
+        self.composition.segments[0].add_note(1, note)
         self.assertTrue(note in self.composition.segments[0].notes)
 
     def test_changenote(self):
         segment = self.composition.segments[0]
         note = segment.notes[0]
         test = Pitch.F
-        note.setpitch(test)
+        note.set_pitch(test)
         pitch = segment.notes[0].pitch
         self.assertTrue(note in self.composition.segments[0].notes)
         self.assertEqual(pitch, test)

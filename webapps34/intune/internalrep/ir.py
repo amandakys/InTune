@@ -15,7 +15,7 @@ class Note:
     def modulate(self, semitones, keysig):
         pass
 
-    def delnote(self):
+    def del_note(self):
         pass
 
 
@@ -47,17 +47,17 @@ class RegNote(Note):
         """
         Note.__init__(self, duration)
         self.pitch = pitch
-        self.octave = RegNote.__boundoctave(octave)
+        self.octave = RegNote.__bound_octave(octave)
         self.accidental = Accidental.NAT
 
     @classmethod
-    def defaultconstruct(cls):
+    def default_construct(cls):
         return cls(RegNote.DEFAULT_DURATION,
                    RegNote.DEFAULT_PITCH,
                    RegNote.DEFAULT_OCTAVE)
 
     @staticmethod
-    def __boundoctave(octave):
+    def __bound_octave(octave):
         """
 
         :param octave:
@@ -72,16 +72,16 @@ class RegNote(Note):
 
         return octave
 
-    def modoctave(self, diff):
+    def mod_octave(self, diff):
         """
 
         :param diff:
         :type diff: int
         """
         octave = self.octave + diff
-        self.octave = RegNote.__boundoctave(octave)
+        self.octave = RegNote.__bound_octave(octave)
 
-    def setpitch(self, pitch):
+    def set_pitch(self, pitch):
         """
         Sets the new pitch explicitly
         :param pitch: New pitch
@@ -89,15 +89,15 @@ class RegNote(Note):
         """
         self.pitch = pitch
 
-    def setoctave(self, octave):
+    def set_octave(self, octave):
         """
         Sets the new octave explicitly
         :param octave: New octave
         :type octave: int
         """
-        self.octave = RegNote.__boundoctave(octave)
+        self.octave = RegNote.__bound_octave(octave)
 
-    def setaccidental(self, accidental):
+    def set_accidental(self, accidental):
         """
         Sets accidental explicitly
         :param accidental: New accidental
@@ -131,7 +131,7 @@ class RegNote(Note):
         # TODO: Do actual modulation
         return self
 
-    def delnote(self):
+    def del_note(self):
         return RestNote(self.duration)
 
 
@@ -153,25 +153,25 @@ class Segment:
         Segment.segCount += 1
 
     @classmethod
-    def defaultconstruct(cls):
+    def default_construct(cls):
         return cls()
 
     # Segment functions #
 
-    def changekey(self, newkey):
+    def change_key(self, newkey):
         self.keySig = newkey
         # TODO: modulate all notes wrt new key
         return self
 
-    def changetimesig(self, newtimesig):
-        self.timeSig = newtimesig
+    def change_timesig(self, new_timesig):
+        self.timeSig = new_timesig
         return self
 
-    def addnote(self, index, note):
+    def add_note(self, index, note):
         self.notes.insert(index, note)
         return self
 
-    def delnote(self, index):
+    def de_note(self, index):
         """
         Replaces note to be deleted at index with a rest of the same duration
         :param index: Note index to be deleted
@@ -180,7 +180,7 @@ class Segment:
         :rtype: Segment
         """
         note = self.notes[index]
-        placeholder = note.delnote()
+        placeholder = note.del_note()
         self.notes.remove(index)
         # Rest placeholder
         self.notes.insert(index, placeholder)
@@ -196,7 +196,7 @@ class Composition:
         self.segments = [Segment()]
 
     @classmethod
-    def defaultconstruct(cls):
+    def default_construct(cls):
         """
         Default Constructor
         :return: Composition object with default values
@@ -206,9 +206,9 @@ class Composition:
                    Composition.DEFAULT_COMPOSER,
                    Composition.DEFAULT_ARRANGER)
 
-    def addsegment(self, segment):
+    def add_seg(self, segment):
         self.segments.append(segment)
 
-    def delsegment(self, index):
+    def del_seg(self, index):
         del self.segments[index]
 

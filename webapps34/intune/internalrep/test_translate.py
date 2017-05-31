@@ -16,7 +16,7 @@ class IRTranslateTestCase(unittest.TestCase):
         self.assertEqual(encoded_pitch, expected)
 
     def test_encode_reg_note(self):
-        note = RegNote.defaultconstruct()
+        note = RegNote.default_construct()
         encoded_note = IREncoder.encode_reg_note(note)
         expected = {IREncoder.DURATION: 1,
                     IREncoder.KEYS: ["C"]}
