@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'intune/login.html'}, name="login"),
     url(r'^accounts/logout/$', auth_views.logout_then_login, name="logout"),
-    url(r'^', include('intune.urls')),
+    url(r'^', include('intune.urls', namespace="intune")),
 ]
