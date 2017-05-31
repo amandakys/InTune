@@ -5,11 +5,8 @@ from .models import Composition
 
 class UserHomeView(generic.ListView):
     def get_queryset(self):
-        return self.request.user.profile.composition_set.all()
-
-    def get_context_data(self, **kwargs):
-        context = super(UserHomeView, self).get_context_data(**kwargs)
-        return context
+        return Composition.objects.filter(Q(owner__user=self.request.user) |
+                                          Q(users__user=self.request.user))
 
 
 class MusicScore(generic.DetailView):
