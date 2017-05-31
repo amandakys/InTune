@@ -18,7 +18,7 @@ class UserHomeView(generic.ListView):
 class MusicScoreOverview(TemplateView):
     @staticmethod
     def can_view(user, composition):
-        shared = (shared_u.id == user.id for shared_u in composition.users.all())
+        shared = (shared_p.user.id == user.id for shared_p in composition.users.all())
         return composition.owner == user or any(shared)
 
     def get(self, request, composition_id, **kwargs):
