@@ -19,7 +19,7 @@ class MusicScoreOverview(TemplateView):
     @staticmethod
     def can_view(user, composition):
         shared = (shared_p.user.id == user.id for shared_p in composition.users.all())
-        return composition.owner == user or any(shared)
+        return composition.owner.user.id == user.id or any(shared)
 
     def get(self, request, composition_id, **kwargs):
         try:
