@@ -14,11 +14,23 @@ pitch_encoding = {
     Pitch.B: "B",
 }
 
+duration_encoding = {
+    1: "w",
+    2: "h",
+    3: "hd",
+    4: "q",
+    8: "8",
+    16: "16"
+}
+
 
 class IREncoder:
     # Keywords
     DURATION = 'duration'
     KEYS = 'keys'
+
+    # Constants
+    DEF_REST_POS = "b/4"
 
     @staticmethod
     def encode_pitch(pitch):
@@ -27,9 +39,20 @@ class IREncoder:
         :param pitch:
         :type pitch: Pitch
         :return:
-        :rtype: Pitch
+        :rtype: str
         """
         return pitch_encoding[pitch]
+
+    @staticmethod
+    def encode_duration(duration):
+        """
+        Encodes IR Duration format to VexFlow JSON format
+        :param duration:
+        :type duration: int
+        :return:
+        :rtype: str
+        """
+        return duration_encoding[duration]
 
     @staticmethod
     def encode_reg_note(note):
@@ -52,8 +75,9 @@ class IREncoder:
         :return: encoded form of a rest note
         :rtype: dict
         """
-        return {IREncoder.DURATION: note.duration,
-                IREncoder.KEYS: []}
+        encoded = IREncoder.encode_duration(note.duration)
+        return {IREncoder.DURATION: (encoded + "r"),
+                IREncoder.KEYS: [IREncoder.DEF_REST_POS]}
 
     @staticmethod
     def encode_segment(segment):
@@ -65,3 +89,7 @@ class IREncoder:
         :rtype:
         """
         pass
+
+
+# class IRDecoder:
+#     pass
