@@ -1,9 +1,6 @@
-from django.http import Http404
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.db.models import Q
 from django.views import generic
 from .models import Composition
-
 
 
 class UserHomeView(generic.ListView):
@@ -15,19 +12,9 @@ class UserHomeView(generic.ListView):
         return context
 
 
-class MusicScoreOverview(TemplateView):
-    @staticmethod
-    def can_view(user, composition):
-        shared = (shared_p.user.id == user.id for shared_p in composition.users.all())
-        return composition.owner.user.id == user.id or any(shared)
+class MusicScore(generic.DetailView):
+    # TODO: consider redirect if composition not found
 
-    def get(self, request, composition_id, **kwargs):
-        try:
-            composition = Composition.objects.get(id=composition_id)
-            context = {'composition': composition}
-        except Composition.DoesNotExist:
-            raise Http404("Composition does not exit")
-        if self.can_view(request.user, composition):
-            return render(request, 'intune/music_score.html', context)
-        else:
-            return render(request, 'intune/unauthorised_view.html')
+    def get_queryset(self):
+        return Composition.objects.filter(Q(owner__user=self.request.user) |
+                                          Q(users__user=self.request.user))
