@@ -1,9 +1,16 @@
 before_script:
   - which python
   - docker info
-  - docker build -t intune .
 
-dockerbuild:
+docker_build:
+  stage: build
+  script:
+    - docker build -t intune .
+
+docker_deploy:
+  stage: deploy
+  only:
+    - master
   script:
     - docker stop intune
     - docker rm intune
