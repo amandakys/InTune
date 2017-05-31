@@ -37,7 +37,7 @@ class Octave:
         """
         Bounds octave to MIN_VALUE and MAX_VALUE
         :param value: Octave value (0 to 8 incl)
-        :type value: integer
+        :type value: int
         """
         if value < Octave.MIN_VALUE:
             self.value = Octave.MIN_VALUE

@@ -1,4 +1,4 @@
-from intune.internalrep.irdefs import Accidental
+from intune.internalrep.irdefs import Accidental, Octave, Pitch
 
 
 class Note:
@@ -8,6 +8,9 @@ class Note:
         self.duration = duration
 
     def modulate(self, semitones, keysig):
+        pass
+
+    def delnote(self):
         pass
 
 
@@ -20,10 +23,23 @@ class RestNote(Note):
 class RegNote(Note):
 
     def __init__(self, duration, pitch, octave):
+        """
+        Constructor
+        :param duration: Length of note
+        :type duration: int
+        :param pitch: Semitone starting at C
+        :type pitch: Pitch
+        :param octave: Value of octave (0 to 8 incl)
+        :type octave: int
+        """
         Note.__init__(self, duration)
         self.pitch = pitch
-        self.octave = octave
+        self.octave = Octave(octave)
         self.accidental = Accidental.NONE
+
+    @classmethod
+    def defaultconstruct(cls):
+        return cls(1, Pitch.C, 4, Accidental.NONE)
 
     def modulate(self, semitones, keysig):
         """
@@ -35,6 +51,9 @@ class RegNote(Note):
 
         # TODO: Do actual modulation
         return self
+
+    def delnote(self):
+        return RestNote(self.duration)
 
 
 # || Segment Class Overview ||
@@ -70,8 +89,17 @@ class Segment:
         return self
 
     def delnote(self, index):
+        """
+        Replaces note to be deleted at index with a rest of the same duration
+        :param index: Note index to be deleted
+        :type index: int
+        :return: self with placeholder inserted
+        :rtype: Segment
+        """
+        note = self.notes[index]
+        placeholder = note.delnote()
         self.notes.remove(index)
         # Rest placeholder
-        self.notes.insert(index, RestNote())
+        self.notes.insert(index, placeholder)
         return self
 
