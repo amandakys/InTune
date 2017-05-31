@@ -6,6 +6,9 @@ from django.utils import timezone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Composition(models.Model):
     title = models.CharField(max_length=200)
@@ -14,3 +17,6 @@ class Composition(models.Model):
     # data = models.BinaryField()
     lastEdit = timezone.now()
     created = timezone.now()
+
+    def __str__(self):
+        return self.title
