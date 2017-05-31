@@ -1,17 +1,18 @@
 before_script:
-  - which python
+  - which python3
   - docker info
 
-docker_build:
-  stage: build
+test:
+  stage: test
   script:
-    - docker build -t intune .
+    - python3 webapps34/manage.py test
 
 docker_deploy:
   stage: deploy
   only:
     - master
   script:
+    - docker build -t intune .
     - docker stop intune
     - docker rm intune
     - docker run -d -p 8000:8000 --name intune intune
