@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<p><a href="{% url 'intune:song_create' %}">New Composition</a></p>
+{% if composition_list %}
+    <ul>
+        <h2>Your compositions:</h2>
+        {% for composition in composition_list %}
+            <li><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no compositions :(</p>
+{% endif %}
+</html>
