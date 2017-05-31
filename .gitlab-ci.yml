@@ -6,4 +6,5 @@ before_script:
 dockerbuild:
   script:
     - docker stop intune
+    - docker rm intune
     - docker run -d -p 8000:8000 --name intune intune
