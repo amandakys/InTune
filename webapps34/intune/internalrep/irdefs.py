@@ -29,6 +29,32 @@ class Pitch(IntEnum):
     BSHARP = 1
 
 
+class Octave:
+    MIN_VALUE = 0
+    MAX_VALUE = 8
+
+    def __init__(self, value):
+        """
+        Bounds octave to MIN_VALUE and MAX_VALUE
+        :param value: Octave value (0 to 8 incl)
+        :type value: integer
+        """
+        if value < Octave.MIN_VALUE:
+            self.value = Octave.MIN_VALUE
+        elif value > Octave.MAX_VALUE:
+            self.value = Octave.MAX_VALUE
+        else:
+            self.value = value
+
+    def inc(self):
+        if self.value < Octave.MAX_VALUE:
+            self.value += 1
+
+    def dec(self):
+        if self.value > Octave.MIN_VALUE:
+            self.value -= 1
+
+
 class Accidental(Enum):
     # Overview:
     # Accidentals are referenced only during rendering, pitch should reflect
