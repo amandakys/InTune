@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^$', auth_views.login, {'template_name': 'core/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
-    url(r'^(?P<user_id>[0-9]+)/$', views.user_home_view.as_view()),
-    url(r'^song=(?P<composition_id>[0-9]+)$', views.music_score_overview.as_view())
+    url(r'^(?P<user_id>[0-9]+)/$', views.UserHomeView.as_view()),
+    url(r'^song=(?P<composition_id>[0-9]+)$', views.MusicScoreOverview.as_view())
 ]

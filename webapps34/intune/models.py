@@ -8,7 +8,7 @@ class Profile(models.Model):
 
 
 class Composition(models.Model):
-    title = models.CharField(max_length  = 200)
+    title = models.CharField(max_length=200)
     owner = models.ForeignKey(Profile, related_name='owner', on_delete=models.CASCADE)
     users = models.ManyToManyField(Profile)
     # data = models.BinaryField()
