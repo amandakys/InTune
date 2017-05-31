@@ -1,4 +1,4 @@
-from intune.irdefs import Accidental
+from intune.internalrep.irdefs import Accidental
 
 
 class Note:
