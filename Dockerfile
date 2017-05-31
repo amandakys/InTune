@@ -9,6 +9,7 @@ EXPOSE 80
 
 ENV NAME InTune
 
+RUN ./manage.py test
 # RUN ./manage.py collectstatic --noinput
 RUN ./manage.py migrate
 
