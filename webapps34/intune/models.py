@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Profile(models.Model):
@@ -7,12 +8,9 @@ class Profile(models.Model):
 
 
 class Composition(models.Model):
-    title = models.CharField(max_length = 200)
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    #users = models.ManyToManyField(Profile)
+    title = models.CharField(max_length  = 200)
+    owner = models.ForeignKey(Profile, related_name='owner', on_delete=models.CASCADE)
+    users = models.ManyToManyField(Profile)
     # data = models.BinaryField()
-    # lastEdit = models.DateTimeField()
-    # created = models.DateTimeField()
-
-# class Segment(models.Model):
-#     composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
+    lastEdit = timezone.now()
+    created = timezone.now()

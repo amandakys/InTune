@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
-<p>Hello world!</p>
 {% if composition_list %}
     <ul>
+        <h2>Your compositions:</h2>
         {% for composition in composition_list %}
             <li>{{ composition.title }}</li>
         {% endfor %}
     </ul>
+{% else %}
+    <p>You have no compositions :(</p>
 {% endif %}
 </html>
