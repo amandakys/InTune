@@ -185,15 +185,11 @@ class Segment:
     DEF_KEYSIG = "C"
     DEF_TIMESIG = (4, 4)
 
-    # Internal counter
-    segCount = 0
-
     def __init__(self, clef, key_sig, time_sig):
         self.clef = clef
         self.keySig = key_sig
         self.timeSig = time_sig
         self.notes = []
-        Segment.segCount += 1
 
     @classmethod
     def default_construct(cls):
