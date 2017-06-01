@@ -9,7 +9,7 @@ EXPOSE 80
 
 ENV NAME InTune
 
-RUN ./manage.py test --settings=webapps34.deploy_settings
+RUN ./manage.py test
 RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
 RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
