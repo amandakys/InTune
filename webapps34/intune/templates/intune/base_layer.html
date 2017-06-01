@@ -24,9 +24,11 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
                 <li><a href="{% url 'intune:index' %}">PROFILE</a></li>
                 <li><a href="#">SETTINGS</a></li>
                 <li><a href="{% url 'logout' %}">LOGOUT</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
