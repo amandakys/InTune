@@ -231,6 +231,16 @@ class Segment:
         self.notes.insert(index, placeholder)
         return self
 
+    def is_similar(self, other):
+        if isinstance(other, self.__class__):
+            return self.clef == other.clef and \
+                   self.timeSig == other.timeSig and \
+                   self.keySig == other.keySig and \
+                   all(self.notes[i].is_similar(other.notes[i])
+                       for i in range(len(self.notes)))
+
+        return False
+
 
 class IRScore:
     DEFAULT_TILE = "Untitled"

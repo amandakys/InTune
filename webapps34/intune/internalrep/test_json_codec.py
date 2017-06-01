@@ -110,6 +110,22 @@ class JsonDecoderTestCase(unittest.TestCase):
         decode = decode_reg_note(test)
         assert_that(decode.is_similar(expected))
 
+    def test_decode_seg(self):
+        expected = Segment("treble", "C", (4, 4))
+        expected.append_note(RegNote(4, Pitch.D, 4)) \
+                .append_note(RegNote(4, Pitch.C, 4)) \
+                .append_note(RegNote(4, Pitch.B, 4)) \
+                .append_note(RegNote(4, Pitch.G, 4))
+        test = {CLEF: "treble",
+                NOTES: [
+                    {DURATION: "q", KEYS: ["D"]},
+                    {DURATION: "q", KEYS: ["C"]},
+                    {DURATION: "q", KEYS: ["B"]},
+                    {DURATION: "q", KEYS: ["G"]}
+                ]}
+        decode = decode_seg(test)
+        assert_that(decode.is_similar(expected))
+
 
 if __name__ == '__main__':
     unittest.main()
