@@ -8,5 +8,30 @@
 {% endblock imports %}
 
 {% block score %}
-    <p>TODO: implement score display for {{ composition.title }}</p>
+
+<script type="text/javascript">
+  function render_vexflow(element_id, data, render_options) {
+    var element = document.getElementById(element_id);
+    var json = new Vex.Flow.JSON(data);
+    if (render_options) {
+        json.render(element, render_options);
+    } else {
+        json.render(element, data);
+    }
+  }
+</script>
+
+    <h2>Simple Chord</h2>
+    <div score style="background-color: white">
+    {# TODO: resize canvas according to height of score #}
+        <canvas id="rendered" height="250"></canvas>
+    </div>
+
+    <p>{{ composition.output_to_json }}</p>
+  <script type="text/javascript">
+    render_vexflow("rendered", {{ composition.output_to_json|safe}});
+  </script>
+
+
+
 {% endblock %}
