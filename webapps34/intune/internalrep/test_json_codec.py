@@ -2,7 +2,7 @@ import unittest
 
 from hamcrest import *
 
-from intune.internalrep.ir import RegNote, RestNote, Segment, IRScore
+from intune.internalrep.ir import IRScore
 from intune.internalrep.jsoncodec.irscore_codec import *
 from intune.internalrep.jsoncodec.note_codec import *
 from intune.internalrep.jsoncodec.seg_codec import *
@@ -79,7 +79,6 @@ class JsonEncoderTestCase(unittest.TestCase):
 
 
 class JsonDecoderTestCase(unittest.TestCase):
-
     def test_decode_pitch(self):
         expected = Pitch.G
         test = "G"
@@ -113,9 +112,9 @@ class JsonDecoderTestCase(unittest.TestCase):
     def test_decode_seg(self):
         expected = Segment("treble", "C", (4, 4))
         expected.append_note(RegNote(4, Pitch.D, 4)) \
-                .append_note(RegNote(4, Pitch.C, 4)) \
-                .append_note(RegNote(4, Pitch.B, 4)) \
-                .append_note(RegNote(4, Pitch.G, 4))
+            .append_note(RegNote(4, Pitch.C, 4)) \
+            .append_note(RegNote(4, Pitch.B, 4)) \
+            .append_note(RegNote(4, Pitch.G, 4))
         test = {CLEF: "treble",
                 NOTES: [
                     {DURATION: "q", KEYS: ["D"]},
@@ -125,6 +124,46 @@ class JsonDecoderTestCase(unittest.TestCase):
                 ]}
         decode = decode_seg(test)
         assert_that(decode.is_similar(expected))
+
+    def test_decode_score(self):
+        expected = [
+            Segment("treble", "C", (4, 4))
+                .append_note(RegNote(4, Pitch.C, 4))
+                .append_note(RegNote(4, Pitch.C, 4))
+                .append_note(RegNote(4, Pitch.C, 4))
+                .append_note(RestNote(4)),
+            Segment("treble", "C", (4, 4))
+                .append_note(RegNote(4, Pitch.D, 4))
+                .append_note(RegNote(4, Pitch.E, 4))
+                .append_note(RegNote(4, Pitch.F, 4))
+                .append_note(RestNote(4))
+        ]
+
+        test = [
+            {CLEF: "treble",
+             NOTES: [
+                 {DURATION: "4", KEYS: ["C"]},
+                 {DURATION: "4", KEYS: ["C"]},
+                 {DURATION: "4", KEYS: ["C"]},
+                 {DURATION: "4r", KEYS: ["B"]}
+             ]},
+            {CLEF: "treble",
+             NOTES: [
+                 {DURATION: "4", KEYS: ["D"]},
+                 {DURATION: "4", KEYS: ["E"]},
+                 {DURATION: "4", KEYS: ["F"]},
+                 {DURATION: "4r", KEYS: ["B"]}
+             ]}
+        ]
+
+        decode = decode_score_segs(test)
+        self.assertTrue(isinstance(decode, list))
+
+        assert_that(len(decode), len(expected),
+                    "Difference in decoded list length")
+        for i in range(len(expected)):
+            with self.subTest(i=i):
+                self.assertTrue(decode[i].is_similar(expected[i]))
 
 
 if __name__ == '__main__':
