@@ -3,7 +3,7 @@ import unittest
 from hamcrest import *
 
 from intune.internalrep.ir import IRScore
-from intune.internalrep.jsoncodec.irscore_codec import *
+from intune.internalrep.jsoncodec.score_segs_codec import *
 from intune.internalrep.jsoncodec.note_codec import *
 from intune.internalrep.jsoncodec.seg_codec import *
 
@@ -68,7 +68,7 @@ class JsonEncoderTestCase(unittest.TestCase):
         score = IRScore.default_construct()
         score.segments[0].append_note(RegNote(1, Pitch.F, 4))
 
-        encoded = encode_score(score)
+        encoded = encode_score_segs(score)
         self.assertTrue(isinstance(encoded, list))
 
         assert_that(len(encoded), len(expected),
