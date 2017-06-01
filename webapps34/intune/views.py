@@ -1,8 +1,10 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.views import generic
 
-from .models import Composition
+from .models import Composition, Profile
 
 
 class UserHomeView(generic.ListView):
@@ -28,3 +30,18 @@ class CompositionCreate(generic.edit.CreateView):
         form.instance.owner = self.request.user.profile
         form.instance.save()
         return super(CompositionCreate, self).form_valid(form)
+
+
+class InTuneRegister(generic.edit.CreateView):
+    form_class = UserCreationForm
+    template_name = "register.html"
+    success_url = reverse_lazy("intune:index")
+
+    # TODO: if logged in, add profile and redirect immediately
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            if not self.request.user.profile:
+                p = Profile(self.request.user)
+                p.save()
+            return redirect("intune:index")
+        return super(InTuneRegister, self).dispatch(*args, **kwargs)
