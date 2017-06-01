@@ -9,8 +9,8 @@ EXPOSE 80
 
 ENV NAME InTune
 
-RUN ./manage.py test
-RUN ./manage.py collectstatic --noinput
-RUN ./manage.py migrate
+RUN ./manage.py test --settings=webapps34.deploy_settings
+RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
+RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
 CMD uwsgi --ini /build/uwsgi.ini
