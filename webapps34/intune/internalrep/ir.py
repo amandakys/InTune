@@ -1,3 +1,5 @@
+from importlib import import_module
+
 from intune.internalrep.irdefs import Accidental, Pitch
 
 
@@ -18,23 +20,31 @@ class Note:
     def del_note(self):
         pass
 
-    def accept_encoder(self, encoder):
+    def accept_encoder(self, codec_name):
         pass
 
 
 class RestNote(Note):
-
     def __init__(self, duration):
         Note.__init__(self, duration)
 
-    def accept_encoder(self, encoder):
+    def accept_encoder(self, codec_name):
         """
-        :param encoder:
-        :type encoder: NoteEncoder
+        :param codec_name:
+        :type codec_name: str
         :return:
         :rtype: dict
         """
-        return encoder.encode_rest_note(self)
+        ret = {}
+        if codec_name:
+            # codec_name is not null
+            codec_name = import_module(codec_name)
+            ret = codec_name.encode_rest_note(self)
+        else:
+            # Don't know how to encode without a codec
+            print("Warning: Codec given is null")
+
+        return ret
 
 
 class RegNote(Note):
@@ -146,14 +156,23 @@ class RegNote(Note):
     def del_note(self):
         return RestNote(self.duration)
 
-    def accept_encoder(self, encoder):
+    def accept_encoder(self, codec_name):
         """
-        :param encoder:
-        :type encoder: NoteEncoder
+        :param codec_name:
+        :type codec_name: str
         :return:
         :rtype: dict
         """
-        return encoder.encode_reg_note(self)
+        ret = {}
+        if codec_name:
+            # codec_name is not null
+            encoder = import_module(codec_name)
+            ret = encoder.encode_reg_note(self)
+        else:
+            # Don't know how to encode without a codec
+            print("Warning: Codec given is null")
+
+        return ret
 
 
 # || Segment Class Overview ||
@@ -226,6 +245,17 @@ class IRScore:
     DEFAULT_ARRANGER = "Unknown"
 
     def __init__(self, title, composer, arranger):
+        """
+        :param title:
+        :type title: str
+        :param composer:
+        :type composer: str
+        :param arranger:
+        :type arranger: str
+        """
+        self.title = title
+        self.composer = composer
+        self.arranger = arranger
         self.segments = [Segment.default_construct()]
 
     @classmethod
@@ -244,4 +274,3 @@ class IRScore:
 
     def del_seg(self, index):
         del self.segments[index]
-
