@@ -15,8 +15,8 @@ class Composition(models.Model):
     owner = models.ForeignKey(Profile, related_name='owner', on_delete=models.CASCADE)
     users = models.ManyToManyField(Profile, blank=True)
     # data = models.BinaryField()
-    lastEdit = timezone.now()
-    created = timezone.now()
+    lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     def __str__(self):
         return self.title
