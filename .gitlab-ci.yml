@@ -5,7 +5,8 @@ before_script:
 test:
   stage: test
   script:
-    - python3 webapps34/manage.py test
+    - cd webapps34
+    - python3 manage.py test
 
 docker_deploy:
   stage: deploy
