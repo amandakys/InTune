@@ -113,3 +113,17 @@ class SegEncoder:
         return {SegEncoder.CLEF: segment.clef,
                 SegEncoder.NOTES: encoded_notes}
 
+
+class ScoreEncoder:
+    @staticmethod
+    def encode_score(score):
+        """
+        :param score:
+        :type score: IRScore
+        :return:
+        :rtype: list
+        """
+        segments = score.segments
+        encoded = [SegEncoder.encode_seg(s) for s in segments]
+        return encoded
+

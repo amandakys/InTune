@@ -2,9 +2,9 @@ import unittest
 
 from hamcrest import *
 
-from intune.internalrep.ir import RegNote, RestNote, Segment, Note
+from intune.internalrep.ir import RegNote, RestNote, Segment, Note, IRScore
 from intune.internalrep.irdefs import Pitch
-from intune.internalrep.translate import NoteEncoder, SegEncoder
+from intune.internalrep.translate import NoteEncoder, SegEncoder, ScoreEncoder
 
 
 class IRTranslateTestCase(unittest.TestCase):
@@ -60,6 +60,27 @@ class IRTranslateTestCase(unittest.TestCase):
         encoded_seg = SegEncoder.encode_seg(segment)
         self.assertTrue(isinstance(encoded_seg, dict))
         assert_that(encoded_seg, has_entries(expected))
+
+    def test_encode_score(self):
+        expected = [{
+            SegEncoder.CLEF: "treble",
+            SegEncoder.NOTES: [
+                {NoteEncoder.DURATION: "w",
+                 NoteEncoder.KEYS: ["F"]}
+            ]
+        }]
+
+        score = IRScore.default_construct()
+        score.segments[0].append_note(RegNote(1, Pitch.F, 4))
+
+        encoded = ScoreEncoder.encode_score(score)
+        self.assertTrue(isinstance(encoded, list))
+
+        assert_that(len(encoded), len(expected),
+                    "Difference in encoded list length")
+        for i in range(len(expected)):
+            with self.subTest(i=i):
+                assert_that(encoded[i], has_entries(expected[i]))
 
 
 if __name__ == '__main__':

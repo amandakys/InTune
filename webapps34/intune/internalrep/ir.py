@@ -177,7 +177,6 @@ class Segment:
         self.keySig = key_sig
         self.timeSig = time_sig
         self.notes = []
-
         Segment.segCount += 1
 
     @classmethod
@@ -195,6 +194,10 @@ class Segment:
 
     def change_timesig(self, new_timesig):
         self.timeSig = new_timesig
+        return self
+
+    def append_note(self, note):
+        self.notes.append(note)
         return self
 
     def add_note(self, index, note):
