@@ -86,16 +86,15 @@ def encode_pitch(pitch):
     """
     return pitch_encoding[pitch]
 
+
 # --- Decoder --- #
-# @staticmethod
-# def decode_pitch(pitch_json):
-#     pass
-#
-# @staticmethod
-# def decode_duration(duration_json):
-#     pass
-#
-# @staticmethod
-# def decode_note(note_json):
-#     pass
-#
+def decode_pitch(pitch_json):
+    pass
+
+
+def decode_duration(duration_json):
+    pass
+
+
+def decode_note(note_json):
+    pass

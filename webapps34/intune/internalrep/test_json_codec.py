@@ -8,7 +8,7 @@ from intune.internalrep.jsoncodec.note_codec import *
 from intune.internalrep.jsoncodec.seg_codec import *
 
 
-class IRTranslateTestCase(unittest.TestCase):
+class JsonEncoderTestCase(unittest.TestCase):
     def test_encode_pitch(self):
         pitch = Pitch.C
         expected = "C"
