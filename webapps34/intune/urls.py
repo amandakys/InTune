@@ -13,4 +13,8 @@ urlpatterns = [
     url(r'^register/$',
         views.InTuneRegister.as_view(),
         name="register"),
+
+    url(r'^composition/(?P<pk>[0-9]+)/edit/$',
+        login_required(views.CompositionEdit.as_view()),
+        name="song_edit"),
 ]
