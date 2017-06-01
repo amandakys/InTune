@@ -33,17 +33,23 @@
 
 <div style="background-color: white">
     {# TODO: resize canvas according to height of score #}
-    <canvas id="rendered" height="250"></canvas>
+    <canvas id="rendered"></canvas>
 </div>
 
 <script type="text/javascript">
     function rerender() {
-        document.getElementById("rendered").innerHTML = ""
-        var text = document.getElementById("updated_json").innerHTML
-        var modified_json = eval("(" + text + ")")
-        render_vexflow("rendered", modified_json)
+
+        var canvas = $("#rendered")[0];
+        var renderer = new Vex.Flow.Renderer(canvas,
+        Vex.Flow.Renderer.Backends.CANVAS);
+        var context = renderer.getContext();
+        renderer.resize(200, 250); // Resize and clear canvas
+
+        var text = document.getElementById("updated_json").innerHTML;
+        var modified_json = eval("(" + text + ")");
+        render_vexflow("rendered", modified_json);
     }
-    window.onload = rerender()
+    window.onload = rerender(); // render on load initial state
 </script>
 
 {% endblock %}
