@@ -1,0 +1,49 @@
+{% extends "intune/music_score_wrapper.html" %}
+{% load staticfiles %}
+
+{% block imports %}
+<script src="{% static 'lib/underscore-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-json.js' %}"></script>
+{% endblock imports %}
+
+{% block score %}
+<script type="text/javascript">
+  function render_vexflow(element_id, data, render_options) {
+    var element = document.getElementById(element_id);
+    var json = new Vex.Flow.JSON(data);
+    if (render_options) {
+        json.render(element, render_options);
+    } else {
+        json.render(element, data);
+    }
+  }
+</script>
+
+<h2>Edit:</h2>
+<form method="post" style="background-color: white" contenteditable="true">
+{% csrf_token %}
+    <div id="updated_json">
+        {{ composition.output_to_json }}
+    </div>
+</form>
+<button onclick="rerender()">Render</button>
+
+<br>
+
+<div style="background-color: white">
+    {# TODO: resize canvas according to height of score #}
+    <canvas id="rendered" height="250"></canvas>
+</div>
+
+<script type="text/javascript">
+    function rerender() {
+        document.getElementById("rendered").innerHTML = ""
+        var text = document.getElementById("updated_json").innerHTML
+        var modified_json = eval("(" + text + ")")
+        render_vexflow("rendered", modified_json)
+    }
+    window.onload = rerender()
+</script>
+
+{% endblock %}

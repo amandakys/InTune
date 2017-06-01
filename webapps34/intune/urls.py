@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^composition/create/$',
         login_required(views.CompositionCreate.as_view()),
         name="song_create"),
+    url(r'^composition/(?P<pk>[0-9]+)/edit/$', login_required(views.CompositionEdit.as_view()), name="song_edit"),
+
 ]

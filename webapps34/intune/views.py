@@ -28,3 +28,12 @@ class CompositionCreate(generic.edit.CreateView):
         form.instance.owner = self.request.user.profile
         form.instance.save()
         return super(CompositionCreate, self).form_valid(form)
+
+
+# TODO: change to UpdateView later to actually update database?
+class CompositionEdit(generic.DetailView):
+    template_name = "intune/composition_edit"
+
+    def get_queryset(self):
+        return Composition.objects.filter(Q(owner__user=self.request.user) |
+                                          Q(users__user=self.request.user))
