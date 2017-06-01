@@ -41,7 +41,11 @@ class InTuneRegister(generic.edit.CreateView):
     def dispatch(self, *args, **kwargs):
         if self.request.user.is_authenticated():
             if not self.request.user.profile:
-                p = Profile(self.request.user)
-                p.save()
+                Profile(user=self.request.user).save()
             return redirect("intune:index")
         return super(InTuneRegister, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.save()
+        Profile(user=form.instance).save()
+        return super(InTuneRegister, self).form_valid(form)
