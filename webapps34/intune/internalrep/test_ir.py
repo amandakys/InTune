@@ -70,16 +70,16 @@ class SegmentBasicTestCase(unittest.TestCase):
         self.composition = Composition.default_construct()
 
     def test_addsegment(self):
-        segment = Segment()
+        segment = Segment.default_construct()
         self.composition.add_seg(segment)
         self.assertTrue(segment in self.composition.segments)
 
     def test_delsegment(self):
         # All composition has at least one segment
         seg0 = self.composition.segments[0]
-        seg1 = Segment()
-        seg2 = Segment()
-        seg3 = Segment()
+        seg1 = Segment.default_construct()
+        seg2 = Segment.default_construct()
+        seg3 = Segment.default_construct()
         seglist = [seg1, seg2, seg3]
         test = [seg0, seg1, seg3]
         self.composition.segments += seglist

@@ -24,7 +24,7 @@ duration_encoding = {
 }
 
 
-class IREncoder:
+class NoteEncoder:
     # Keywords
     DURATION = 'duration'
     KEYS = 'keys'
@@ -63,8 +63,8 @@ class IREncoder:
         :return: encoded form of a regular note
         :rtype: dict
         """
-        return {IREncoder.DURATION: note.duration,
-                IREncoder.KEYS: [IREncoder.encode_pitch(note.pitch)]}
+        return {NoteEncoder.DURATION: NoteEncoder.encode_duration(note.duration),
+                NoteEncoder.KEYS: [NoteEncoder.encode_pitch(note.pitch)]}
 
     @staticmethod
     def encode_rest_note(note):
@@ -75,21 +75,41 @@ class IREncoder:
         :return: encoded form of a rest note
         :rtype: dict
         """
-        encoded = IREncoder.encode_duration(note.duration)
-        return {IREncoder.DURATION: (encoded + "r"),
-                IREncoder.KEYS: [IREncoder.DEF_REST_POS]}
+        encoded = NoteEncoder.encode_duration(note.duration)
+        return {NoteEncoder.DURATION: (encoded + "r"),
+                NoteEncoder.KEYS: [NoteEncoder.DEF_REST_POS]}
 
     @staticmethod
-    def encode_segment(segment):
+    def encode_note(note):
+        """
+        Polymorphic encoding of a note
+        :param n:
+        :type n: Note
+        :return:
+        :rtype: dict
+        """
+        return note.accept_encoder(NoteEncoder)
+
+
+class SegEncoder:
+    # Keywords
+    CLEF = 'clef'
+    NOTES = 'notes'
+
+    @staticmethod
+    def encode_seg(segment):
         """
         Translates a single segment
         :param segment:
         :type segment: Segment
-        :return:
-        :rtype:
+        :return: encoded form of a segment
+        :rtype: dict
         """
-        pass
+        encoded_notes = []
+        for n in segment.notes:
+            enc_note = NoteEncoder.encode_note(n)
+            encoded_notes.append(enc_note)
 
+        return {SegEncoder.CLEF: segment.clef,
+                SegEncoder.NOTES: encoded_notes}
 
-# class IRDecoder:
-#     pass

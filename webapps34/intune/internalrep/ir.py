@@ -18,11 +18,23 @@ class Note:
     def del_note(self):
         pass
 
+    def accept_encoder(self, encoder):
+        pass
+
 
 class RestNote(Note):
 
     def __init__(self, duration):
         Note.__init__(self, duration)
+
+    def accept_encoder(self, encoder):
+        """
+        :param encoder:
+        :type encoder: NoteEncoder
+        :return:
+        :rtype: dict
+        """
+        return encoder.encode_rest_note(self)
 
 
 class RegNote(Note):
@@ -134,6 +146,15 @@ class RegNote(Note):
     def del_note(self):
         return RestNote(self.duration)
 
+    def accept_encoder(self, encoder):
+        """
+        :param encoder:
+        :type encoder: NoteEncoder
+        :return:
+        :rtype: dict
+        """
+        return encoder.encode_reg_note(self)
+
 
 # || Segment Class Overview ||
 # Class Attribute:
@@ -143,18 +164,27 @@ class RegNote(Note):
 # 2. timeSig (time signature)
 # 3. notes (list of notes)
 class Segment:
+    # Constants
+    DEF_CLEF = "treble"
+    DEF_KEYSIG = "C"
+    DEF_TIMESIG = (4, 4)
+
+    # Internal counter
     segCount = 0
 
-    def __init__(self):
-        self.keySig = "C"
-        self.timeSig = (4, 4)
+    def __init__(self, clef, key_sig, time_sig):
+        self.clef = clef
+        self.keySig = key_sig
+        self.timeSig = time_sig
         self.notes = []
 
         Segment.segCount += 1
 
     @classmethod
     def default_construct(cls):
-        return cls()
+        return cls(Segment.DEF_CLEF,
+                   Segment.DEF_KEYSIG,
+                   Segment.DEF_TIMESIG)
 
     # Segment functions #
 
@@ -193,7 +223,7 @@ class Composition:
     DEFAULT_ARRANGER = "Unknown"
 
     def __init__(self, title, composer, arranger):
-        self.segments = [Segment()]
+        self.segments = [Segment.default_construct()]
 
     @classmethod
     def default_construct(cls):
