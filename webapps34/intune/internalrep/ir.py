@@ -20,15 +20,21 @@ class Note:
     def del_note(self):
         pass
 
-    def accept_encoder(self, codec_name):
+    def accept_codec(self, codec_name):
         pass
 
 
 class RestNote(Note):
+    DEFAULT_DURATION = 1
+
     def __init__(self, duration):
         Note.__init__(self, duration)
 
-    def accept_encoder(self, codec_name):
+    @classmethod
+    def default_construct(cls):
+        return cls(RestNote.DEFAULT_DURATION)
+
+    def accept_codec(self, codec_name):
         """
         :param codec_name:
         :type codec_name: str
@@ -38,13 +44,19 @@ class RestNote(Note):
         ret = {}
         if codec_name:
             # codec_name is not null
-            codec_name = import_module(codec_name)
-            ret = codec_name.encode_rest_note(self)
+            codec = import_module(codec_name)
+            ret = codec.encode_rest_note(self)
         else:
             # Don't know how to encode without a codec
             print("Warning: Codec given is null")
 
         return ret
+
+    def is_similar(self, other):
+        if isinstance(other, self.__class__):
+            return self.duration == other.duration
+
+        return False
 
 
 class RegNote(Note):
@@ -81,7 +93,6 @@ class RegNote(Note):
     @staticmethod
     def __bound_octave(octave):
         """
-
         :param octave:
         :type octave: int
         :return:
@@ -96,7 +107,6 @@ class RegNote(Note):
 
     def mod_octave(self, diff):
         """
-
         :param diff:
         :type diff: int
         """
@@ -128,35 +138,13 @@ class RegNote(Note):
         self.accidental = accidental
 
     def modulate(self, semitones, keysig):
-        """
-        Changes the note by the number of semitones given
-        :param keysig: key signature used by this note
-        :param semitones: int (+/-) number of semitones to change
-        :return: self
-        """
-
-        # pitch = self.pitch
-        # cand = pitch.value + semitones
-        # # Max pitch reached
-        # if cand > RegNote.MAX_PITCH:
-        #     if self.octave.value >= Octave.MAX:
-        #         self.pitch = Pitch.B
-        #     else:
-        #         octavechange = int(semitones / RegNote.SEMITONES)
-        #         self.octave.mod(octavechange)
-        #
-        #     pitchchange = semitones % RegNote.SEMITONES
-        #
-        # else:
-        #     self.pitch = Pitch(cand)
-
         # TODO: Do actual modulation
         return self
 
     def del_note(self):
         return RestNote(self.duration)
 
-    def accept_encoder(self, codec_name):
+    def accept_codec(self, codec_name):
         """
         :param codec_name:
         :type codec_name: str
@@ -166,13 +154,22 @@ class RegNote(Note):
         ret = {}
         if codec_name:
             # codec_name is not null
-            encoder = import_module(codec_name)
-            ret = encoder.encode_reg_note(self)
+            codec = import_module(codec_name)
+            ret = codec.encode_reg_note(self)
         else:
             # Don't know how to encode without a codec
             print("Warning: Codec given is null")
 
         return ret
+
+    def is_similar(self, other):
+        if isinstance(other, self.__class__):
+            return self.duration == other.duration and \
+                   self.pitch == other.pitch and \
+                   self.octave == other.octave and \
+                   self.accidental == other.accidental
+
+        return False
 
 
 # || Segment Class Overview ||

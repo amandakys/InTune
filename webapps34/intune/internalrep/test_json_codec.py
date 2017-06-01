@@ -33,7 +33,7 @@ class JsonEncoderTestCase(unittest.TestCase):
         note = RestNote(4)
         encoded_note = encode_rest_note(note)
         expected = {DURATION: "qr",
-                    KEYS: [DEF_REST_POS]}
+                    KEYS: [DEF_PITCH]}
         self.assertTrue(isinstance(encoded_note, dict))
         assert_that(encoded_note, has_entries(expected))
 
@@ -76,6 +76,39 @@ class JsonEncoderTestCase(unittest.TestCase):
         for i in range(len(expected)):
             with self.subTest(i=i):
                 assert_that(encoded[i], has_entries(expected[i]))
+
+
+class JsonDecoderTestCase(unittest.TestCase):
+
+    def test_decode_pitch(self):
+        expected = Pitch.G
+        test = "G"
+        decode = decode_pitch(test)
+        assert_that(decode, is_(expected))
+
+    def test_decode_duration(self):
+        expected = 16
+        test = "16"
+        decode = decode_duration(test)
+        assert_that(decode, is_(expected))
+
+    def test_decode_reg_note(self):
+        expected = RegNote.default_construct()
+        test = {DURATION: "w", KEYS: ["C"]}
+        decode = decode_reg_note(test)
+        assert_that(decode.is_similar(expected))
+
+    def test_decode_rest_note(self):
+        expected = RestNote.default_construct()
+        test = {DURATION: "wr", KEYS: [DEF_PITCH]}
+        decode = decode_rest_note(test)
+        assert_that(decode.is_similar(expected))
+
+    def test_decode_note(self):
+        expected = RegNote(2, Pitch.A, 4)
+        test = {DURATION: "h", KEYS: ["A"]}
+        decode = decode_reg_note(test)
+        assert_that(decode.is_similar(expected))
 
 
 if __name__ == '__main__':
