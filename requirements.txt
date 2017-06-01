@@ -1,2 +1,4 @@
 Django==1.11.1
 uwsgi
+# Tests Module
+PyHamcrest==1.9.0
