@@ -1,6 +1,8 @@
 Django==1.11.1
 uwsgi
 psycopg2
+django-bootstrap3
 
 # Tests Module
 PyHamcrest==1.9.0
+

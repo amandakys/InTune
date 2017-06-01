@@ -19,27 +19,24 @@ body {
 
 ul {
     list-style: none;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--element_color);
 }
 
 h1, h2 {
-    color: var(--element_color);
     text-align: center;
 }
 
-.login {
-    margin-left: 5%;
-}
-
-.login label {
+form label {
     color: var(--element_color);
 }
 
-.create {
-    margin-left: 5%;
-}
-.create label {
-    color: var(--element_color);
-    vertical-align: top;
+.form-control:focus {
+  border-color: var(--element_color);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element_color);
 }
 
 .navbar.navbar-default {
