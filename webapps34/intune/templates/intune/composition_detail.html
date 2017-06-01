@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 
 {% extends "intune/music_score_wrapper.html" %}
+{% load staticfiles %}
+
+{% block imports %}
+<script src="{% static 'lib/underscore-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-json.js' %}"></script>
+{% endblock imports %}
 
 {% block score %}
     <p>TODO: implement score display for {{ composition.title }}</p>
