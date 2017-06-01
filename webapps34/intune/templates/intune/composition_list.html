@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
-<<<<<<< HEAD
 {% extends "intune/base_layer.html" %}
 {% block content %}
+    <h2>Your compositions:</h2>
+    <p><a href="{% url 'intune:song_create' %}">New Composition</a></p>
     {% if composition_list %}
         <ul>
-            <h2>Your compositions:</h2>
-        <p><a href="{% url 'intune:song_create' %}">New Composition</a></p>
             {% for composition in composition_list %}
                 <div class="container-fluid">
                     <div class="row">
@@ -33,4 +30,3 @@
     {% endif %}
 {%  endblock %}
 
-</html>
