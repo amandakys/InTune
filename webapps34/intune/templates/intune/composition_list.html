@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html>
-{% if composition_list %}
-    <ul>
-        <h2>Your compositions:</h2>
-        {% for composition in composition_list %}
-            <li><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>You have no compositions :(</p>
-{% endif %}
+{% extends "intune/base_layer.html" %}
+{% block content %}
+    {% if composition_list %}
+        <ul>
+            <h2>Your compositions:</h2>
+            {% for composition in composition_list %}
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h1 class="glyphicon glyphicon-music"></h1>
+                        </div>
+                        <div class="col-sm-8">
+                            <li style="color: #34383b"><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
+                            <p>Last Edited: {{ composition.lastEdit }}</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no compositions :(</p>
+    {% endif %}
+{%  endblock %}
+
 </html>
