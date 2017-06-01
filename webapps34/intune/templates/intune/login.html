@@ -11,6 +11,9 @@
             {{ form.as_p }}
             <button type="submit" class="btn btn-light">Login</button>
         </form>
+        <a href="{% url 'intune:register' %}">
+        <button type="button" class="btn btn-light">Register</button>
+        </a>
     </div>
 {% endblock %}
 

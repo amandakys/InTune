@@ -34,7 +34,7 @@ class CompositionCreate(generic.edit.CreateView):
 
 class InTuneRegister(generic.edit.CreateView):
     form_class = UserCreationForm
-    template_name = "register.html"
+    template_name = "intune/register.html"
     success_url = reverse_lazy("intune:index")
 
     # TODO: if logged in, add profile and redirect immediately
@@ -49,3 +49,4 @@ class InTuneRegister(generic.edit.CreateView):
         form.instance.save()
         Profile(user=form.instance).save()
         return super(InTuneRegister, self).form_valid(form)
+
