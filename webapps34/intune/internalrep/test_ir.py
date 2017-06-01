@@ -1,6 +1,6 @@
 import unittest
 
-from intune.internalrep.ir import RegNote, RestNote, Composition, Segment
+from intune.internalrep.ir import RegNote, RestNote, IRScore, Segment
 from intune.internalrep.irdefs import Pitch, Accidental
 
 
@@ -67,7 +67,7 @@ class RegNoteAdvTestCase(unittest.TestCase):
 class SegmentBasicTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.composition = Composition.default_construct()
+        self.composition = IRScore.default_construct()
 
     def test_addsegment(self):
         segment = Segment.default_construct()
@@ -90,7 +90,7 @@ class SegmentBasicTestCase(unittest.TestCase):
 class SegmentNotesTestCase(SegmentBasicTestCase):
 
     def setUp(self):
-        self.composition = Composition.default_construct()
+        self.composition = IRScore.default_construct()
         note = RegNote.default_construct()
         segments = self.composition.segments
         segments[0].add_note(0, note)

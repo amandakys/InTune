@@ -217,7 +217,7 @@ class Segment:
         return self
 
 
-class Composition:
+class IRScore:
     DEFAULT_TILE = "Untitled"
     DEFAULT_COMPOSER = "Unknown"
     DEFAULT_ARRANGER = "Unknown"
@@ -230,11 +230,11 @@ class Composition:
         """
         Default Constructor
         :return: Composition object with default values
-        :rtype: Composition
+        :rtype: IRScore
         """
-        return cls(Composition.DEFAULT_TILE,
-                   Composition.DEFAULT_COMPOSER,
-                   Composition.DEFAULT_ARRANGER)
+        return cls(IRScore.DEFAULT_TILE,
+                   IRScore.DEFAULT_COMPOSER,
+                   IRScore.DEFAULT_ARRANGER)
 
     def add_seg(self, segment):
         self.segments.append(segment)
