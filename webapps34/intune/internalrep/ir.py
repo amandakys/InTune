@@ -172,14 +172,13 @@ class RegNote(Note):
         return False
 
 
-# || Segment Class Overview ||
-# Class Attribute:
-# 1. segCount (number of segments)
-# Instance Attributes:
-# 1. keySig (key signature)
-# 2. timeSig (time signature)
-# 3. notes (list of notes)
 class Segment:
+    # Class Attribute:
+    # 1. segCount (number of segments)
+    # Instance Attributes:
+    # 1. keySig (key signature)
+    # 2. timeSig (time signature)
+    # 3. notes (list of notes)
     # Constants
     DEF_CLEF = "treble"
     DEF_KEYSIG = "C"
@@ -216,9 +215,10 @@ class Segment:
         self.notes.insert(index, note)
         return self
 
-    def de_note(self, index):
+    def del_note(self, index):
         """
-        Replaces note to be deleted at index with a rest of the same duration
+        Replaces note to be deleted at index with a rest of the same
+        duration
         :param index: Note index to be deleted
         :type index: int
         :return: self with placeholder inserted
