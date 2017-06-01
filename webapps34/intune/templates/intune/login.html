@@ -1,8 +1,11 @@
 {% extends "intune/base_layer.html" %}
+{% block title %}
+    <title>Login</title>
+{% endblock %}
 
 {% block content %}
     <div class="login">
-        <h2>Login</h2>
+        <h2 style="text-align: left">Login</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}

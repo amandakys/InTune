@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en">
 <head>
-    <title>InTune Template</title>
+    {% block title %}{% endblock %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,12 +20,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">InTune</a>
+            <a class="navbar-brand" href="#" style="color: var(--background_color)">InTune</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">WHO</a></li>
-                <li><a href="#">WHAT</a></li>
+                <li><a href="#">PROFILE</a></li>
+                <li><a href="#">SETTINGS</a></li>
                 <li><a href="{% url 'login'%}">LOGOUT</a></li>
             </ul>
         </div>

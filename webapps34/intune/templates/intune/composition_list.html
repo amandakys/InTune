@@ -1,7 +1,14 @@
 {% extends "intune/base_layer.html" %}
+
+{% block title %}
+    <title>User Homepage</title>
+{% endblock %}
+
 {% block content %}
-    <h2>Your compositions:</h2>
-    <p><a href="{% url 'intune:song_create' %}">New Composition</a></p>
+    <h2>Your Compositions</h2>
+    <div class="btn-new-composition">
+        <a href="{% url 'intune:song_create' %}"><button type="button" class="btn btn-light">New Composition</button></a>
+    </div>
     {% if composition_list %}
         <ul>
             {% for composition in composition_list %}

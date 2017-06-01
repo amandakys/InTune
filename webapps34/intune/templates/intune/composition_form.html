@@ -1,9 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "intune/base_layer.html" %}
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
-  </form>
-</html>
+{% block title %}
+    <title>New Composition</title>
+{% endblock %}
+
+{% block content %}
+    <div class="create">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-light">Create</button>
+        </form>
+    </div>
+{% endblock %}
+
