@@ -8,7 +8,6 @@
 {% endblock imports %}
 
 {% block score %}
-
 <script type="text/javascript">
   function render_vexflow(element_id, data, render_options) {
     var element = document.getElementById(element_id);
@@ -21,13 +20,36 @@
   }
 </script>
 
+<h2>Edit:</h2>
+<form method="post" style="background-color: white" contenteditable="true">
+{% csrf_token %}
+    <div id="updated_json">
+        {{ composition.output_to_json }}
+    </div>
+</form>
+<button onclick="rerender()">Render</button>
+
+<br>
+
 <div style="background-color: white">
     {# TODO: resize canvas according to height of score #}
-    <canvas id="rendered" height="250"></canvas>
+    <canvas id="rendered"></canvas>
 </div>
 
 <script type="text/javascript">
-render_vexflow("rendered", {{ composition.output_to_json|safe}});
+    function rerender() {
+
+        var canvas = $("#rendered")[0];
+        var renderer = new Vex.Flow.Renderer(canvas,
+        Vex.Flow.Renderer.Backends.CANVAS);
+        var context = renderer.getContext();
+        renderer.resize(200, 250); // Resize and clear canvas
+
+        var text = document.getElementById("updated_json").innerHTML;
+        var modified_json = eval("(" + text + ")");
+        render_vexflow("rendered", modified_json);
+    }
+    window.onload = rerender(); // render on load initial state
 </script>
 
 {% endblock %}
