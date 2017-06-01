@@ -2,7 +2,7 @@ import unittest
 
 from hamcrest import *
 
-from intune.internalrep.ir import RegNote, RestNote, Segment, Note, IRScore
+from intune.internalrep.ir import RegNote, RestNote, Segment, IRScore
 from intune.internalrep.irdefs import Pitch
 from intune.internalrep.translate import NoteEncoder, SegEncoder, ScoreEncoder
 

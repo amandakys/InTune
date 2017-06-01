@@ -63,7 +63,8 @@ class NoteEncoder:
         :return: encoded form of a regular note
         :rtype: dict
         """
-        return {NoteEncoder.DURATION: NoteEncoder.encode_duration(note.duration),
+        return {NoteEncoder.DURATION:
+                    NoteEncoder.encode_duration(note.duration),
                 NoteEncoder.KEYS: [NoteEncoder.encode_pitch(note.pitch)]}
 
     @staticmethod
@@ -83,8 +84,8 @@ class NoteEncoder:
     def encode_note(note):
         """
         Polymorphic encoding of a note
-        :param n:
-        :type n: Note
+        :param note:
+        :type note: Note
         :return:
         :rtype: dict
         """
