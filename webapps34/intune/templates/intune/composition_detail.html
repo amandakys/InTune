@@ -21,17 +21,13 @@
   }
 </script>
 
-    <h2>Simple Chord</h2>
-    <div score style="background-color: white">
+<div style="background-color: white">
     {# TODO: resize canvas according to height of score #}
-        <canvas id="rendered" height="250"></canvas>
-    </div>
+    <canvas id="rendered" height="250"></canvas>
+</div>
 
-    <p>{{ composition.output_to_json }}</p>
-  <script type="text/javascript">
-    render_vexflow("rendered", {{ composition.output_to_json|safe}});
-  </script>
-
-
+<script type="text/javascript">
+render_vexflow("rendered", {{ composition.output_to_json|safe}});
+</script>
 
 {% endblock %}
