@@ -9,6 +9,7 @@
     padding-top: 20px;
     padding-bottom: 10px;
     border: 5px solid var(--background_color);
+    border-radius: 10px;
     line-height: 20px;
     color: var(--background_color);
 }
