@@ -1,9 +1,15 @@
 {% extends 'intune/base_layer.html' %}
 
+{% block title %}
+    <title>Register</title>
+{% endblock %}
+
 {% block content %}
+    <div class="register">
     <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-light">Create</button>
         </form>
+    </div>
 {%  endblock %}

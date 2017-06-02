@@ -12,16 +12,16 @@
     {% if composition_list %}
         <ul>
             {% for composition in composition_list %}
-                <div class="container-fluid">
+                <div class="composition-element">
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="icon col-sm-2">
                             <span class="glyphicon glyphicon-music"></span>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="info col-sm-8">
                             <li style="color: #34383b"><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
                             <p>Last Edited: {{ composition.lastEdit }}</p>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="edit col-sm-2">
                             <a href="{% url 'intune:song' composition.id %}">
                             <button type="button" class="btn btn-dark">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
@@ -33,7 +33,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>You have no compositions :(</p>
+        <h3 style="text-align: center">You have no compositions :(</h3>
     {% endif %}
 {%  endblock %}
 
