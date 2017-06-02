@@ -11,7 +11,8 @@ from .models import Composition, Profile
 class UserHomeView(generic.ListView):
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)
+                                          ).distinct().order_by("-lastEdit")
 
 
 class MusicScore(generic.DetailView):
