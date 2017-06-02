@@ -14,6 +14,11 @@ urlpatterns = [
         views.InTuneRegister.as_view(),
         name="register"),
 
+    url(r'^profile/$',
+        views.ProfileDetail.as_view(),
+        name="profile"),
+
+
     url(r'^composition/(?P<pk>[0-9]+)/edit/$',
         login_required(views.CompositionEdit.as_view()),
         name="song_edit"),

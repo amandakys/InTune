@@ -20,18 +20,22 @@
   }
 </script>
 
-<h2>Edit:</h2>
-<form method="post" style="background-color: white" contenteditable="true">
-{% csrf_token %}
-    <div id="updated_json">
-        {{ composition.output_to_json }}
+<div class="render col-sm-12">
+    <form method="post" contenteditable="true">
+        {% csrf_token %}
+        <div id="updated_json">
+            {{ composition.output_to_json }}
+        </div>
+    </form>
     </div>
-</form>
-<button onclick="rerender()">Render</button>
+    <div style="text-align: center" class="col-sm-12">
+        <button onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
+    </div>
+
 
 <br>
 
-<div style="background-color: white">
+<div id="song-canvas" class="col-xs-12">
     {# TODO: resize canvas according to height of score #}
     <canvas id="rendered"></canvas>
 </div>
@@ -42,7 +46,6 @@
         var canvas = $("#rendered")[0];
         var renderer = new Vex.Flow.Renderer(canvas,
         Vex.Flow.Renderer.Backends.CANVAS);
-        var context = renderer.getContext();
         renderer.resize(200, 250); // Resize and clear canvas
 
         var text = document.getElementById("updated_json").innerHTML;
