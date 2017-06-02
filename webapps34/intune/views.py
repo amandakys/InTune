@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import redirect
 from django.views import generic
 
@@ -14,7 +15,14 @@ class UserHomeView(generic.ListView):
 
 
 class MusicScore(generic.DetailView):
-    # TODO: consider redirect if composition not found
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+        except Http404:
+            # TODO: add error message
+            return redirect("intune:index")
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
@@ -37,7 +45,6 @@ class InTuneRegister(generic.edit.CreateView):
     template_name = "intune/register.html"
     success_url = reverse_lazy("intune:index")
 
-    # TODO: if logged in, add profile and redirect immediately
     def dispatch(self, *args, **kwargs):
         if self.request.user.is_authenticated():
             if not self.request.user.profile:
@@ -50,11 +57,12 @@ class InTuneRegister(generic.edit.CreateView):
         Profile(user=form.instance).save()
         return super(InTuneRegister, self).form_valid(form)
 
+
 class ProfileDetail(generic.DetailView):
     def get_object(self, queryset=None):
         return self.request.user.profile
 
-# TODO: change to UpdateView later to actually update database?
+
 class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
