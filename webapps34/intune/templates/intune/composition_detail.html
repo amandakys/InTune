@@ -2,39 +2,23 @@
 {% load staticfiles %}
 
 {% block imports %}
-<script src="{% static 'lib/underscore-min.js' %}"></script>
-<script src="{% static 'lib/vexflow-min.js' %}"></script>
-<script src="{% static 'lib/vexflow-json.js' %}"></script>
+<script src="{% static 'lib/vextab-div.js' %}"></script>
+<script src="{% static 'intune/vextab-renderer.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
 {% block score %}
+<div style="margin:auto; width:600px;">
 
-<script type="text/javascript">
-    function render_vexflow(element_id, data, render_options) {
-        var element = document.getElementById(element_id);
-        var json = new Vex.Flow.JSON(data);
-        if (render_options) {
-            json.render(element, render_options);
-        } else {
-            json.render(element, data);
-        }
-    }
-</script>
-
-<div style="background-color: white" class="col-xs-12">
-    {# TODO: resize canvas according to height of score #}
-    <canvas id="rendered"></canvas>
+    <canvas id="canvas-to-load"></canvas>
+<div id="error"></div>
 </div>
 
-<script type="text/javascript">
-
-    var canvas = $("#rendered")[0];
-    var renderer = new Vex.Flow.Renderer(canvas,
-    Vex.Flow.Renderer.Backends.CANVAS);
-
-    {# TODO: dynamic sizing according to browser size? #}
-    renderer.resize(800, 250); // Resize and clear canvas
-    render_vexflow("rendered", {{ composition.data|safe}});
-</script>
+<textarea id="to-render" style="display: none">
+{% if composition.data %}{{ composition.data }}
+{% else %}{{ composition.get_default_string }}
+{% endif %}
+</textarea>
 
 {% endblock %}
