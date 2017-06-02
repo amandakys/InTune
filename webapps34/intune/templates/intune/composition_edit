@@ -36,7 +36,6 @@
 <br>
 
 <div id="song-canvas" class="col-xs-12">
-    {# TODO: resize canvas according to height of score #}
     <canvas id="rendered"></canvas>
 </div>
 
@@ -46,7 +45,9 @@
         var canvas = $("#rendered")[0];
         var renderer = new Vex.Flow.Renderer(canvas,
         Vex.Flow.Renderer.Backends.CANVAS);
-        renderer.resize(200, 250); // Resize and clear canvas
+
+        {# TODO: dynamic sizing according to browser size? #}
+        renderer.resize(800, 250); // Resize and clear canvas
 
         var text = document.getElementById("updated_json").innerHTML;
         var modified_json = eval("(" + text + ")");

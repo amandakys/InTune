@@ -18,11 +18,26 @@ class Composition(models.Model):
 
     def output_to_json(self):
         return \
-            '''{
-      clef: ["treble", "bass"],
-      duration: "w",
-      keys: ["C_2", "G_2", "Bb_2", "E_3", "Bb-3", "E-4", "G-4"],
-      add_right_double_line: true,
+    '''{
+      clef: "treble",
+      voices: [
+        { time: "4/4", notes: [
+          { duration: "h", keys: ["C", "Eb", "F", "A"] },
+          { duration: "h", keys: ["Bb", "D", "F", "A"] },
+          { barnote: true },
+          { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
+          { duration: "q", keys: ["C", "Eb", "F", "A"] },
+          { duration: "h", keys: ["Bb", "D", "F", "A"] },
+          { barnote: true },
+          { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
+          { duration: "q", keys: ["C", "Eb", "F", "A"] },
+          { duration: "h", keys: ["Bb", "D", "F", "A"] },
+          { barnote: true },
+          { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
+          { duration: "q", keys: ["C", "Eb", "F", "A"] },
+          { duration: "h", keys: ["Bb", "D", "F", "A"] }
+        ]}
+      ]
     }'''
 
     def __str__(self):
