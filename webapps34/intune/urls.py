@@ -13,4 +13,10 @@ urlpatterns = [
     url(r'^register/$',
         views.InTuneRegister.as_view(),
         name="register"),
+
+    url(r'^profile/$',
+        views.ProfileDetail.as_view(),
+        name="profile"),
+
+
 ]

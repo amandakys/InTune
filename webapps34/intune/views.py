@@ -50,3 +50,6 @@ class InTuneRegister(generic.edit.CreateView):
         Profile(user=form.instance).save()
         return super(InTuneRegister, self).form_valid(form)
 
+class ProfileDetail(generic.DetailView):
+    def get_object(self, queryset=None):
+        return self.request.user.profile
