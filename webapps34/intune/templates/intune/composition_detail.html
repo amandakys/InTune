@@ -1,7 +1,33 @@
-
-
 {% extends "intune/music_score_wrapper.html" %}
+{% load staticfiles %}
+
+{% block imports %}
+<script src="{% static 'lib/underscore-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-json.js' %}"></script>
+{% endblock imports %}
 
 {% block score %}
-    <p>TODO: implement score display for {{ composition.title }}</p>
+
+<script type="text/javascript">
+  function render_vexflow(element_id, data, render_options) {
+    var element = document.getElementById(element_id);
+    var json = new Vex.Flow.JSON(data);
+    if (render_options) {
+        json.render(element, render_options);
+    } else {
+        json.render(element, data);
+    }
+  }
+</script>
+
+<div style="background-color: white">
+    {# TODO: resize canvas according to height of score #}
+    <canvas id="rendered" height="250"></canvas>
+</div>
+
+<script type="text/javascript">
+render_vexflow("rendered", {{ composition.output_to_json|safe}});
+</script>
+
 {% endblock %}

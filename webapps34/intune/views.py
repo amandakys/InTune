@@ -53,3 +53,11 @@ class InTuneRegister(generic.edit.CreateView):
 class ProfileDetail(generic.DetailView):
     def get_object(self, queryset=None):
         return self.request.user.profile
+
+# TODO: change to UpdateView later to actually update database?
+class CompositionEdit(generic.DetailView):
+    template_name = "intune/composition_edit"
+
+    def get_queryset(self):
+        return Composition.objects.filter(Q(owner__user=self.request.user) |
+                                          Q(users__user=self.request.user))

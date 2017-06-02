@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+    <h2>Hi {{ request.user }}!</h2>
     <h2>Your Compositions</h2>
     <div class="btn-new-composition">
         <a href="{% url 'intune:song_create' %}"><button type="button" class="btn btn-light">New Composition</button></a>
@@ -22,7 +23,7 @@
                             <p>Last Edited: {{ composition.lastEdit }}</p>
                         </div>
                         <div class="edit col-sm-2">
-                            <a href="{% url 'intune:song' composition.id %}">
+                            <a href="{% url 'intune:song_edit' composition.id %}">
                             <button type="button" class="btn btn-dark">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
                             </button>
@@ -36,4 +37,3 @@
         <h3 style="text-align: center">You have no compositions :(</h3>
     {% endif %}
 {%  endblock %}
-

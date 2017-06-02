@@ -1,24 +1,23 @@
 {% extends "intune/base_layer.html" %}
+{% load bootstrap3 %}
+
 {% block title %}
     <title>Login</title>
 {% endblock %}
 
 {% block content %}
-    <div class="login">
-        <h2 style="text-align: left">Login</h2>
+    <div class="col-sm-4">
         <form method="post">
+            <h3>Login</h3>
             {% csrf_token %}
-            {{ form.as_p }}
-            <div class="buttons">
-                <button type="submit" class="btn btn-light">Login</button>
-                <a href="{% url 'intune:register' %}">
-                <button type="button" class="btn btn-light">Register</button>
-                </a>
-            </div>
+            {% bootstrap_form form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-light">Login</button>
+            {% endbuttons %}
         </form>
-
-
-
+        <h4>New user?</h4>
+        <a href="{% url 'intune:register' %}">
+            <button type="button" class="btn btn-light">Register</button>
+        </a>
     </div>
 {% endblock %}
-

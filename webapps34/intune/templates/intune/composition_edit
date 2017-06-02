@@ -1,0 +1,57 @@
+{% extends "intune/music_score_wrapper.html" %}
+{% load staticfiles %}
+
+{% block imports %}
+<script src="{% static 'lib/underscore-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-min.js' %}"></script>
+<script src="{% static 'lib/vexflow-json.js' %}"></script>
+{% endblock imports %}
+
+{% block score %}
+<script type="text/javascript">
+  function render_vexflow(element_id, data, render_options) {
+    var element = document.getElementById(element_id);
+    var json = new Vex.Flow.JSON(data);
+    if (render_options) {
+        json.render(element, render_options);
+    } else {
+        json.render(element, data);
+    }
+  }
+</script>
+
+<div class="col-xs-12">
+    <form method="post" class="col-sm-8" contenteditable="true">
+        {% csrf_token %}
+        <div id="updated_json">
+            {{ composition.output_to_json }}
+        </div>
+    </form>
+    <div class="col-sm-2">
+        <button onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
+    </div>
+</div>
+
+<br>
+
+<div id="song-canvas" class="col-xs-12">
+    {# TODO: resize canvas according to height of score #}
+    <canvas id="rendered"></canvas>
+</div>
+
+<script type="text/javascript">
+    function rerender() {
+
+        var canvas = $("#rendered")[0];
+        var renderer = new Vex.Flow.Renderer(canvas,
+        Vex.Flow.Renderer.Backends.CANVAS);
+        renderer.resize(200, 250); // Resize and clear canvas
+
+        var text = document.getElementById("updated_json").innerHTML;
+        var modified_json = eval("(" + text + ")");
+        render_vexflow("rendered", modified_json);
+    }
+    window.onload = rerender(); // render on load initial state
+</script>
+
+{% endblock %}

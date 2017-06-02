@@ -16,6 +16,15 @@ class Composition(models.Model):
     lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
+    def output_to_json(self):
+        return \
+            '''{
+      clef: ["treble", "bass"],
+      duration: "w",
+      keys: ["C_2", "G_2", "Bb_2", "E_3", "Bb-3", "E-4", "G-4"],
+      add_right_double_line: true,
+    }'''
+
     def __str__(self):
         return self.title
 

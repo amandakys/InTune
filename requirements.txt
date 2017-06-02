@@ -1,2 +1,4 @@
 Django==1.11.1
 uwsgi
+psycopg2
+django-bootstrap3
