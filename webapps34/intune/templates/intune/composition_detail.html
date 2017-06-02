@@ -10,24 +10,31 @@
 {% block score %}
 
 <script type="text/javascript">
-  function render_vexflow(element_id, data, render_options) {
-    var element = document.getElementById(element_id);
-    var json = new Vex.Flow.JSON(data);
-    if (render_options) {
-        json.render(element, render_options);
-    } else {
-        json.render(element, data);
+    function render_vexflow(element_id, data, render_options) {
+        var element = document.getElementById(element_id);
+        var json = new Vex.Flow.JSON(data);
+        if (render_options) {
+            json.render(element, render_options);
+        } else {
+            json.render(element, data);
+        }
     }
-  }
 </script>
 
-<div style="background-color: white">
+<div style="background-color: white" class="col-xs-12">
     {# TODO: resize canvas according to height of score #}
-    <canvas id="rendered" height="250"></canvas>
+    <canvas id="rendered"></canvas>
 </div>
 
 <script type="text/javascript">
-render_vexflow("rendered", {{ composition.output_to_json|safe}});
+
+    var canvas = $("#rendered")[0];
+    var renderer = new Vex.Flow.Renderer(canvas,
+    Vex.Flow.Renderer.Backends.CANVAS);
+
+    {# TODO: dynamic sizing according to browser size? #}
+    renderer.resize(800, 250); // Resize and clear canvas
+    render_vexflow("rendered", {{ composition.output_to_json|safe}});
 </script>
 
 {% endblock %}
