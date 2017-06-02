@@ -27,7 +27,8 @@ class MusicScore(generic.DetailView):
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)
+                                          ).distinct()
 
 
 class CompositionCreate(generic.edit.CreateView):
@@ -71,7 +72,8 @@ class CompositionEdit(generic.edit.UpdateView):
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)
+                                          ).distinct()
 
     def get_success_url(self):
         return reverse_lazy("intune:song_edit", args=[self.kwargs['pk']])
