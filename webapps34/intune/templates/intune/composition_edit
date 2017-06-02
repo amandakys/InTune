@@ -20,17 +20,18 @@
   }
 </script>
 
-<div class="col-xs-12">
-    <form method="post" class="col-sm-8" contenteditable="true">
+<div class="render col-sm-12">
+    <form method="post" contenteditable="true">
         {% csrf_token %}
         <div id="updated_json">
             {{ composition.output_to_json }}
         </div>
     </form>
-    <div class="col-sm-2">
+    </div>
+    <div style="text-align: center" class="col-sm-12">
         <button onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
     </div>
-</div>
+
 
 <br>
 
