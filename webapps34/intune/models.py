@@ -17,29 +17,9 @@ class Composition(models.Model):
     lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
-    def output_to_json(self):
-        return \
-            '''{
-              clef: "treble",
-              voices: [
-                { time: "4/4", notes: [
-                  { duration: "h", keys: ["C", "Eb", "F", "A"] },
-                  { duration: "h", keys: ["Bb", "D", "F", "A"] },
-                  { barnote: true },
-                  { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
-                  { duration: "q", keys: ["C", "Eb", "F", "A"] },
-                  { duration: "h", keys: ["Bb", "D", "F", "A"] },
-                  { barnote: true },
-                  { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
-                  { duration: "q", keys: ["C", "Eb", "F", "A"] },
-                  { duration: "h", keys: ["Bb", "D", "F", "A"] },
-                  { barnote: true },
-                  { duration: "q", keys: ["C", "Eb", "G", "Bb"] },
-                  { duration: "q", keys: ["C", "Eb", "F", "A"] },
-                  { duration: "h", keys: ["Bb", "D", "F", "A"] }
-                ]}
-              ]
-            }'''
+    def get_default_string(self):
+        return 'options space=20 tab-stems=true stave-distance=40 tab-stem-direction=down\n' \
+               'tabstave notation=true key=C time=4/4 tablature=false'
 
     def __str__(self):
         return self.title

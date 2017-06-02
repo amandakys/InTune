@@ -2,56 +2,81 @@
 {% load staticfiles %}
 
 {% block imports %}
-<script src="{% static 'lib/underscore-min.js' %}"></script>
-<script src="{% static 'lib/vexflow-min.js' %}"></script>
-<script src="{% static 'lib/vexflow-json.js' %}"></script>
+<script src="{% static 'lib/vextab-div.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+
+<script>
+    // Load VexTab module.
+    vextab = VexTabDiv;
+
+    $(function() {
+      VexTab = vextab.VexTab;
+      Artist = vextab.Artist;
+      Renderer = Vex.Flow.Renderer;
+
+      Artist.DEBUG = true;
+      VexTab.DEBUG = false;
+
+      // Create VexFlow Renderer from canvas element with id #canvas-to-load
+      renderer = new Renderer($('#canvas-to-load')[0], Renderer.Backends.CANVAS);
+
+      // Initialize VexTab artist and parser.
+      artist = new Artist(10, 10, 600, {scale: 0.8});
+      vextab = new VexTab(artist);
+
+      function render() {
+        try {
+          vextab.reset();
+          artist.reset();
+          vextab.parse($("#to-render").val());
+          artist.render(renderer);
+          $("#error").text("");
+        } catch (e) {
+          console.log(e);
+          $("#error").html(e.message.replace(/[\n]/g, '<br/>'));
+        }
+      }
+
+      $("#to-render").keyup(_.throttle(render, 250));
+      render();
+    });
+</script>
+
 {% endblock imports %}
 
+
+<body>
+
 {% block score %}
-<script type="text/javascript">
-  function render_vexflow(element_id, data, render_options) {
-    var element = document.getElementById(element_id);
-    var json = new Vex.Flow.JSON(data);
-    if (render_options) {
-        json.render(element, render_options);
-    } else {
-        json.render(element, data);
-    }
-  }
-</script>
 
-<div class="render col-sm-12">
-    <form method="post" action="">
-        {% csrf_token %}
-        <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
-        id="id_data">{{ composition.data }}</textarea>
-        <br>
-        <button type="submit" class="btn btn-light">Save</button>
-        <button type="button" onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
-    </form>
+<h1>VexTab Playground</h1>
 
-
-<br>
-
-<div id="song-canvas" class="col-xs-12">
-    <canvas id="rendered"></canvas>
+<div style="float:left;width:600px;">
+<canvas id="canvas-to-load"></canvas>
+<div id="error"></div>
 </div>
 
-<script type="text/javascript">
-    function rerender() {
+<div style="float:left;">
 
-        var canvas = $("#rendered")[0];
-        var renderer = new Vex.Flow.Renderer(canvas,
-        Vex.Flow.Renderer.Backends.CANVAS);
 
-        {# TODO: dynamic sizing according to browser size? #}
-        renderer.resize(800, 250); // Resize and clear canvas
+<form method="post" action="">
+    {% csrf_token %}
 
-        var text = document.getElementById("id_data").value;
-        var modified_json = eval("(" + text + ")");
-        render_vexflow("rendered", modified_json);
-    }
-    window.onload = rerender(); // render on load initial state
-</script>
+    <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
+    id="to-render">
+{% if composition.data %}{{ composition.data }}
+{% else %}{{ composition.get_default_string }}
+{% endif %}
+    </textarea>
+
+
+    <br>
+    <button type="submit" class="btn btn-light">Save</button>
+</form>
+
+</div>
 
 {% endblock %}
+</body>
