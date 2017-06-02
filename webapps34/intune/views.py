@@ -55,9 +55,14 @@ class ProfileDetail(generic.DetailView):
         return self.request.user.profile
 
 # TODO: change to UpdateView later to actually update database?
-class CompositionEdit(generic.DetailView):
-    template_name = "intune/composition_edit"
+class CompositionEdit(generic.edit.UpdateView):
+    template_name = "intune/composition_edit.html"
+    model = Composition
+    fields = ['data']
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
                                           Q(users__user=self.request.user))
+
+    def get_success_url(self):
+        return reverse_lazy("intune:song_edit", args=[self.kwargs['pk']])

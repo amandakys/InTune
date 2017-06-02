@@ -34,7 +34,7 @@
 
     {# TODO: dynamic sizing according to browser size? #}
     renderer.resize(800, 250); // Resize and clear canvas
-    render_vexflow("rendered", {{ composition.output_to_json|safe}});
+    render_vexflow("rendered", {{ composition.data|safe}});
 </script>
 
 {% endblock %}

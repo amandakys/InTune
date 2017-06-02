@@ -21,16 +21,14 @@
 </script>
 
 <div class="render col-sm-12">
-    <form method="post" contenteditable="true">
+    <form method="post" action="">
         {% csrf_token %}
-        <div id="updated_json">
-            {{ composition.output_to_json }}
-        </div>
+        <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
+        id="id_data">{{ composition.data }}</textarea>
+        <br>
+        <button type="submit" class="btn btn-light">Save</button>
+        <button type="button" onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
     </form>
-    </div>
-    <div style="text-align: center" class="col-sm-12">
-        <button onclick="rerender()" class="btn btn-light" style="margin-top:20px">Render</button>
-    </div>
 
 
 <br>
@@ -49,7 +47,7 @@
         {# TODO: dynamic sizing according to browser size? #}
         renderer.resize(800, 250); // Resize and clear canvas
 
-        var text = document.getElementById("updated_json").innerHTML;
+        var text = document.getElementById("id_data").value;
         var modified_json = eval("(" + text + ")");
         render_vexflow("rendered", modified_json);
     }
