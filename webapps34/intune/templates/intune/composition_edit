@@ -20,7 +20,6 @@
   }
 </script>
 
-<h2>Edit:</h2>
 <div class="col-xs-12">
     <form method="post" class="col-sm-8" contenteditable="true">
         {% csrf_token %}
