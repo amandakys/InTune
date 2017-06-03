@@ -1,11 +1,12 @@
 {% extends "intune/music_score_wrapper.html" %}
 {% load staticfiles %}
+{% load bootstrap3 %}
 
 {% block imports %}
-<script src="{% static 'lib/vextab-div.js' %}"></script>
-<script src="{% static 'intune/vextab-renderer.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="{% static 'lib/vextab-div.js' %}"></script>
+    <script src="{% static 'intune/vextab-renderer.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
 
@@ -13,29 +14,29 @@
 
 {% block score %}
 
-<div style="margin:auto;width:600px;">
-<canvas id="canvas-to-load"></canvas>
-<div id="error"></div>
-</div>
+    <div class="container" style="margin:auto;width:600px;">
+        <canvas id="canvas-to-load"></canvas>
+        <div id="error"></div>
+    </div>
 
-<div style="margin:auto;">
+    <div class="container">
 
+        <form method="post" action="">
+            {% csrf_token %}
 
-<form method="post" action="">
-    {% csrf_token %}
-
-    <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
-    id="to-render">
-{% if composition.data %}{{ composition.data }}
-{% else %}{{ composition.get_default_string }}
+{% if composition.data %}
+            <textarea class="form-control" rows="10" name="data" maxlength="10000"
+                      width="100%" id="to-render">{{ composition.data }}</textarea>
+{% else %}
+            <textarea class="form-control" rows="20" cols="160" name="data" maxlength="10000"
+                      width="100%" id="to-render">{{ composition.get_default_string }}</textarea>
 {% endif %}
-    </textarea>
-
-    <br>
-    <button type="submit" class="btn btn-light">Save</button>
-</form>
-
-</div>
+            <span class = "container">
+            {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
+            </span>
+        </form>
+    </div>
 
 {% endblock %}
+
 </body>
