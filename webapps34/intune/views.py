@@ -27,6 +27,12 @@ class CompositionCreate(generic.edit.CreateView):
     fields = ["title", "users"]
     success_url = reverse_lazy("intune:index")
 
+    def get_form(self):
+        form = super(CompositionCreate, self).get_form()
+        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(url='intune:profile-autocomplete')
+        form.fields['users'].queryset = Profile.objects.all()
+        return form
+
     def form_valid(self, form):
         form.instance.owner = self.request.user.profile
         form.instance.save()
