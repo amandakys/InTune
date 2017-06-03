@@ -1,4 +1,4 @@
-{% extends "intune/music_score_wrapper.html" %}
+{% extends "intune/base_layer.html" %}
 {% load staticfiles %}
 
 {% block imports %}
@@ -8,9 +8,10 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
-<body>
 
-{% block score %}
+{% block content %}
+
+<h1>{{ composition.title }}</h1>
 
 <div style="margin:auto;">
 
@@ -46,8 +47,6 @@
 </form>
 </div>
 
-
 {# needed for autocomplete to work #}
 {{ form.media }}
 {% endblock %}
-</body>
