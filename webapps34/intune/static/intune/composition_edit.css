@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'bravura';
+    src: url('../fonts/bravura/eot/Bravura.eot');
+    src: url('../fonts/bravura/otf/Bravura.otf');
+    src: url('../fonts/bravura/svg/Bravura.svg');
+    src: url('../fonts/bravura/woff/Bravura.woff');
+    src: url('../fonts/bravura/woff/Bravura.woff2');
+}
+
+@font-face {
+    font-family: 'bravura-text';
+    src: url('../fonts/bravura/eot/BravuraText.eot');
+    src: url('../fonts/bravura/otf/BravuraText.otf');
+    src: url('../fonts/bravura/svg/BravuraText.svg');
+    src: url('../fonts/bravura/woff/BravuraText.woff');
+}
+
+.bravura {
+    font-family: 'bravura';
+    font-size: large;
+}
+
+.bravura-text {
+    font-family: 'bravura-text';
+}
