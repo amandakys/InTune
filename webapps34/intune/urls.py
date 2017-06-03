@@ -18,8 +18,15 @@ urlpatterns = [
         views.ProfileDetail.as_view(),
         name="profile"),
 
-
     url(r'^composition/(?P<pk>[0-9]+)/edit/$',
         login_required(views.CompositionEdit.as_view()),
         name="song_edit"),
+
+    # (auxillary url used for django-autocomplete)
+    # TODO: make this url not visible?
+    url(
+        r'^profile-autocomplete/$',
+        login_required(views.ProfileAutocomplete.as_view()),
+        name='profile-autocomplete',
+    ),
 ]

@@ -8,15 +8,11 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
-
 <body>
 
 {% block score %}
 
-
-
 <div style="margin:auto;">
-
 
 <form method="post" action="">
     {% csrf_token %}
@@ -42,6 +38,6 @@
 </form>
 
 </div>
-
+{{ form.media }}
 {% endblock %}
 </body>

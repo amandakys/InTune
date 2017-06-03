@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views import generic
 
 from .models import Composition, Profile
-from django import forms
+from dal import autocomplete
 
 
 class UserHomeView(generic.ListView):
@@ -51,12 +51,12 @@ class InTuneRegister(generic.edit.CreateView):
         Profile(user=form.instance).save()
         return super(InTuneRegister, self).form_valid(form)
 
+
 class ProfileDetail(generic.DetailView):
     def get_object(self, queryset=None):
         return self.request.user.profile
 
 
-# TODO: change to UpdateView later to actually update database?
 class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
@@ -64,7 +64,7 @@ class CompositionEdit(generic.edit.UpdateView):
 
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
-        form.fields['users'].widget = forms.SelectMultiple()
+        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.all()
         return form
 
@@ -86,3 +86,11 @@ class CompositionEdit(generic.edit.UpdateView):
         return super(CompositionEdit, self).form_valid(form)
 
 
+class ProfileAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Profile.objects.none()
+        qs = Profile.objects.all()
+        if self.q:
+            qs = qs.filter(user__username__istartswith=self.q)
+        return qs
