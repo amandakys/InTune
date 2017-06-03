@@ -36,8 +36,11 @@
     <br>
     <button type="submit" class="btn btn-light">Save</button>
 </form>
-
 </div>
+
+{#<div class="text-center">#}
+    <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
+{#</div>#}
 {# needed for autocomplete to work #}
 {{ form.media }}
 {% endblock %}

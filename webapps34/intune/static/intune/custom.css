@@ -282,3 +282,12 @@ form label {
     }
 }
 
+@media print {
+    textarea, .edit_users, .btn {
+        display: none;
+    }
+    * {
+        color: #000;
+        background-color: #fff;
+    }
+}
