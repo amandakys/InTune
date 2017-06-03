@@ -5,12 +5,13 @@ from django.shortcuts import redirect
 from django.views import generic
 
 from .models import Composition, Profile
+from django import forms
 
 
 class UserHomeView(generic.ListView):
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)).distinct()
 
 
 class MusicScore(generic.DetailView):
@@ -18,7 +19,7 @@ class MusicScore(generic.DetailView):
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)).distinct()
 
 
 class CompositionCreate(generic.edit.CreateView):
@@ -54,15 +55,34 @@ class ProfileDetail(generic.DetailView):
     def get_object(self, queryset=None):
         return self.request.user.profile
 
+
 # TODO: change to UpdateView later to actually update database?
 class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
-    fields = ['data']
+    fields = ['data', 'users']
+
+    def get_form(self):
+        form = super(CompositionEdit, self).get_form()
+        form.fields['users'].widget = forms.SelectMultiple()
+        form.fields['users'].queryset = Profile.objects.all()
+        return form
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user))
+                                          Q(users__user=self.request.user)).distinct()
 
     def get_success_url(self):
         return reverse_lazy("intune:song_edit", args=[self.kwargs['pk']])
+
+    def form_valid(self, form):
+        composition = form.save(commit=False)
+        composition.save()
+        users = form.cleaned_data['users']
+        composition.users.clear()
+        for u in users:
+            composition.users.add(u)
+        form.save_m2m()
+        return super(CompositionEdit, self).form_valid(form)
+
+

@@ -13,16 +13,22 @@
 
 {% block score %}
 
-<div style="margin:auto;width:600px;">
-<canvas id="canvas-to-load"></canvas>
-<div id="error"></div>
-</div>
+
 
 <div style="margin:auto;">
 
 
 <form method="post" action="">
     {% csrf_token %}
+    <div class="edit_users">
+        <h6>Add/Remove shared users: </h6>
+        {{ form.users }}
+    </div>
+
+    <div style="margin:auto;width:600px;">
+    <canvas id="canvas-to-load"></canvas>
+    <div id="error"></div>
+    </div>
 
     <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
     id="to-render">
