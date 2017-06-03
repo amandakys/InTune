@@ -21,7 +21,12 @@
 {% endif %}
 </textarea>
 
-<div class="text-center">
-    <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
+<div>
+    <div class="pull-left">
+        <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
+    </div>
 </div>
 {% endblock %}

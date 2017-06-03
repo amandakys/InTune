@@ -34,13 +34,19 @@
     </textarea>
 
     <br>
-    <button type="submit" class="btn btn-light">Save</button>
+<div>
+    <div class="pull-left">
+        <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
+    </div>
+    <div class="pull-right">
+        <button type="submit" class="btn btn-light">Save</button>
+        <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
+    </div>
+</div>
 </form>
 </div>
 
-{#<div class="text-center">#}
-    <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
-{#</div>#}
+
 {# needed for autocomplete to work #}
 {{ form.media }}
 {% endblock %}
