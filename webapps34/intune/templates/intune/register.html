@@ -5,8 +5,11 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="register">
-    <form method="post">
+        <h1 style="text-align: left !important;">Register</h1>
+
+        <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-light">Create</button>
