@@ -19,8 +19,8 @@
         <div id="error"></div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row"><div class="col-md-8 col-md-offset-2 text-center">
+
+        <div class="container row"><div class="col-md-8 col-md-offset-2 text-center">
         <div class="btn-group" role="group" aria-label="Notation Selection">
             <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
             {# Semibreve #}
@@ -49,7 +49,7 @@
         </div>
         </div></div>
 
-        <div class="row">
+        <div class="container row">
             <div class="col-md-2 text-center">
                 <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
                     <button type="button" class="btn btn-default bravura">PLACEHOLDER</button>
@@ -79,22 +79,22 @@
                 </div>
             </div>
         </div>
-    </div>
+
 
     <div class="container" style="margin:auto;width:600px;">
         <canvas id="canvas-to-load2"></canvas>
         <div id="error2"></div>
     </div>
 
-    <div class="container">
+    <div class="container row">
     <div class="col-md-8 col-md-offset-2 text-center">
         <textarea class="form-control" rows="10" name="data" maxlength="10000"
                   width="100%" style="display: none" id="staff-prop">
 options space=20 tab-stems=true stave-distance=40 tab-stem-direction=down
 tabstave notation=true key=C time=4/4 tablature=false
         </textarea>
-        <textarea class="form-control" rows="20" cols="160" name="data" maxlength="10000"
-                  width="100%" id="notes"></textarea>
+        <textarea class="form-control" name="data" maxlength="10000"
+                 id="notes"></textarea>
         <div id="ECHO"></div>
     </div>
     </div>
