@@ -87,23 +87,27 @@
         </div>
     </div>
 
-    {# Second Editor Style #}
+    {# Second Editor Style - Hidden for now #}
 
-    <div class="container">
-        <div class="col-md-6 col-md-offset-3">
-            <canvas id="canvas-to-load2" style="margin:auto; display:block"></canvas>
-            <div id="error2"></div>
+    <div id="second-editor" style="display: none;">
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+                <canvas id="canvas-to-load2" style="margin:auto; display:block"></canvas>
+                <div id="error2"></div>
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
         <textarea class="form-control" name="staff properties"
                   style="display: none" id="staff-prop">
 tabstave notation=true key=C time=4/4 tablature=false
         </textarea>
-            <textarea class="form-control" name="notes" id="notes"></textarea>
+                <textarea class="form-control" name="notes" id="notes"></textarea>
+            </div>
         </div>
     </div>
+
+    {# Second Editor END #}
 
 {% endblock %}
