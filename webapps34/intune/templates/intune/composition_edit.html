@@ -65,11 +65,13 @@
                 {% csrf_token %}
 
                 {% if composition.data %}
-                    <textarea class="form-control" rows="10" name="data" maxlength="10000"
-                              width="100%" id="to-render">{{ composition.data }}</textarea>
+                    <label for="to-render">
+                        <textarea class="form-control" rows="10" name="data" maxlength="10000"
+                                  id="to-render">{{ composition.data }}</textarea>
+                    </label>
                 {% else %}
                     <textarea class="form-control" rows="20" cols="160" name="data" maxlength="10000"
-                              width="100%" id="to-render">{{ composition.get_default_string }}</textarea>
+                              id="to-render">{{ composition.get_default_string }}</textarea>
                 {% endif %}
                 <span class="container">
                     {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
@@ -99,11 +101,13 @@
 
         <div class="container">
             <div class="col-md-6 col-md-offset-3">
-        <textarea class="form-control" name="staff properties"
-                  style="display: none" id="staff-prop">
-tabstave notation=true key=C time=4/4 tablature=false
-        </textarea>
-                <textarea class="form-control" name="notes" id="notes"></textarea>
+                <label for="staff-prop">
+                    <textarea class="form-control" name="staff properties"
+                              style="display: none" id="staff-prop">tabstave notation=true key=C time=4/4 tablature=false</textarea>
+                </label>
+                <label for="notes">
+                    <textarea class="form-control" name="notes" id="notes"></textarea>
+                </label>
             </div>
         </div>
     </div>
