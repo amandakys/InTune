@@ -20,43 +20,45 @@
     </div>
 
 
-        <div class="container row"><div class="col-md-8 col-md-offset-2 text-center">
-        <div class="btn-group" role="group" aria-label="Notation Selection">
-            <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
-            {# Semibreve #}
-            <button type="button" class="btn btn-default bravura">&#xE1D3;</button>
-            {# Minim #}
-            <button type="button" class="btn btn-default bravura">&#xE1D5;</button>
-            {# Crotchet #}
-            <button type="button" class="btn btn-default bravura">&#xE1D7;</button>
-            {# Quaver #}
-            <button type="button" class="btn btn-default bravura">&#xE1D9;</button>
-            {# Semiquaver #}
-            <button type="button" class="btn btn-default bravura">&#xE1E7;</button>
-            {# Dotted Note #}
-            <button type="button" class="btn btn-default bravura">&#xE4E5;</button>
-            {# Rest #}
-            <button type="button" class="btn btn-default bravura">&#xE260;</button>
-            {# Flat #}
-            <button type="button" class="btn btn-default bravura">&#xE264;</button>
-            {# Double Flat #}
-            <button type="button" class="btn btn-default bravura">&#xE261;</button>
-            {# Natural #}
-            <button type="button" class="btn btn-default bravura">&#xE262;</button>
-            {# Sharp #}
-            <button type="button" class="btn btn-default bravura">&#xE263;</button>
-            {# Double Sharp #}
-        </div>
-        </div></div>
-
-        <div class="container row">
-            <div class="col-md-2 text-center">
-                <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
-                    <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
-                </div>
+    <div class="container row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+            <div class="btn-group" role="group" aria-label="Notation Selection">
+                <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
+                {# Semibreve #}
+                <button type="button" class="btn btn-default bravura">&#xE1D3;</button>
+                {# Minim #}
+                <button type="button" class="btn btn-default bravura">&#xE1D5;</button>
+                {# Crotchet #}
+                <button type="button" class="btn btn-default bravura">&#xE1D7;</button>
+                {# Quaver #}
+                <button type="button" class="btn btn-default bravura">&#xE1D9;</button>
+                {# Semiquaver #}
+                <button type="button" class="btn btn-default bravura">&#xE1E7;</button>
+                {# Dotted Note #}
+                <button type="button" class="btn btn-default bravura">&#xE4E5;</button>
+                {# Rest #}
+                <button type="button" class="btn btn-default bravura">&#xE260;</button>
+                {# Flat #}
+                <button type="button" class="btn btn-default bravura">&#xE264;</button>
+                {# Double Flat #}
+                <button type="button" class="btn btn-default bravura">&#xE261;</button>
+                {# Natural #}
+                <button type="button" class="btn btn-default bravura">&#xE262;</button>
+                {# Sharp #}
+                <button type="button" class="btn btn-default bravura">&#xE263;</button>
+                {# Double Sharp #}
             </div>
+        </div>
+    </div>
 
-            <div class="col-md-8 text-center">
+    <div class="container row">
+        <div class="col-md-2 text-center">
+            <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
+                <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
+            </div>
+        </div>
+
+        <div class="col-md-8 text-center">
             <form method="post" action="">
                 {% csrf_token %}
 
@@ -71,14 +73,14 @@
                 {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
                 </span>
             </form>
-            </div>
+        </div>
 
-            <div class="col-md-2 text-center">
-                <div class="btn-group-vertical" role="group" aria-label="Right Editor Buttons">
-                    <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
-                </div>
+        <div class="col-md-2 text-center">
+            <div class="btn-group-vertical" role="group" aria-label="Right Editor Buttons">
+                <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
             </div>
         </div>
+    </div>
 
 
     <div class="container" style="margin:auto;width:600px;">
@@ -87,16 +89,16 @@
     </div>
 
     <div class="container row">
-    <div class="col-md-8 col-md-offset-2 text-center">
+        <div class="col-md-8 col-md-offset-2 text-center">
         <textarea class="form-control" rows="10" name="data" maxlength="10000"
                   width="100%" style="display: none" id="staff-prop">
 options space=20 tab-stems=true stave-distance=40 tab-stem-direction=down
 tabstave notation=true key=C time=4/4 tablature=false
         </textarea>
-        <textarea class="form-control" name="data" maxlength="10000"
-                 id="notes"></textarea>
-        <div id="ECHO"></div>
-    </div>
+            <textarea class="form-control" name="data" maxlength="10000"
+                      id="notes"></textarea>
+            <div id="ECHO"></div>
+        </div>
     </div>
 
 {% endblock %}
