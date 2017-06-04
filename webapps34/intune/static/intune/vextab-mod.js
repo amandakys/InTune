@@ -19,10 +19,10 @@ $(function () {
             vextab.reset();
             artist.reset();
             var staff_text = $("#staff-prop").val().concat("\r\n");
-            var notes_text = "";
+            var notes_text = $("#notes").val();
             // Only add notes if the textarea for it is not empty
-            if ($.trim($("#notes").val())) {
-                notes_text += "notes " + $("#notes").val() + "\r\n";
+            if ($.trim(notes_text)) {
+                notes_text = "notes " + notes_text + "\r\n";
             }
             var full = staff_text.concat(notes_text);
             // $("#ECHO").text(full.replace(/[\r\n]/g, '<br/>'));
@@ -31,7 +31,7 @@ $(function () {
             $("#error2").text("");
         } catch (e) {
             console.log(e);
-            $("#error2").html(e.message.replace(/[\n]/g, '<br/>'));
+            $("#error2").html(e.message.replace(/[\n]/g, "<br/>"));
         }
     }
 
