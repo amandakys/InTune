@@ -1,3 +1,10 @@
+:root {
+    --background_color: #ffffff;
+    --element_color: #0070b5;
+    --dark_color: #34383b;
+    --light_color: #ebebeb;
+}
+
 @font-face {
     font-family: 'bravura';
     src: url('../fonts/bravura/eot/Bravura.eot');
