@@ -1,8 +1,8 @@
 $(function () {
     var vt = VexTabDiv;
-    VexTab = vt.VexTab;
-    Artist = vt.Artist;
-    Renderer = vt.Flow.Renderer;
+    var VexTab = vt.VexTab;
+    var Artist = vt.Artist;
+    var Renderer = vt.Flow.Renderer;
 
     Artist.DEBUG = true;
     vt.DEBUG = false;
@@ -12,12 +12,6 @@ $(function () {
 
     var artist = new Artist(10, 10, 600, {scale: 0.8});
     var vextab = new VexTab(artist);
-
-    $.valHooks.textarea = {
-      get: function( elem ) {
-        return elem.value.replace( /\r?\n/g, "\r\n" );
-      }
-    };
 
     function render2() {
         try {
