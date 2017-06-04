@@ -1,0 +1,45 @@
+$(function () {
+    var vt = VexTabDiv;
+    VexTab = vt.VexTab;
+    Artist = vt.Artist;
+    Renderer = vt.Flow.Renderer;
+
+    Artist.DEBUG = true;
+    vt.DEBUG = false;
+
+    // Create VexFlow Renderer from canvas element with id #boo.
+    var renderer = new Renderer($('#canvas-to-load2')[0], Renderer.Backends.CANVAS);
+
+    var artist = new Artist(10, 10, 600, {scale: 0.8});
+    var vextab = new VexTab(artist);
+
+    $.valHooks.textarea = {
+      get: function( elem ) {
+        return elem.value.replace( /\r?\n/g, "\r\n" );
+      }
+    };
+
+    function render2() {
+        try {
+            vextab.reset();
+            artist.reset();
+            var staff_text = $("#staff-prop").val().concat("\r\n");
+            var notes_text = "";
+            // Only add notes if the textarea for it is not empty
+            if ($.trim($("#notes").val())) {
+                notes_text += "notes " + $("#notes").val() + "\r\n";
+            }
+            var full = staff_text.concat(notes_text);
+            // $("#ECHO").text(full.replace(/[\r\n]/g, '<br/>'));
+            vextab.parse(full);
+            artist.render(renderer);
+            $("#error2").text("");
+        } catch (e) {
+            console.log(e);
+            $("#error2").html(e.message.replace(/[\n]/g, '<br/>'));
+        }
+    }
+
+    $("#notes").keyup(_.throttle(render2, 250));
+    render2();
+});
