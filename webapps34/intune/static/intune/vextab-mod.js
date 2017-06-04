@@ -4,7 +4,8 @@ $(function () {
     var Artist = vt.Artist;
     var Renderer = vt.Flow.Renderer;
 
-    Artist.DEBUG = true;
+    // Remove "vexflow.com" logo that is rendered by default
+    Artist.NOLOGO = true;
     vt.DEBUG = false;
 
     // Create VexFlow Renderer from canvas element with id #boo.
