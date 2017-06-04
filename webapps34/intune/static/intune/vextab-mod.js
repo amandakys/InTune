@@ -11,7 +11,7 @@ $(function () {
     // Create VexFlow Renderer from canvas element with id #boo.
     var renderer = new Renderer($('#canvas-to-load2')[0], Renderer.Backends.CANVAS);
 
-    var artist = new Artist(10, 10, 600, {scale: 0.8});
+    var artist = new Artist(10, 10, 600, {scale: 1});
     var vextab = new VexTab(artist);
 
     function render2() {

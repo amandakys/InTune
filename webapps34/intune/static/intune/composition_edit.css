@@ -5,6 +5,7 @@
     --light_color: #ebebeb;
 }
 
+/* Font and Text */
 @font-face {
     font-family: 'bravura';
     src: url('../fonts/bravura/eot/Bravura.eot');
@@ -33,4 +34,5 @@
 
 h1 {
     color: #20b2aa;
+    font-family: "Lucida Handwriting", serif;
 }

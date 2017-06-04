@@ -16,19 +16,22 @@
 
     {# First Editor Style #}
 
-    <div class="container" style="margin:auto;width:600px;">
-        <canvas id="canvas-to-load"></canvas>
-        <div id="error"></div>
-    </div>
-
-    <div class="col-md-2 text-center">
-        <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
-            <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+            <canvas id="canvas-to-load" style="margin:auto; display:block"></canvas>
+            <div id="error"></div>
         </div>
     </div>
 
-    <div class="col-md-8 text-center">
-        <div class="container-fluid">
+    <div class="col-md-2">
+        <div class="btn-group-vertical pull-right" role="group" aria-label="Left Editor Buttons">
+            <button type="button" class="btn btn-default">Octave Change</button>
+            <button type="button" class="btn btn-default">Select Multiple</button>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="container-fluid text-center">
             <div class="btn-group" role="group" aria-label="Notation Selection">
                 <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
                 {# Semibreve #}
@@ -57,7 +60,7 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid text-center">
             <form method="post" action="">
                 {% csrf_token %}
 
@@ -75,28 +78,31 @@
         </div>
     </div>
 
-    <div class="col-md-2 text-center">
-        <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
-            <button type="button" class="btn btn-default bravura-text">PLACEHOLDER</button>
+    <div class="col-md-2">
+        <div class="btn-group-vertical pull-left" role="group" aria-label="Right Editor Buttons">
+            <button type="button" class="btn btn-default">UP</button>
+            <button type="button" class="btn btn-default">LEFT</button>
+            <button type="button" class="btn btn-default">RIGHT</button>
+            <button type="button" class="btn btn-default">DOWN</button>
         </div>
     </div>
 
     {# Second Editor Style #}
 
-    <div class="container" style="margin:auto;width:600px;">
-        <canvas id="canvas-to-load2"></canvas>
-        <div id="error2"></div>
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <canvas id="canvas-to-load2" style="margin:auto; display:block"></canvas>
+            <div id="error2"></div>
+        </div>
     </div>
 
-    <div class="container row">
-        <div class="col-md-8 col-md-offset-2 text-center">
-        <textarea class="form-control" rows="10" name="data" maxlength="10000"
-                  width="100%" style="display: none" id="staff-prop">
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+        <textarea class="form-control" name="staff properties"
+                  style="display: none" id="staff-prop">
 tabstave notation=true key=C time=4/4 tablature=false
         </textarea>
-            <textarea class="form-control" name="data" maxlength="10000"
-                      id="notes"></textarea>
-            <div id="ECHO"></div>
+            <textarea class="form-control" name="notes" id="notes"></textarea>
         </div>
     </div>
 
