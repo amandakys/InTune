@@ -1,10 +1,3 @@
-:root {
-    --background_color: #ffffff;
-    --element_color: #33cccc;
-    --dark_color: #34383b;
-    --light_color: #ebebeb;
-}
-
 /* Font and Text */
 @font-face {
     font-family: 'bravura';
