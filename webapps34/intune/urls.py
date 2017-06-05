@@ -35,4 +35,7 @@ urlpatterns = [
         login_required(views.ProfileAutocomplete.as_view()),
         name='profile-autocomplete',
     ),
+
+    url(r'^notifications/$', views.NotificationList.as_view(), name='notifications'),
+
 ]

@@ -1,0 +1,16 @@
+{% extends "intune/base_layer.html" %}
+{% load humanize %}
+{% block content %}
+    {% if notification_list %}
+        {% for notification in notification_list %}
+            <li><a href="{% url 'intune:song' notification.composition.id %}">
+                <div class="notification col-sm-12">
+                    <p style="float:left">{{ notification.sender }} {{ notification.msg }}</p>
+                    <p style="float:left">{{ notification.sent_at|naturaltime }}</p>
+                </div>
+            </a>
+            </li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
