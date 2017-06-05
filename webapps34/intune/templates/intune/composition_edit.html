@@ -21,6 +21,7 @@ var vextab = new VexTab(artist);
 
 function edit_bar(bar_id) {
     $("#edit_text").val($("#render_" + bar_id).val());
+    $('label[for="edit_text"]').html("Bar " + (bar_id + 1));
 }
 
 function render(bar_id, from_edit) {
@@ -124,7 +125,8 @@ function render(bar_id, from_edit) {
         </div>
 
         <br>
-        <input type="text" id="edit_text" style="margin: .8em; font-size: 1.5em" width="200" maxlength="30"></input>
+        <label for="edit_text"></label>
+        <input type="text" id="edit_text" style="margin: .8em; font-size: 1.5em" width="200" maxlength="30" />
         <div id="error"></div>
     </div>
 
