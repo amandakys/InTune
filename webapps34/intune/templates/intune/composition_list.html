@@ -1,4 +1,5 @@
 {% extends "intune/base_layer.html" %}
+{% load humanize %}
 
 {% block title %}
     <title>User Homepage</title>
@@ -19,7 +20,7 @@
                         </div>
                         <div class="info col-sm-8">
                             <li style="color: #34383b"><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
-                            <p>Last Edited: {{ composition.lastEdit }}</p>
+                            <p>Last Edited: {{ composition.lastEdit|naturalday }}</p>
                         </div>
                         <div class="edit col-sm-2">
                             <a href="{% url 'intune:song_edit' composition.id %}">
