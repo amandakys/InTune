@@ -1,6 +1,6 @@
 :root {
     --background_color: #ffffff;
-    --element_color: #0070b5;
+    --element_color: #33cccc;
     --dark_color: #34383b;
     --light_color: #ebebeb;
 }
@@ -33,7 +33,7 @@
 }
 
 h1 {
-    color: #20b2aa;
+    color: #000000;
     font-family: "Lucida Handwriting", serif;
 }
 
