@@ -3,7 +3,6 @@
 
 {% block imports %}
 <script src="{% static 'lib/vextab-div.js' %}"></script>
-<script src="{% static 'intune/vextab-renderer.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
@@ -11,18 +10,10 @@
 {% block content %}
 
 <h1>{{ composition.title }}</h1>
-
-<div style="margin:auto; width:600px;">
-
-    <canvas id="canvas-to-load"></canvas>
-<div id="error"></div>
+<div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
+notation=true tablature=false
+notes {% for bar in composition.get_bar_list %}{{ bar }} |{% endfor %}
 </div>
-
-<textarea id="to-render" style="display: none">
-{% if composition.data %}{{ composition.data }}
-{% else %}{{ composition.get_default_string }}
-{% endif %}
-</textarea>
 
 <div>
     <div class="pull-left">

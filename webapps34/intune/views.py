@@ -39,8 +39,10 @@ class CompositionCreate(generic.edit.CreateView):
 
     def get_form(self):
         form = super(CompositionCreate, self).get_form()
-        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(url='intune:profile-autocomplete')
-        form.fields['users'].queryset = Profile.objects.exclude(user__id=self.request.user.id)
+        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
+                                        url='intune:profile-autocomplete')
+        form.fields['users'].queryset = Profile.objects.exclude(
+                                        user__id=self.request.user.id)
         return form
 
     def form_valid(self, form):
@@ -79,8 +81,10 @@ class CompositionEdit(generic.edit.UpdateView):
 
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
-        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(url='intune:profile-autocomplete')
-        form.fields['users'].queryset = Profile.objects.exclude(user__id=self.request.user.id)
+        form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
+                                        url='intune:profile-autocomplete')
+        form.fields['users'].queryset = Profile.objects.exclude(
+                                        user__id=self.request.user.id)
         return form
 
     def get_queryset(self):
@@ -90,16 +94,6 @@ class CompositionEdit(generic.edit.UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("intune:song_edit", args=[self.kwargs['pk']])
-
-    def form_valid(self, form):
-        composition = form.save(commit=False)
-        composition.save()
-        users = form.cleaned_data['users']
-        composition.users.clear()
-        for u in users:
-            composition.users.add(u)
-        form.save_m2m()
-        return super(CompositionEdit, self).form_valid(form)
 
 
 class ProfileAutocomplete(autocomplete.Select2QuerySetView):

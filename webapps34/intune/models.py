@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import json
 
 
 class Profile(models.Model):
@@ -18,9 +19,8 @@ class Composition(models.Model):
     lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
-    def get_default_string(self):
-        return 'options space=20 tab-stems=true stave-distance=40 tab-stem-direction=down\n' \
-               'tabstave notation=true key=C time=4/4 tablature=false'
+    def get_bar_list(self):
+        return json.loads(self.data)['bars']
 
     def __str__(self):
         return self.title

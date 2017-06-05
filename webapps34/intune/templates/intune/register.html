@@ -1,4 +1,5 @@
 {% extends 'intune/base_layer.html' %}
+{% load bootstrap3 %}
 
 {% block title %}
     <title>Register</title>
@@ -6,13 +7,15 @@
 
 {% block content %}
 
-    <div class="register">
+    <div class="col-sm-4">
         <h1 style="text-align: left !important;">Register</h1>
 
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-light">Create</button>
+            {% bootstrap_form form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-light">Register</button>
+            {% endbuttons %}
         </form>
     </div>
-{%  endblock %}
+{% endblock %}

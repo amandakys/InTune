@@ -87,10 +87,6 @@ form label {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element_color);
 }
 
-.register label {
-    color: var(--element_color);
-}
-
 .navbar.navbar-default {
     background-color: var(--element_color);
     border-radius: 0;
