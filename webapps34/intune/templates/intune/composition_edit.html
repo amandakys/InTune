@@ -85,6 +85,18 @@ $.ajaxSetup({
         }
     }
 });
+
+function add_bar() {
+    $.ajax({
+        method: "POST",
+        url: "{% url 'intune:bar_add' composition.id %}",
+        dataType: "json",
+        encode: true,
+    });
+    // TODO: add dynamically instead of reloading
+    location.reload();
+}
+
 $(function () {
     $('#edit_form').submit(function(event) {
         if (current_bar < 0 || current_bar >= {{ composition.get_bar_list| length }}) {
@@ -101,7 +113,6 @@ $(function () {
                 'bar_contents': $("#edit_text").val(),
             };
             // Submit
-            console.log("attempted submission of bar " + current_bar);
             $.ajax({
                 type: $('#edit_form').attr('method'),
                 url: $('#edit_form').attr('action'),
@@ -254,6 +265,7 @@ $(function () {
             <label for="edit_text"></label>
             <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
             <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-primary" onclick="add_bar()">New Bar</button>
             <div id="edit_error"></div>
             <div id="save_error"></div>
         </form>

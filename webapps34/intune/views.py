@@ -120,3 +120,14 @@ def composition_bar_edit_ajax(request):
 
     composition.set_bar(bar_id, request.POST['bar_contents'])
     return JsonResponse({'success': True})
+
+
+def composition_add_bar(request, pk):
+    if not request.is_ajax() or request.method != "POST":
+        return Http404()
+
+    composition = Composition.objects.get(pk=pk)
+    if not composition.has_access(request.user):
+        return Http404()
+    composition.add_bar()
+    return JsonResponse({'success': True})

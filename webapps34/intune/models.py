@@ -28,9 +28,14 @@ class Composition(models.Model):
         except ValueError:
             return {'bars': []}
 
-
     def has_access(self, user):
         return self.owner.user == user or user.profile in self.users.all()
+
+    def add_bar(self):
+        data = self.get_data()
+        data['bars'].append(":w ##")
+        self.data = dumps(data)
+        self.save()
 
     def set_bar(self, bar_id, contents):
         data = self.get_data()

@@ -32,6 +32,10 @@ urlpatterns = [
         login_required(views.composition_bar_edit_ajax),
         name="bar_edit"),
 
+    url(r'^composition/bar_append/(?P<pk>[0-9]+)/$',
+        login_required(views.composition_add_bar),
+        name="bar_add"),
+
     # (auxillary url used for django-autocomplete)
     # TODO: make this url not visible?
     url(
