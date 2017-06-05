@@ -11,6 +11,7 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
 <script>
+current_bar = -1;
 var vt = VexTabDiv;
 var VexTab = vt.VexTab;
 var Artist = vt.Artist;
@@ -22,6 +23,7 @@ var vextab = new VexTab(artist);
 function edit_bar(bar_id) {
     $("#edit_text").val($("#render_" + bar_id).val());
     $('label[for="edit_text"]').html("Bar " + (bar_id + 1));
+    current_bar = bar_id;
 }
 
 function render(bar_id, from_edit) {
@@ -34,12 +36,22 @@ function render(bar_id, from_edit) {
         var source = from_edit ? '#edit_text' : ('#render_' + bar_id);
         vextab.parse(stave + "\nnotes " + $(source).val());
         artist.render(renderer);
-        $("#error2").text("");
+        $("#edit_error").text("");
     } catch (e) {
         console.log(e);
-        $("#error2").html(e.message.replace(/[\n]/g, "<br/>"));
+        $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
     }
 }
+
+function render_edit() {
+    if (current_bar >= 0)
+        render(current_bar, true);
+}
+
+$(function () {
+    $("#edit_text").keyup(_.throttle(render_edit, 250));
+    render_edit();
+});
 </script>
 
 {% endblock imports %}
@@ -127,7 +139,7 @@ function render(bar_id, from_edit) {
         <br>
         <label for="edit_text"></label>
         <input type="text" id="edit_text" style="margin: .8em; font-size: 1.5em" width="200" maxlength="30" />
-        <div id="error"></div>
+        <div id="edit_error"></div>
     </div>
 
 </div>
