@@ -5,8 +5,8 @@ before_script:
 test:
   stage: test
   script:
-    - cd webapps34
-    - python3 manage.py test
+    - ./test.sh
+  environment: test
 
 docker_deploy:
   stage: deploy
@@ -17,3 +17,4 @@ docker_deploy:
     - docker stop intune
     - docker rm intune
     - docker run -d -p 8000:8000 --name intune intune
+  environment: production
