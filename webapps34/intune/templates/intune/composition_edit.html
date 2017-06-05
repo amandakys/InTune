@@ -74,9 +74,7 @@
                     <textarea class="form-control" rows="20" cols="160" name="data" maxlength="10000"
                               width="100%" id="to-render">{{ composition.get_default_string }}</textarea>
                 {% endif %}
-                <span class="container">
-                    {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
-                </span>
+                {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
             </form>
         </div>
     </div>
@@ -118,6 +116,12 @@
     <footer class="footer">
         <div class="container footer-text">
             *Placeholder*
+        </div>
+        <div class="container footer-text">
+            *Placeholder*
+        </div>
+        <div class="container footer-text">
+            Notifications
         </div>
     </footer>
 {% endblock footer %}
