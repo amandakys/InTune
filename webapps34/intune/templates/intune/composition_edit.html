@@ -1,9 +1,8 @@
 {% extends "intune/base_layer.html" %}
 {% load staticfiles %}
-
+{# tabstave notation=true tablature=falsenotes #}
 {% block imports %}
 <script src="{% static 'lib/vextab-div.js' %}"></script>
-<script src="{% static 'intune/vextab-renderer.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
@@ -13,38 +12,26 @@
 
 <h1>{{ composition.title }}</h1>
 
-<div style="margin:auto;">
-
 <form method="post" action="">
     {% csrf_token %}
     <div class="edit_users">
         <h6>Add/Remove shared users: </h6>
         {{ form.users }}
     </div>
-
-    <div style="margin:auto;width:600px;">
-    <canvas id="canvas-to-load"></canvas>
-    <div id="error"></div>
-    </div>
-
-    <textarea rows="20" cols="160" name="data" maxlength="10000" width="100%"
-    id="to-render">
-{% if composition.data %}{{ composition.data }}
-{% else %}{{ composition.get_default_string }}
-{% endif %}
-    </textarea>
-
-    <br>
-<div>
-    <div class="pull-left">
-        <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
-    </div>
-    <div class="pull-right">
-        <button type="submit" class="btn btn-light">Save</button>
-        <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
-    </div>
-</div>
 </form>
+
+{% for bar in composition.get_bar_list %}
+<div class="vex-tabdiv" width=200 scale=1.0 editor="false">tabstave
+{% if not forloop.first %}clef=none {% endif %} notation=true tablature=false
+notes {{ bar }}</div>
+{% endfor %}
+
+<div class="pull-left">
+    <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
+</div>
+<div class="pull-right">
+    <button type="submit" class="btn btn-light">Save</button>
+    <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
 </div>
 
 {# needed for autocomplete to work #}
