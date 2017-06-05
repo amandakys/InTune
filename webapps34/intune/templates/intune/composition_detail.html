@@ -10,11 +10,9 @@
 {% block content %}
 
 <h1>{{ composition.title }}</h1>
-
-<div class="vex-tabdiv" style="text-align: center" id="to-render" width=680 scale=1.0 editor="false">
-{% if composition.data %}{{ composition.data }}
-{% else %}{{ composition.get_default_string }}
-{% endif %}
+<div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
+notation=true tablature=false
+notes {% for bar in composition.get_bar_list %}{{ bar }} |{% endfor %}
 </div>
 
 <div>

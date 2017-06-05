@@ -1,15 +1,20 @@
 {% extends "intune/base_layer.html" %}
 {% load staticfiles %}
-{# tabstave notation=true tablature=falsenotes #}
+
 {% block imports %}
 <script src="{% static 'lib/vextab-div.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+<script>
+function editBar(bar_id) {
+    console.log("Editing bar " + bar_id);
+}
+</script>
 {% endblock imports %}
 
 
 {% block content %}
-
 <h1>{{ composition.title }}</h1>
 
 <form method="post" action="">
@@ -21,7 +26,7 @@
 </form>
 
 {% for bar in composition.get_bar_list %}
-<div class="vex-tabdiv" width=200 scale=1.0 editor="false">tabstave
+<div class="vex-tabdiv" width=200 scale=1.0 editor="false" onclick="editBar({{ forloop.counter }})">tabstave
 {% if not forloop.first %}clef=none {% endif %} notation=true tablature=false
 notes {{ bar }}</div>
 {% endfor %}
