@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.views import generic
 
-from .models import Composition, Profile
+from .models import Composition, Profile, Notification
 from dal import autocomplete
 
 
@@ -104,3 +104,7 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs
+
+class NotificationList(generic.ListView):
+    def get_queryset(self):
+        return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
