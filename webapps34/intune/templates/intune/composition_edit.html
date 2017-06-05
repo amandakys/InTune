@@ -58,19 +58,68 @@ $(function () {
 
 {% block content %}
 
-<h1>{{ composition.title }}</h1>
+{# --- Editor Navigation --- #}
 
-    <div class="container row text-center">
-        {% for bar in composition.get_bar_list %}
-        <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
-        <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{bar}}" />
-        <script>
-        render({{ forloop.counter0 }}, false);
-        </script>
-        {% endfor %}
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col-sm-6">
+            <a href="{% url 'intune:index' %}" class="btn btn-default pull-left">Back</a>
+        </div>
+        <div class="col-sm-6">
+            <div class="dropdown pull-right">
+                {# Sharing Composition #}
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        id="share_button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Share
+                </button>
+                <div class="dropdown-menu" aria-labelledby="share_actions">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="edit_users">
+                            <h6 class="container">Add/Remove shared users:</h6>
+                            {{ form.users }}
+                        </div>
+                        <div class="container">
+                            <button type="submit" class="btn btn-default">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {# Print Composition #}
+                <button type="button" class="btn btn-default"
+                        onclick="window.print();return false;">
+                    Print sheets
+                </button>
+            </div>
+        </div>
     </div>
+</div>
 
-    {# Left Editor Buttons #}
+<div class="container">
+    <div class="row">
+        <h1>{{ composition.title }}</h1>
+    </div>
+</div>
+
+{# --- Canvas/Render Block --- #}
+
+<div class="container text-center">
+    {% for bar in composition.get_bar_list %}
+    <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
+    <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{bar}}" />
+    <script>
+    render({{ forloop.counter0 }}, false);
+    </script>
+    {% endfor %}
+</div>
+
+
+{# --- Main Editor interface --- #}
+{# Left Column #}
+<div class="row">
 <div class="col-md-2 text-center">
     <div class="btn-group-vertical" role="group"
          aria-label="Left Editor Buttons">
@@ -81,69 +130,72 @@ $(function () {
     </div>
 </div>
 
-{# Center Buttons #}
+{# Center Column #}
 <div class="col-md-8">
-    <div class="container-fluid text-center">
-        <div class="btn-group" role="group"
-             aria-label="Notation Selection">
-            <button type="button" class="btn btn-default bravura">
-                &#xE1D2;
-            </button>
-            {# Semibreve #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE1D3;
-            </button>
-            {# Minim #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE1D5;
-            </button>
-            {# Crotchet #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE1D7;
-            </button>
-            {# Quaver #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE1D9;
-            </button>
-            {# Semiquaver #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE1E7;
-            </button>
-            {# Dotted Note #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE4E5;
-            </button>
-            {# Rest #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE260;
-            </button>
-            {# Flat #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE264;
-            </button>
-            {# Double Flat #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE261;
-            </button>
-            {# Natural #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE262;
-            </button>
-            {# Sharp #}
-            <button type="button" class="btn btn-default bravura">
-                &#xE263;
-            </button>
-            {# Double Sharp #}
+    <div class="container">
+        <div class="row text-center">
+            <div class="btn-group" role="group" aria-label="Notation Selection">
+                {# Semibreve #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D2;
+                </button>
+                {# Minim #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D3;
+                </button>
+                {# Crotchet #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D5;
+                </button>
+                {# Quaver #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D7;
+                </button>
+                {# Semiquaver #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D9;
+                </button>
+                {# Dotted Note #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1E7;
+                </button>
+                {# Rest #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE4E5;
+                </button>
+                {# Flat #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE260;
+                </button>
+                {# Double Flat #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE264;
+                </button>
+                {# Natural #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE261;
+                </button>
+                {# Sharp #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE262;
+                </button>
+                {# Double Sharp #}
+                <button type="button" class="btn btn-default bravura">
+                    &#xE263;
+                </button>
+            </div>
         </div>
-
-        <br>
-        <label for="edit_text"></label>
-        <input type="text" id="edit_text" style="margin: .8em; font-size: 1.5em" width="200" maxlength="30" />
-        <div id="edit_error"></div>
     </div>
-
+    <div class="row text-center">
+        <div class="form-group">
+            <label for="edit_text"></label>
+            <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
+            <div id="edit_error"></div>
+        </div>
+    </div>
 </div>
 
+{# Right Column #}
 <div class="col-md-2 text-center">
     <div class="btn-group-vertical" role="group"
          aria-label="Right Editor Buttons">
@@ -154,40 +206,15 @@ $(function () {
         <button type="button" class="btn btn-default">DOWN</button>
     </div>
 </div>
-    </div>
-
-<div class="container row">
-    <div class="col-md-4">
-        <form method="post" action="">
-            {% csrf_token %}
-            <div class="edit_users">
-                <h6>Add/Remove shared users: </h6>
-                {{ form.users }}
-            </div>
-        </form>
-    </div>
-
-    <div class="col-md-8">
-        <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
-
-        <button type="submit" class="btn btn-light">Save</button>
-        <button class="btn btn-light" style="" onclick="window.print();return false;">
-            Print sheets
-        </button>
-    </div>
-
 </div>
 
 
-
-
-
-
-    {# needed for autocomplete to work #}
-    {{ form.media }}
+{# needed for autocomplete to work #}
+{{ form.media }}
 
 {% endblock content %}
 
+{# --- Footer Navigation --- #}
 {% block footer %}
     <footer class="footer">
         <div class="container footer-text">
