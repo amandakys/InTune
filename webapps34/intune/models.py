@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from json import loads, JSONDecodeError
+from json import loads
 
 
 class Profile(models.Model):
@@ -22,7 +22,7 @@ class Composition(models.Model):
     def get_bar_list(self):
         try:
             return loads(self.data)['bars']
-        except JSONDecodeError:
+        except ValueError:
             return []
 
     def __str__(self):
