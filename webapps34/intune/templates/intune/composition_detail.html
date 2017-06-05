@@ -12,7 +12,7 @@
 <h1>{{ composition.title }}</h1>
 <div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
 notation=true tablature=false
-notes {% for bar in composition.get_bar_list %}{{ bar }} |{% endfor %}
+{% for bar in composition.get_bar_list %}{% if forloop.first %}notes {% endif %}{{ bar }} |{% endfor %}
 </div>
 
 <div>

@@ -1,8 +1,6 @@
-from json import JSONDecodeError
-
 from django.db import models
 from django.contrib.auth.models import User
-import json
+from json import loads, JSONDecodeError
 
 
 class Profile(models.Model):
@@ -23,7 +21,7 @@ class Composition(models.Model):
 
     def get_bar_list(self):
         try:
-            return json.loads(self.data)['bars']
+            return loads(self.data)['bars']
         except JSONDecodeError:
             return []
 
