@@ -1,10 +1,11 @@
-{% extends "intune/music_score_wrapper.html" %}
+{% extends "intune/base_layer.html" %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
 {% block imports %}
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'intune/composition_edit.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'intune/composition_edit.css' %}">
     <script src="{% static 'lib/vextab-div.js' %}"></script>
     <script src="{% static 'intune/vextab-renderer.js' %}"></script>
     <script src="{% static 'intune/vextab-mod.js' %}"></script>
@@ -12,7 +13,9 @@
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
-{% block score %}
+{% block content %}
+
+    <h1>{{ composition.title }}</h1>
 
     {# Main Body Content : Editor Interface #}
 
@@ -20,44 +23,73 @@
 
     <div class="container">
         <div class="col-md-8 col-md-offset-2">
-            <canvas id="canvas-to-load" style="margin:auto; display:block"></canvas>
+            <canvas id="canvas-to-load"
+                    style="margin:auto; display:block"></canvas>
             <div id="error"></div>
         </div>
     </div>
 
     <div class="col-md-2 text-center">
-        <div class="btn-group-vertical" role="group" aria-label="Left Editor Buttons">
-            <button type="button" class="btn btn-default">Octave Change</button>
-            <button type="button" class="btn btn-default">Select Multiple</button>
+        <div class="btn-group-vertical" role="group"
+             aria-label="Left Editor Buttons">
+            <button type="button" class="btn btn-default">Octave Change
+            </button>
+            <button type="button" class="btn btn-default">Select Multiple
+            </button>
         </div>
     </div>
 
     <div class="col-md-8">
         <div class="container-fluid text-center">
-            <div class="btn-group" role="group" aria-label="Notation Selection">
-                <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
+            <div class="btn-group" role="group"
+                 aria-label="Notation Selection">
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D2;
+                </button>
                 {# Semibreve #}
-                <button type="button" class="btn btn-default bravura">&#xE1D3;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D3;
+                </button>
                 {# Minim #}
-                <button type="button" class="btn btn-default bravura">&#xE1D5;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D5;
+                </button>
                 {# Crotchet #}
-                <button type="button" class="btn btn-default bravura">&#xE1D7;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D7;
+                </button>
                 {# Quaver #}
-                <button type="button" class="btn btn-default bravura">&#xE1D9;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1D9;
+                </button>
                 {# Semiquaver #}
-                <button type="button" class="btn btn-default bravura">&#xE1E7;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE1E7;
+                </button>
                 {# Dotted Note #}
-                <button type="button" class="btn btn-default bravura">&#xE4E5;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE4E5;
+                </button>
                 {# Rest #}
-                <button type="button" class="btn btn-default bravura">&#xE260;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE260;
+                </button>
                 {# Flat #}
-                <button type="button" class="btn btn-default bravura">&#xE264;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE264;
+                </button>
                 {# Double Flat #}
-                <button type="button" class="btn btn-default bravura">&#xE261;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE261;
+                </button>
                 {# Natural #}
-                <button type="button" class="btn btn-default bravura">&#xE262;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE262;
+                </button>
                 {# Sharp #}
-                <button type="button" class="btn btn-default bravura">&#xE263;</button>
+                <button type="button" class="btn btn-default bravura">
+                    &#xE263;
+                </button>
                 {# Double Sharp #}
             </div>
         </div>
@@ -66,25 +98,50 @@
             <form method="post" action="">
                 {% csrf_token %}
 
+                <div class="edit_users">
+                    <h6>Add/Remove shared users: </h6>
+                    {{ form.users }}
+                </div>
+
                 {% if composition.data %}
                     <label for="to-render"></label>
-                    <textarea class="form-control" rows="10" name="data" maxlength="10000"
-                              width="100%" id="to-render">{{ composition.data }}</textarea>
+                    <textarea class="form-control" rows="10" name="data"
+                              maxlength="10000"
+                              width="100%"
+                              id="to-render">{{ composition.data }}</textarea>
                 {% else %}
-                    <textarea class="form-control" rows="20" cols="160" name="data" maxlength="10000"
-                              width="100%" id="to-render">{{ composition.get_default_string }}</textarea>
+                    <textarea class="form-control" rows="20" cols="160"
+                              name="data" maxlength="10000"
+                              width="100%"
+                              id="to-render">{{ composition.get_default_string }}</textarea>
                 {% endif %}
                 {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
             </form>
         </div>
-    </div>
 
-    <div class="col-md-2 text-center">
-        <div class="btn-group-vertical" role="group" aria-label="Right Editor Buttons">
-            <button type="button" class="btn btn-default">UP</button>
-            <button type="button" class="btn btn-default">LEFT</button>
-            <button type="button" class="btn btn-default">RIGHT</button>
-            <button type="button" class="btn btn-default">DOWN</button>
+        <div class="col-md-2 text-center">
+            <div class="btn-group-vertical" role="group"
+                 aria-label="Right Editor Buttons">
+                <button type="button" class="btn btn-default">UP</button>
+                <button type="button" class="btn btn-default">LEFT</button>
+                <button type="button" class="btn btn-default">RIGHT
+                </button>
+                <button type="button" class="btn btn-default">DOWN</button>
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <div class="pull-left">
+                <a href="{% url 'intune:index' %}"
+                   class="btn btn-light">Back</a>
+            </div>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-light">Save</button>
+                <button class="btn btn-light" style=""
+                        onclick="window.print();return false;">Print sheets
+                </button>
+            </div>
         </div>
     </div>
 
@@ -93,7 +150,8 @@
     <div id="second-editor">
         <div class="container">
             <div class="col-md-6 col-md-offset-3">
-                <canvas id="canvas-to-load2" style="margin:auto; display:block"></canvas>
+                <canvas id="canvas-to-load2"
+                        style="margin:auto; display:block"></canvas>
                 <div id="error2"></div>
             </div>
         </div>
@@ -104,12 +162,15 @@
                 <textarea class="form-control" name="staff properties"
                           style="display: none" id="staff-prop">tabstave notation=true key=C time=4/4 tablature=false</textarea>
                 <label for="notes"></label>
-                <textarea class="form-control" name="notes" id="notes"></textarea>
+                <textarea class="form-control" name="notes"
+                          id="notes"></textarea>
             </div>
         </div>
     </div>
     {# Second Editor END #}
 
+{# needed for autocomplete to work #}
+{{ form.media }}
 {% endblock %}
 
 {% block footer %}

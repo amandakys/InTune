@@ -1,4 +1,4 @@
-{% extends "intune/music_score_wrapper.html" %}
+{% extends "intune/base_layer.html" %}
 {% load staticfiles %}
 
 {% block imports %}
@@ -8,7 +8,10 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
-{% block score %}
+{% block content %}
+
+<h1>{{ composition.title }}</h1>
+
 <div style="margin:auto; width:600px;">
 
     <canvas id="canvas-to-load"></canvas>
@@ -21,4 +24,13 @@
 {% endif %}
 </textarea>
 
-{% endblock %}
+<div>
+    <div class="pull-left">
+        <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
+    </div>
+</div>
+
+{% endblock content %}
