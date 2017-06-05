@@ -11,9 +11,34 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
 <script>
-    function editBar(bar_id) {
-        console.log("Editing bar " + bar_id);
+var vt = VexTabDiv;
+var VexTab = vt.VexTab;
+var Artist = vt.Artist;
+var Renderer = vt.Flow.Renderer;
+
+var artist = new Artist(10, 10, 200, {scale: 1});
+var vextab = new VexTab(artist);
+
+function edit_bar(bar_id) {
+    $("#edit_text").val($("#render_" + bar_id).val());
+}
+
+function render(bar_id, from_edit) {
+    try {
+        vextab.reset();
+        artist.reset();
+        var renderer = new Renderer($('#canvas_bar_' + bar_id)[0], Renderer.Backends.CANVAS);
+        var stave = "tabstave notation=true tablature = false";
+        if (bar_id > 0) { stave += " clef=none"; }
+        var source = from_edit ? '#edit_text' : ('#render_' + bar_id);
+        vextab.parse(stave + "\nnotes " + $(source).val());
+        artist.render(renderer);
+        $("#error2").text("");
+    } catch (e) {
+        console.log(e);
+        $("#error2").html(e.message.replace(/[\n]/g, "<br/>"));
     }
+}
 </script>
 
 {% endblock imports %}
@@ -23,14 +48,13 @@
 <h1>{{ composition.title }}</h1>
 
     <div class="container row text-center">
-{% for bar in composition.get_bar_list %}
-<div class="vex-tabdiv" width=200 scale=1.0 editor="false" onclick="editBar({{ forloop.counter0 }})">tabstave
-{% if not forloop.first %}clef=none {% endif %} notation=true tablature=false
-notes {{ bar }}</div>
-{% empty %}
-<div class="vex-tabdiv" width=200 scale=1.0 editor="false" onclick="editBar(-1)">tabstave
-notation=true tablature=false</div>
-{% endfor %}
+        {% for bar in composition.get_bar_list %}
+        <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
+        <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{bar}}" />
+        <script>
+        render({{ forloop.counter0 }}, false);
+        </script>
+        {% endfor %}
     </div>
 
     {# Left Editor Buttons #}
@@ -98,6 +122,10 @@ notation=true tablature=false</div>
             </button>
             {# Double Sharp #}
         </div>
+
+        <br>
+        <input type="text" id="edit_text" style="margin: .8em; font-size: 1.5em" width="200" maxlength="30"></input>
+        <div id="error"></div>
     </div>
 
 </div>
