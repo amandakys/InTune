@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-import json
+from json import loads, JSONDecodeError
 
 
 class Profile(models.Model):
@@ -20,7 +20,10 @@ class Composition(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     def get_bar_list(self):
-        return json.loads(self.data)['bars']
+        try:
+            return loads(self.data)['bars']
+        except JSONDecodeError:
+            return []
 
     def __str__(self):
         return self.title
