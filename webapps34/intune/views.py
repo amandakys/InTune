@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import redirect
 from django.views import generic
 
@@ -19,7 +20,11 @@ class MusicScore(generic.DetailView):
 
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user)).distinct()
+                                                 Q(users__user=self.request.user)).distinct()
+        # try:
+        #     compositions.get(id=self.kwargs['pk'])
+        # except Composition.DoesNotExist:
+        #     raise Http404("Composition does not exist!")
 
 
 class CompositionCreate(generic.edit.CreateView):
