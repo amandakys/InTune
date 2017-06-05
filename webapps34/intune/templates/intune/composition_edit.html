@@ -250,7 +250,7 @@ $(function () {
         </div>
     </div>
     <div class="row text-center">
-        <form method="post" action="/" id="edit_form">
+        <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form">
             <label for="edit_text"></label>
             <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
             <button type="submit" class="btn btn-primary">Save</button>

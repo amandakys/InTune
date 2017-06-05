@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
@@ -104,3 +104,19 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs
+
+
+def composition_bar_edit_ajax(request):
+    if not request.is_ajax() or request.method != "POST":
+        return Http404()
+
+    composition = Composition.objects.get(id=request.POST['composition_id'])
+    if not composition.has_access(request.user):
+        return Http404()
+
+    bar_id = int(request.POST['bar_id'])
+    if bar_id < 0 or bar_id >= len(composition.get_bar_list()):
+        return Http404()
+
+    composition.set_bar(bar_id, request.POST['bar_contents'])
+    return JsonResponse({'success': True})

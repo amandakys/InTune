@@ -28,6 +28,10 @@ urlpatterns = [
         login_required(views.CompositionEdit.as_view()),
         name="song_edit"),
 
+    url(r'^composition/bar_change/$',
+        login_required(views.composition_bar_edit_ajax),
+        name="bar_edit"),
+
     # (auxillary url used for django-autocomplete)
     # TODO: make this url not visible?
     url(
