@@ -17,10 +17,13 @@
 
 <form method="post" action="">
     {% csrf_token %}
+
+    {% if composition.owner.user == request.user %}
     <div class="edit_users">
         <h6>Add/Remove shared users: </h6>
         {{ form.users }}
     </div>
+    {% endif %}
 
     <div style="margin:auto;width:600px;">
     <canvas id="canvas-to-load"></canvas>
