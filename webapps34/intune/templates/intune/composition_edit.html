@@ -129,49 +129,24 @@
                 <button type="button" class="btn btn-default">DOWN</button>
             </div>
         </div>
+    </div>
 
-        <br>
-        <div>
-            <div class="pull-left">
-                <a href="{% url 'intune:index' %}"
-                   class="btn btn-light">Back</a>
-            </div>
-            <div class="pull-right">
-                <button type="submit" class="btn btn-light">Save</button>
-                <button class="btn btn-light" style=""
-                        onclick="window.print();return false;">Print sheets
-                </button>
-            </div>
+    <div class = "container row">
+        <div class="pull-left">
+            <a href="{% url 'intune:index' %}"
+               class="btn btn-light">Back</a>
+        </div>
+        <div class="pull-right">
+            <button type="submit" class="btn btn-light">Save</button>
+            <button class="btn btn-light" style=""
+                    onclick="window.print();return false;">Print sheets
+            </button>
         </div>
     </div>
 
-    {# Second Editor Style - Hidden for now #}
-
-    <div id="second-editor">
-        <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                <canvas id="canvas-to-load2"
-                        style="margin:auto; display:block"></canvas>
-                <div id="error2"></div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                <label for="staff-prop"></label>
-                <textarea class="form-control" name="staff properties"
-                          style="display: none" id="staff-prop">tabstave notation=true key=C time=4/4 tablature=false</textarea>
-                <label for="notes"></label>
-                <textarea class="form-control" name="notes"
-                          id="notes"></textarea>
-            </div>
-        </div>
-    </div>
-    {# Second Editor END #}
-
-{# needed for autocomplete to work #}
-{{ form.media }}
-{% endblock %}
+    {# needed for autocomplete to work #}
+    {{ form.media }}
+{% endblock content %}
 
 {% block footer %}
     <footer class="footer">
