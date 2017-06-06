@@ -45,3 +45,14 @@ class Composition(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    commenter = models.ForeignKey(Profile)
+    time = models.DateTimeField(auto_now_add=True)
+    composition = models.ForeignKey(Composition)
+    bar = models.PositiveIntegerField()
+    comment = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.comment
