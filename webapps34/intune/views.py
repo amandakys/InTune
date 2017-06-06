@@ -42,7 +42,7 @@ class CompositionCreate(generic.edit.CreateView):
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
                                         url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user__id=self.request.user.id)
+                                        user=self.request.user)
         return form
 
     def form_valid(self, form):
@@ -84,7 +84,7 @@ class CompositionEdit(generic.edit.UpdateView):
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
                                         url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user__id=self.request.user.id)
+                                        user=self.request.user)
         return form
 
     def get_queryset(self):
@@ -110,7 +110,7 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
             return Profile.objects.none()
-        qs = Profile.objects.exclude(user__id=self.request.user.id)
+        qs = Profile.objects.exclude(user=self.request.user)
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs

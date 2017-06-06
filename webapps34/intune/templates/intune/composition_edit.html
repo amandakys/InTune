@@ -146,12 +146,15 @@ $(function () {
         <div class="col-sm-6">
             <div class="dropdown pull-right">
                 {# Sharing Composition #}
+                {% if composition.owner.user == request.user %}
                 <button type="button" class="btn btn-default dropdown-toggle"
                         id="share_button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     Share
                 <span class="caret"></span>
                 </button>
+                {% endif %}
+
                 <div class="dropdown-menu" aria-labelledby="share_actions">
                     <form method="post" action="">
                         {% csrf_token %}
@@ -176,6 +179,7 @@ $(function () {
         </div>
     </div>
 </div>
+
 
 <div class="container">
     <div class="row">
