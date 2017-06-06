@@ -1,6 +1,8 @@
 {% extends "intune/base_layer.html" %}
 {% load staticfiles %}
 
+{% block title %}<title>{{ composition }}</title>{% endblock title %}
+
 {% block imports %}
 <script src="{% static 'lib/vextab-div.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
