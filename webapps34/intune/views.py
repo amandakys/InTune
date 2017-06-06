@@ -96,6 +96,16 @@ class CompositionEdit(generic.edit.UpdateView):
         return reverse_lazy("intune:song_edit", args=[self.kwargs['pk']])
 
 
+class CompositionDelete(generic.edit.DeleteView):
+    model = Composition
+    success_url = reverse_lazy("intune:index")
+
+    def get_queryset(self):
+        return Composition.objects.filter(Q(owner__user=self.request.user) |
+                                          Q(users__user=self.request.user)
+                                          ).distinct()
+
+
 class ProfileAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():

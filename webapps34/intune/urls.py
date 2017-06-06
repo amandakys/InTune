@@ -28,6 +28,10 @@ urlpatterns = [
         login_required(views.CompositionEdit.as_view()),
         name="song_edit"),
 
+    url(r'^composition/(?P<pk>[0-9]+)/delete/$',
+        login_required(views.CompositionDelete.as_view()),
+        name="song_delete"),
+
     url(r'^composition/bar_change/$',
         login_required(views.composition_bar_edit_ajax),
         name="bar_edit"),

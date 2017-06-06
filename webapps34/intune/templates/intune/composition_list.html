@@ -24,9 +24,14 @@
                         </div>
                         <div class="edit col-sm-2">
                             <a href="{% url 'intune:song_edit' composition.id %}">
-                            <button type="button" class="btn btn-dark">
-                                <span class="glyphicon glyphicon-pencil"></span> Edit
-                            </button>
+                                <button type="button" class="btn btn-dark">
+                                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                                </button>
+                            </a>
+                            <a href="{% url 'intune:song_delete' composition.id %}">
+                                <button type="button" class="btn btn-dark">
+                                    <span class="glyphicon glyphicon-remove"></span> Delete
+                                </button>
                             </a>
                         </div>
                     </div>

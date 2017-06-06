@@ -1,0 +1,34 @@
+{% extends "intune/base_layer.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}<title>{{ composition }}: Delete</title>{% endblock title %}
+
+{% block imports %}
+<script src="{% static 'lib/vextab-div.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+{% endblock imports %}
+
+{% block content %}
+<h1>Delete {{ composition.title }}</h1>
+<div class="row">
+    <div class="col-sm-4">
+        <form method="post" action="">
+            {% csrf_token %}
+            <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
+            {% buttons %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
+    notation=true tablature=false
+    {% for bar in composition.get_bar_list %}{% if forloop.first %}notes {% endif %}{{ bar }} |{% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
