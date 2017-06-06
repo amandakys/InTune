@@ -7,7 +7,6 @@ from intune.models import Composition, User, Profile
 
 class ViewTests(TestCase):
     u_names = ['u1', 'u2', 'u3']
-    pw = 'password123'
     client = Client()
     users = []
     profiles = []
@@ -15,7 +14,6 @@ class ViewTests(TestCase):
     def setUp(self):
         for i in range(3):
             self.users.append(User.objects.create(username=self.u_names[i]))
-            self.users[i].set_password(self.pw)
             self.users[i].save()
             self.profiles.append(Profile.objects.create(user=self.users[i]))
 
@@ -27,17 +25,18 @@ class ViewTests(TestCase):
                                                             title="song1")
 
     def test_can_view_owned_compositions(self):
-        login = self.client.login(username=self.u_names[0], password=self.pw)
-        self.assertTrue(login)
+        login = self.client.force_login(self.users[0])
         pk = self.composition.id
         response = self.client.get(reverse('intune:song', args=[pk]))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['composition'], self.composition)
         self.client.logout()
 
     def test_cannot_view_compositions_not_owned_or_shared(self):
-        login = self.client.login(username=self.u_names[1], password=self.pw)
-        self.assertTrue(login)
+        login = self.client.force_login(self.users[1])
         pk = self.user0_composition.id
         response = self.client.get(reverse('intune:song', args=[pk]))
-        self.assertEqual(response.status_code, 404)
+        if response.context:
+            self.assertIsNone(response.context['composition'])
+        else:
+            self.assertFalse("song1" in str(response.content))
         self.client.logout()
