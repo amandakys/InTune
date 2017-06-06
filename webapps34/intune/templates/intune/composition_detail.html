@@ -18,13 +18,11 @@
 <div id="error"></div>
 </div>
 
-{% if composition.owner.user == request.user %}
 <textarea id="to-render" style="display: none">
 {% if composition.data %}{{ composition.data }}
 {% else %}{{ composition.get_default_string }}
 {% endif %}
 </textarea>
-{% endif %}
 
 <div>
     <div class="pull-left">
