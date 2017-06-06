@@ -47,4 +47,10 @@ urlpatterns = [
         login_required(views.ProfileAutocomplete.as_view()),
         name='profile-autocomplete',
     ),
+
+    # Retrieve Composition Attributes as JSON
+    url(r'^composition/attribute/(?P<pk>[0-9]+)/$',
+        login_required(views.CompositionAttribute),
+        name="composition_attribute"
+        )
 ]

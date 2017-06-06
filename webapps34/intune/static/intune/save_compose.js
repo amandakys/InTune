@@ -28,13 +28,17 @@ $.ajaxSetup({
     }
 });
 
-function add_bar() {
+$(document).ready (function ()
+{
+    window.add_bar = function add_bar() {
     $.ajax({
         method: "POST",
         url: "{% url 'intune:bar_add' composition.id %}",
         dataType: "json",
-        encode: true,
+        encode: true
     });
     // TODO: add dynamically instead of reloading
     location.reload();
 }
+});
+

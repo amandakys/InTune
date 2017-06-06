@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
-from django.views import generic
+from django.views import generic, View
 
 from .models import Composition, Profile
 from dal import autocomplete
@@ -114,6 +114,11 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs
+
+
+class CompositionAttribute(View):
+    def get_title(self):
+        pass
 
 
 def composition_bar_edit_ajax(request):
