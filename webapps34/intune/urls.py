@@ -50,7 +50,7 @@ urlpatterns = [
 
     # Retrieve Composition Attributes as JSON
     url(r'^composition/attribute/(?P<pk>[0-9]+)/$',
-        login_required(views.CompositionAttribute),
+        login_required(views.get_composition_attribute),
         name="composition_attribute"
         )
 ]

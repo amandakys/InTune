@@ -1,7 +1,9 @@
+from json import dumps
+
 from django.contrib.auth.forms import UserCreationForm
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views import generic, View
 
@@ -40,9 +42,9 @@ class CompositionCreate(generic.edit.CreateView):
     def get_form(self):
         form = super(CompositionCreate, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
-                                        url='intune:profile-autocomplete')
+            url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user=self.request.user)
+            user=self.request.user)
         return form
 
     def form_valid(self, form):
@@ -82,9 +84,9 @@ class CompositionEdit(generic.edit.UpdateView):
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
-                                        url='intune:profile-autocomplete')
+            url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user=self.request.user)
+            user=self.request.user)
         return form
 
     def get_queryset(self):
@@ -116,9 +118,26 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
-class CompositionAttribute(View):
-    def get_title(self):
-        pass
+def get_composition_attribute(request, pk):
+    """
+    Returns python dictionary containing composition attributes
+    :param request: Http request method
+    :type request: django.core.handlers.wsgi.WSGIRequest
+    :param pk: Composition id
+    :type pk: int
+    :return: Dictionary containing composition attributes
+    :rtype: dict
+    """
+    if request.method != "GET":
+        return Http404()
+
+    composition = Composition.objects.get(pk=pk)
+    if not composition.has_access(request.user):
+        return HttpResponseForbidden()
+
+    attributes = composition.get_full_attributes()
+
+    return JsonResponse(attributes)
 
 
 def composition_bar_edit_ajax(request):

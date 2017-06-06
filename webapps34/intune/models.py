@@ -12,12 +12,20 @@ class Profile(models.Model):
 
 class Composition(models.Model):
     title = models.CharField(max_length=200)
-    owner = models.ForeignKey(Profile, related_name='owner', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, related_name='owner',
+                              on_delete=models.CASCADE)
     users = models.ManyToManyField(Profile, blank=True)
     # data = models.BinaryField()
     data = models.CharField(max_length=10000, blank=True)
     lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def get_full_attributes(self):
+        attributes = {'title': self.title,
+                      'owner': self.owner.user.username,
+                      'users': list(self.users.all())}
+        attributes.update(self.get_data())
+        return attributes
 
     def get_bar_list(self):
         return self.get_data()['bars']
