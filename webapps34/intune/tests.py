@@ -1,3 +1,4 @@
+import datetime
 from django.test import Client, TestCase, RequestFactory
 from django.urls import reverse
 
@@ -39,4 +40,26 @@ class ViewTests(TestCase):
             self.assertIsNone(response.context['composition'])
         else:
             self.assertFalse("song1" in str(response.content))
+        self.client.logout()
+
+    def test_composition_list_no_duplicates(self):
+        login = self.client.force_login(self.users[1])
+        response = self.client.get(reverse('intune:index'))
+        cl = response.context['composition_list']
+        self.assertEqual(len(cl), len(cl.distinct()))
+        self.client.logout()
+
+    def test_composition_list_ordered(self):
+        login = self.client.force_login(self.users[1])
+        response = self.client.get(reverse('intune:index'))
+        cl = response.context['composition_list']
+        self.assertEqual(len(cl), len(cl.order_by("-lastEdit")))
+        self.client.logout()
+
+    def test_composition_last_edit_no_future(self):
+        login = self.client.force_login(self.users[1])
+        response = self.client.get(reverse('intune:index'))
+        composition = response.context['composition_list'][0]
+        self.assertTrue(composition.lastEdit <=
+                        datetime.datetime.now(tz=composition.lastEdit.tzinfo))
         self.client.logout()
