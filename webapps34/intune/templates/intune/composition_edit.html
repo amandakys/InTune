@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css"
       href="{% static 'intune/composition_edit.css' %}">
 <script src="{% static 'lib/vextab-div.js' %}"></script>
-{#<script src="{% static 'intune/save_compose.js' %}"></script>#}
+<script src="{% static 'intune/save_compose.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 
@@ -190,13 +190,21 @@ $(function () {
 {# --- Canvas/Render Block --- #}
 
 <div class="container text-center">
+    <div class="row">
+        <div class="canvas-block" id="render_block">
+            <p class="text-center">PLACEHOLDER</p>
+        </div>
+    </div>
+
+    <div class="row">
     {% for bar in composition.get_bar_list %}
-    <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
-    <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{bar}}" />
-    <script>
-    render({{ forloop.counter0 }}, false);
-    </script>
+        <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
+        <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{ bar }}"/>
+        <script>
+            render({{ forloop.counter0 }}, false);
+        </script>
     {% endfor %}
+    </div>
 </div>
 
 
@@ -274,7 +282,8 @@ $(function () {
             <label for="edit_text"></label>
             <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
             <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-primary" onclick="add_bar()">New Bar</button>
+            <button type="button" class="btn btn-primary" onclick="add_bar()">Add Bar</button>
+            <button type="button" class="btn btn-primary" onclick="new_bar()">New Bar</button>
             <div id="edit_error"></div>
             <div id="save_error"></div>
         </form>

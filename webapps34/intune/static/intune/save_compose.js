@@ -1,44 +1,49 @@
-<!-- Saving -->
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+$(document).ready(function () {
+    // using jQuery
+    var getCookie = function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
+        return cookieValue;
+    };
 
-$(document).ready (function ()
-{
-    window.add_bar = function add_bar() {
-    $.ajax({
-        method: "POST",
-        url: "{% url 'intune:bar_add' composition.id %}",
-        dataType: "json",
-        encode: true
+    var csrftoken = getCookie('csrftoken');
+    var csrfSafeMethod = function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    };
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
     });
-    // TODO: add dynamically instead of reloading
-    location.reload();
-}
+
+    // Appends a new bar to render block
+    window.new_bar = function add_new() {
+        // $.ajax({
+        //         method: "POST",
+        //         url: "",
+        //         dataType: "json",
+        //         encode: true
+        //     }
+        // );
+
+        var canvas = document.createElement('canvas');
+        canvas.id = 'bar1';
+
+        document.getElementById('render_block').appendChild(canvas);
+    }
 });
 
