@@ -36,7 +36,7 @@ class ViewTests(TestCase):
         login = self.client.force_login(self.users[1])
         pk = self.user0_composition.id
         response = self.client.get(reverse('intune:song', args=[pk]))
-        if response.context:
+        if response.context and 'composition' in response.context:
             self.assertIsNone(response.context['composition'])
         else:
             self.assertFalse("song1" in str(response.content))
@@ -62,4 +62,22 @@ class ViewTests(TestCase):
         composition = response.context['composition_list'][0]
         self.assertTrue(composition.lastEdit <=
                         datetime.datetime.now(tz=composition.lastEdit.tzinfo))
+        self.client.logout()
+
+    def test_composition_edit_permission(self):
+        login = self.client.force_login(self.users[0])
+        pk = self.composition.id
+        response = self.client.get(reverse('intune:song_edit', args=[pk]))
+        self.assertEqual(response.context['composition'], self.composition)
+        pk = self.user0_composition.id
+        response = self.client.get(reverse('intune:song_edit', args=[pk]))
+        self.assertEqual(response.context['composition'], self.user0_composition)
+        self.client.logout()
+
+        login = self.client.force_login(self.users[2])
+        response = self.client.get(reverse('intune:song_edit', args=[pk]))
+        if response.context and 'composition' in response.context:
+            self.assertIsNone(response.context['composition'])
+        else:
+            self.assertFalse("song1" in str(response.content))
         self.client.logout()
