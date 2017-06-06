@@ -81,3 +81,19 @@ class ViewTests(TestCase):
         else:
             self.assertFalse("song1" in str(response.content))
         self.client.logout()
+
+
+class CompositionTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create(username="TestUser")
+        cls.profile = Profile.objects.create(user=cls.user)
+        cls.composition = Composition.objects.create(title="Test Composition", owner=cls.profile)
+
+    def test_has_bar(self):
+        self.assertTrue('bars' in self.composition.get_data())
+
+    def test_bar_add_integrity(self):
+        bar_list = self.composition.get_bar_list()
+        self.composition.add_bar()
+        self.assertSequenceEqual(bar_list, self.composition.get_bar_list()[:-1])
