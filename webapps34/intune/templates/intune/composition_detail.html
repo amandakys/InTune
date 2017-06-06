@@ -20,6 +20,7 @@ notation=true tablature=false
 <div>
     <div class="pull-left">
         <a href="{% url 'intune:index' %}" class="btn btn-light" >Back</a>
+        <a href="{% url 'intune:song_edit' composition.id %}" class="btn btn-light">Edit</a>
     </div>
     <div class="pull-right">
         <button class="btn btn-light" style="" onclick="window.print();return false;">Print sheets</button>
