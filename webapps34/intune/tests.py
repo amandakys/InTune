@@ -6,26 +6,35 @@ from intune.models import Composition, User, Profile
 
 
 class ViewTests(TestCase):
-    u_name1 = 'my_username1'
-    u_name2 = 'my_username2'
+    u_names = ['u1', 'u2', 'u3']
     pw = 'password123'
     client = Client()
+    users = []
+    profiles = []
 
     def setUp(self):
-        self.factory = RequestFactory()
-        self.test_user1 = User.objects.create(username=self.u_name1, password=self.pw)
-        self.test_user2 = User.objects.create(username=self.u_name2, password=self.pw)
-        test_profile1 = Profile.objects.create(user=self.test_user1)
-        test_profile2 = Profile.objects.create(user=self.test_user2)
-        self.composition = Composition.objects.create(owner=test_profile2, title="song")
-        self.composition.users.add(test_profile1)
-        self.user1_composition = Composition.objects.create(owner=test_profile1, title="song1")
+        for i in range(3):
+            self.users.append(User.objects.create(username=self.u_names[i]))
+            self.users[i].set_password(self.pw)
+            self.users[i].save()
+            self.profiles.append(Profile.objects.create(user=self.users[i]))
+
+        self.composition = Composition.objects.create(owner=self.profiles[1],
+                                                      title="song")
+        self.composition.users.add(self.profiles[0])
+        self.composition.users.add(self.profiles[2])
+        self.user0_composition = Composition.objects.create(owner=self.profiles[0],
+                                                            title="song1")
+        login = self.client.login(username=self.u_names[0], password=self.pw)
+        self.assertTrue(login)
 
     def test_can_view_owned_compositions(self):
         pk = self.composition.id
-        request = self.factory.get(reverse('intune:song', args=[pk]))
-        request.user = self.test_user1
-        response = views.MusicScore.as_view()(request, pk=pk)
+        response = self.client.get(reverse('intune:song', args=[pk]))
         self.assertEqual(response.status_code, 200)
 
+    def test_cannot_view_compositions_not_owned_or_shared(self):
+        pk = self.user0_composition.id
+        response = self.client.get(reverse('intune:song', args=[pk]))
+        self.assertEqual(response, 404)
 
