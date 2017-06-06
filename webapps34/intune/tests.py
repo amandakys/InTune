@@ -88,7 +88,16 @@ class CompositionTests(TestCase):
     def setUpTestData(cls):
         cls.user = User.objects.create(username="TestUser")
         cls.profile = Profile.objects.create(user=cls.user)
-        cls.composition = Composition.objects.create(title="Test Composition", owner=cls.profile)
+
+        cls.shared_user = User.objects.create(username="Shared")
+        cls.shared_profile = Profile.objects.create(user=cls.shared_user)
+
+        cls.non_shared_user = User.objects.create(username="NotShared")
+        cls.non_shared_profile = Profile.objects.create(user=cls.non_shared_user)
+
+        cls.composition = Composition.objects.create(title="Test Composition",
+                                                     owner=cls.profile)
+        cls.composition.users.add(cls.shared_profile)
 
     def test_has_bar(self):
         self.assertTrue('bars' in self.composition.get_data())
@@ -97,3 +106,8 @@ class CompositionTests(TestCase):
         bar_list = self.composition.get_bar_list()
         self.composition.add_bar()
         self.assertSequenceEqual(bar_list, self.composition.get_bar_list()[:-1])
+
+    def test_has_access(self):
+        self.assertTrue(self.composition.has_access(self.user))
+        self.assertTrue(self.composition.has_access(self.shared_user))
+        self.assertFalse(self.composition.has_access(self.non_shared_user))
