@@ -16,6 +16,24 @@ $(document).ready(function () {
         var bar_count = 0;
         var current_bar = 0;
 
+        /**
+         * Accepts a JSON object representing composition
+         * Renders it to the canvas block
+         * @param composition_json
+         * @private
+         */
+        function _load_init() {
+            /* Get composition attributes from server */
+            // var composition_json;
+            $.get($("#render_block").attr("data-ajax-target"),
+                function(data) {
+                    var json_string = JSON.stringify(data);
+                    console.log("Composition data:\n" + json_string);
+                },
+                "json"
+            );
+        }
+
         // Appends a new bar to render block
         function _append_new_bar() {
             if (bar_count < MAX_BARS) {
@@ -175,6 +193,8 @@ $(document).ready(function () {
             // Update data in div
             div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
         }
+
+        _load_init();
 
         return {
             append_new_bar: _append_new_bar,

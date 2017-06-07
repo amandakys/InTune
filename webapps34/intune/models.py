@@ -35,7 +35,7 @@ class Composition(models.Model):
     def get_full_attributes(self):
         attributes = {'title': self.title,
                       'owner': self.owner.user.username,
-                      'users': list(self.users.all())}
+                      'users': [str(p) for p in self.users.all()]}
         attributes.update(self.get_data())
         return attributes
 
