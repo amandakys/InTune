@@ -253,9 +253,13 @@ $(function () {
         <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form">
             <label for="edit_text"></label>
             <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
+            <div class="container">
+                <textarea class="form-control" placeholder="Playground!"></textarea>
+            </div>
             <button type="submit" class="btn btn-primary">Save</button>
             <button type="button" class="btn btn-primary" onclick="add_bar()">Add Bar</button>
-            <button type="button" class="btn btn-primary" id="new_bar">New Bar</button>
+            <button type="button" class="btn btn-default" id="new_bar">New Bar</button>
+            <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
             <div id="edit_error"></div>
             <div id="save_error"></div>
         </form>
@@ -268,8 +272,7 @@ $(function () {
          aria-label="Right Editor Buttons">
         <button type="button" class="btn btn-default">UP</button>
         <button type="button" class="btn btn-default">LEFT</button>
-        <button type="button" class="btn btn-default">RIGHT
-        </button>
+        <button type="button" class="btn btn-default">RIGHT</button>
         <button type="button" class="btn btn-default">DOWN</button>
     </div>
 </div>

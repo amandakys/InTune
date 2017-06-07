@@ -30,11 +30,10 @@ var Render = (function () {
             vextab.reset();
             artist.reset();
 
-            if (vex_string === "")
-            {
+            if (vex_string === "") {
                 vex_string = DEFAULT_OPTIONS + DEFAULT_STAVE;
             }
-
+            // console.log("Parsing:\n" + vex_string);
             vextab.parse(vex_string);
             artist.render(renderer);
             $("#error2").text("");
