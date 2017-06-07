@@ -1,4 +1,11 @@
+/**
+ * Module "Render":
+ * + render_bar
+ * - _render_bar
+ */
 var Render = (function () {
+    "use strict";
+
     // Constants
     var DEFAULT_OPTIONS = "";
     var DEFAULT_STAVE = "tabstave notation=true tablature = false";
