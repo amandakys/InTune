@@ -1,13 +1,13 @@
 from json import dumps
 
 from django.contrib.auth.forms import UserCreationForm
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views import generic, View
 
-from .models import Composition, Profile
+from .models import Comment, Composition, Profile
 from dal import autocomplete
 
 
@@ -145,7 +145,7 @@ def composition_bar_edit_ajax(request):
         return Http404()
 
     composition = Composition.objects.get(id=request.POST['composition_id'])
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
 
     bar_id = int(request.POST['bar_id'])
@@ -161,7 +161,42 @@ def composition_add_bar(request, pk):
         return Http404()
 
     composition = Composition.objects.get(pk=pk)
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
     composition.add_bar()
+    return JsonResponse({'success': True})
+
+
+def comment_get(request):
+    if not request.is_ajax() or request.method != "GET":
+        return Http404()
+
+    composition = Composition.objects.get(pk=request.GET['composition'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    comments = Comment.objects.filter(composition=composition,
+                                      bar=int(request.GET['bar']))
+    comments = [{   "commenter": str(comment.commenter),
+                    "time": str(comment.time),
+                    "comment": str(comment.comment),
+                } for comment in comments]
+    return JsonResponse({'comments': comments})
+
+
+def comment_create_ajax(request):
+    if not request.is_ajax() or request.method != "POST":
+        return Http404()
+
+    composition = Composition.objects.get(pk=request.POST['composition_id'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    # TODO: refactor into method in Composition
+    if len(request.POST['comment']) < 1:
+        return Http404()
+    Comment.objects.create(commenter=request.user.profile,
+                           composition=composition,
+                           bar=int(request.POST['bar_id']),
+                           comment=request.POST['comment'])
     return JsonResponse({'success': True})

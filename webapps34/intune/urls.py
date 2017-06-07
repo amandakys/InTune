@@ -40,6 +40,14 @@ urlpatterns = [
         login_required(views.composition_add_bar),
         name="bar_add"),
 
+    url(r'^comments/$',
+        login_required(views.comment_get),
+        name="comments"),
+
+    url(r'^comments/create/$',
+        login_required(views.comment_create_ajax),
+        name="comment_create"),
+
     # (auxillary url used for django-autocomplete)
     # TODO: make this url not visible?
     url(
