@@ -3,7 +3,10 @@ FROM python:latest
 WORKDIR /build/webapps34
 ADD . /build/
 
-RUN pip install -r /build/requirements.txt
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python2.7 get-pip.py
+RUN pip2.7 install supervisor
+RUN pip3 install -r /build/requirements.txt
 
 EXPOSE 80
 
