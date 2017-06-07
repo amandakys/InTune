@@ -5,7 +5,6 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
-from .forms import CommentForm
 from .models import Comment, Composition, Profile
 from dal import autocomplete
 
@@ -80,11 +79,6 @@ class CompositionEdit(generic.edit.UpdateView):
     model = Composition
     fields = ['data', 'users']
 
-    def get_context_data(self, **kwargs):
-        context = super(CompositionEdit, self).get_context_data(**kwargs)
-        context['comment_form'] = CommentForm({'composition': self.object})
-        return context
-
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
@@ -120,18 +114,6 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs
-
-
-class CommentCreate(generic.edit.CreateView):
-    form_class = CommentForm
-
-    def form_valid(self, form):
-        form.instance.commenter = self.request.user.profile
-        form.instance.save()
-        return super(CommentCreate, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse("intune:song_edit", args=[self.object.composition.id])
 
 
 def composition_bar_edit_ajax(request):
@@ -176,3 +158,21 @@ def comment_get(request):
                     "comment": str(comment.comment),
                 } for comment in comments]
     return JsonResponse({'comments': comments})
+
+
+def comment_create_ajax(request):
+    if not request.is_ajax() or request.method != "POST":
+        return Http404()
+
+    composition = Composition.objects.get(pk=request.POST['composition_id'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    # TODO: refactor into method in Composition
+    if len(request.POST['comment']) < 1:
+        return Http404()
+    Comment.objects.create(commenter=request.user.profile,
+                           composition=composition,
+                           bar=int(request.POST['bar_id']),
+                           comment=request.POST['comment'])
+    return JsonResponse({'success': True})

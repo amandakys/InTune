@@ -45,7 +45,7 @@ urlpatterns = [
         name="comments"),
 
     url(r'^comments/create/$',
-        login_required(views.CommentCreate.as_view()),
+        login_required(views.comment_create_ajax),
         name="comment_create"),
 
     # (auxillary url used for django-autocomplete)
