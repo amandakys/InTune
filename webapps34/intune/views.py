@@ -5,7 +5,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
-from .models import Composition, Profile
+from .models import Comment, Composition, Profile
 from dal import autocomplete
 
 
@@ -146,3 +146,15 @@ def composition_add_bar(request, pk):
 def comment_get(request):
     if not request.is_ajax() or request.method != "GET":
         return Http404()
+
+    composition = Composition.objects.get(pk=request.GET['composition'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    comments = Comment.objects.filter(composition=composition,
+                                      bar=int(request.GET['bar']))
+    comments = [{   "commenter": str(comment.commenter),
+                    "time": str(comment.time),
+                    "comment": str(comment.comment),
+                } for comment in comments]
+    return JsonResponse({'comments': comments})
