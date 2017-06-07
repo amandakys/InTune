@@ -19,7 +19,6 @@ $(document).ready(function () {
         /**
          * Accepts a JSON object representing composition
          * Renders it to the canvas block
-         * @param composition_json
          * @private
          */
         function _load_init() {
