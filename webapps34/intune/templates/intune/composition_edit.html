@@ -30,7 +30,7 @@ function edit_bar(bar_id) {
     current_bar = bar_id;
     var comments = $.getJSON("{% url 'intune:comments' %}", { composition: {{ composition.id }}, bar: bar_id, })
                     .done(function(comments){
-                        $('#comments').html("Comments for bar " + bar_id + ": " + comments.comment);
+                        $('#comments').html("Comments for bar " + bar_id + ": " + JSON.stringify(comments.comments, null, 2));
                     });
 }
 
