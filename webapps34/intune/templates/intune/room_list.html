@@ -1,0 +1,21 @@
+{% extends "intune/base_layer.html" %}
+
+{% block title %}
+    <title>Room list</title>
+{% endblock %}
+
+{% block content %}
+    <h2>Rooms</h2>
+    {% if room_list %}
+        <ul>
+            {% for room in room_list %}
+                <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3 style="text-align: center">You have no rooms! Create one in admin</h3>
+    {% endif %}
+
+    <div id="chats">
+    </div>
+{%  endblock %}

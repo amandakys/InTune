@@ -45,3 +45,10 @@ class Composition(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Room(models.Model):
+    composition = models.ForeignKey(Composition, related_name='composition', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.composition.title

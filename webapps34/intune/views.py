@@ -5,7 +5,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
-from .models import Composition, Profile
+from .models import Composition, Profile, Room
 from dal import autocomplete
 
 
@@ -141,3 +141,8 @@ def composition_add_bar(request, pk):
         return Http404()
     composition.add_bar()
     return JsonResponse({'success': True})
+
+
+class Chats(generic.ListView):
+    def get_queryset(self):
+        return Room.objects.all()

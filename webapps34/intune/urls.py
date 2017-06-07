@@ -47,4 +47,8 @@ urlpatterns = [
         login_required(views.ProfileAutocomplete.as_view()),
         name='profile-autocomplete',
     ),
+
+    url(r'chats/$',
+        login_required(views.Chats.as_view()),
+        name="chats"),
 ]
