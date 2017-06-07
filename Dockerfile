@@ -16,4 +16,4 @@ RUN ./manage.py test
 RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
 RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
-CMD uwsgi --ini /build/uwsgi.ini
+CMD supervisord
