@@ -20,7 +20,7 @@ $(document).ready(function () {
                 var canvas = document.createElement('canvas');
                 canvas.id = 'bar' + bar_count;
                 canvas.setAttribute("class", "bar-block");
-                $('render_block').appendChild(canvas);
+                document.getElementById('render_block').appendChild(canvas);
 
                 var canvas_size = {width: canvas.offsetWidth};
                 Render.render_bar(canvas.id, canvas_size, "");
@@ -37,7 +37,6 @@ $(document).ready(function () {
             }
 
             var canvas = document.getElementById('bar' + bar_count);
-
         }
 
         return {
