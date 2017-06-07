@@ -16,4 +16,5 @@ RUN ./manage.py test
 RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
 RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
-CMD supervisord
+RUN cp /build/patch/asgi_ipc/store.py /usr/local/lib/python3.6/site-packages/asgi_ipc/
+CMD supervisord -c /build/supervisord.conf
