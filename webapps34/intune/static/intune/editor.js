@@ -1,5 +1,10 @@
 $(document).ready(function () {
-    // using jQuery
+    // Module specific constants
+    var MAX_BARS = 5;
+
+    // Module specific variables
+    var bar_count = 0;
+
     var getCookie = function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -40,10 +45,20 @@ $(document).ready(function () {
         //     }
         // );
 
-        var canvas = document.createElement('canvas');
-        canvas.id = 'bar1';
+        // Scale according to dimensions of render block
 
-        document.getElementById('render_block').appendChild(canvas);
+        if (bar_count < MAX_BARS) {
+            bar_count++;
+            var canvas = document.createElement('canvas');
+            canvas.id = "bar" + bar_count;
+            canvas.setAttribute("class", "bar-block");
+
+            document.getElementById('render_block').appendChild(canvas);
+        } else {
+            console.log("Maximum bars that can be rendered has been reached.");
+        }
+
     }
+
 });
 

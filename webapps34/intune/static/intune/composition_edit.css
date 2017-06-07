@@ -47,6 +47,11 @@ body {
     padding-left: 0;
 }
 
+canvas.bar-block {
+    width:200px;
+    height:130px;
+}
+
 /* Footer Configuration */
 .footer {
     position: absolute;

@@ -9,9 +9,9 @@
 <link rel="stylesheet" type="text/css"
       href="{% static 'intune/composition_edit.css' %}">
 <script src="{% static 'lib/vextab-div.js' %}"></script>
-<script src="{% static 'intune/save_compose.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="{% static 'intune/editor.js' %}"></script>
 
 <script type="text/javascript">
 <!-- Rendering and edit box -->
@@ -192,7 +192,6 @@ $(function () {
 <div class="container text-center">
     <div class="row">
         <div class="canvas-block" id="render_block">
-            <p class="text-center">PLACEHOLDER</p>
         </div>
     </div>
 
