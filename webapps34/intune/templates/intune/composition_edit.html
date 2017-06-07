@@ -32,6 +32,7 @@ function edit_bar(bar_id) {
                     .done(function(comments){
                         $('#comments').html("Comments for bar " + bar_id + ": " + JSON.stringify(comments.comments, null, 2));
                     });
+    $('#comment_form').show();
 }
 
 function render(bar_id, from_edit) {
@@ -105,6 +106,7 @@ function add_bar() {
 }
 
 $(function () {
+    $('#comment_form').hide();
     $('#edit_form').submit(function(event) {
         if (current_bar < 0 || current_bar >= {{ composition.get_bar_list| length }}) {
             // Verify valid bar
@@ -302,6 +304,13 @@ $(function () {
     <div class="row">
         <h3>Comments</h3>
         <div id="comments"></div>
+        <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form">
+            {% csrf_token %}
+            {% bootstrap_form comment_form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-light">Add Comment</button>
+            {% endbuttons %}
+        </form>
     </div>
 </div>
 

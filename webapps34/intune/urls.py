@@ -44,6 +44,10 @@ urlpatterns = [
         login_required(views.comment_get),
         name="comments"),
 
+    url(r'^comments/create/$',
+        login_required(views.CommentCreate.as_view()),
+        name="comment_create"),
+
     # (auxillary url used for django-autocomplete)
     # TODO: make this url not visible?
     url(
