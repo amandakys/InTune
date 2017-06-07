@@ -1,5 +1,6 @@
-(function () {
+$(document).ready(function () {
     "use strict";
+
     var getCookie = function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
