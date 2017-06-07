@@ -1,3 +1,6 @@
+/**
+ * CSRF Token Acquisition
+ */
 $(document).ready(function () {
     "use strict";
 
