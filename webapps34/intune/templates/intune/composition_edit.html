@@ -28,6 +28,10 @@ function edit_bar(bar_id) {
     $("#edit_text").val($("#render_" + bar_id).val());
     $('label[for="edit_text"]').html("Bar " + (bar_id + 1));
     current_bar = bar_id;
+    var comments = $.getJSON("{% url 'intune:comments' %}", { composition: {{ composition.id }}, bar: bar_id, })
+                    .done(function(comments){
+                        $('#comments').html("Comments for bar " + bar_id + ": " + comments.comment);
+                    });
 }
 
 function render(bar_id, from_edit) {
@@ -294,6 +298,12 @@ $(function () {
 </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <h3>Comments</h3>
+        <div id="comments"></div>
+    </div>
+</div>
 
 {# needed for autocomplete to work #}
 {{ form.media }}

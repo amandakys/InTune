@@ -121,7 +121,7 @@ def composition_bar_edit_ajax(request):
         return Http404()
 
     composition = Composition.objects.get(id=request.POST['composition_id'])
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
 
     bar_id = int(request.POST['bar_id'])
@@ -137,7 +137,12 @@ def composition_add_bar(request, pk):
         return Http404()
 
     composition = Composition.objects.get(pk=pk)
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
     composition.add_bar()
     return JsonResponse({'success': True})
+
+
+def comment_get(request):
+    if not request.is_ajax() or request.method != "GET":
+        return Http404()
