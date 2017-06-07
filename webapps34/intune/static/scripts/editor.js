@@ -10,6 +10,7 @@ $(document).ready(function () {
         // Module specific constants
         var MAX_BARS = 5;
         var DEFAULT_TABSTAVE = "tabstave notation=true tablature=false";
+        var VT_DATA_NAME = "vt_data";
 
         // Module specific variables
         var bar_count = 0;
@@ -47,31 +48,40 @@ $(document).ready(function () {
                 }
                 json_obj["notes"] = "";
 
-                $("#vt_" + bar_count).data("vt_json", JSON.stringify(json_obj));
+                $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(json_obj));
 
                 // console.log("Default bar vextab:" + vt_json.value);
 
                 _select(bar_count);
 
                 // Register click event for canvas
-                $("#bar_" + bar_count).click(_edit);
+                $("#bar_" + bar_count).click(_change_scope);
             } else {
                 console.log("Maximum bars that can be rendered has been reached.");
             }
         }
 
+        /**
+         * Takes an INTEGER bar_id and makes the bar corresponding to this id to
+         * be the current editing scope
+         * @param bar_id
+         * @private
+         */
         function _select(bar_id) {
+            current_bar = bar_id;
+
             // console.log("Selecting: " + "vt_" + bar_id);
-            var vt_json_string = $("#vt_" + bar_id).data("vt_json");
+            var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
             // console.log("vt_json_string: " + vt_json_string);
             var vt_json = JSON.parse(vt_json_string);
 
-            // Selects this bar for editing
-            $("#bar_notes").val(vt_json["notes"]);
             var vex_string = _build_vextab(vt_json);
-
             // console.log("vexstring: " + vex_string);
 
+            // Display vextab notes to editor textbox
+            $("#bar_notes").val(vt_json["notes"]);
+
+            // Render to canvas
             var canvas = document.getElementById("bar_" + bar_id);
             var canvas_width = {width: canvas.offsetWidth};
             // console.log("canvas_width: " + canvas_width.width);
@@ -93,16 +103,17 @@ $(document).ready(function () {
             vex_string += "\n";
 
             if (json["notes"] !== "") {
-                vex_string += json["notes"];
+                vex_string += "notes " + json["notes"];
             }
 
             return vex_string;
         }
 
-        function _edit() {
-            console.log("Edit Bar: " + this.id);
+        function _change_scope() {
+            console.log("Select Bar: " + this.id);
             var id = this.id;
             id = id.replace("bar_", "");
+            id = parseInt(id);
             _select(id);
         }
 
@@ -129,20 +140,42 @@ $(document).ready(function () {
             $("#bar" + to_remove).remove();
         }
 
+        function _edit_bar() {
+            console.log("Edit Bar: " + current_bar);
+            if (current_bar === 0) {
+                console.log("No Bar to edit!");
+                return;
+            }
+
+            var div_storage = $("#vt_" + current_bar);
+            var vt_json_string = div_storage.data(VT_DATA_NAME);
+
+            var vt_json = JSON.parse(vt_json_string);
+            vt_json["notes"] = $("#bar_notes").val();
+
+            // vt_json_string = JSON.stringify(vt_json);
+            // console.log("vt_json_string: " + vt_json_string);
+
+            var vex_string = _build_vextab(vt_json);
+            // Render to canvas
+            var canvas = document.getElementById("bar_" + current_bar);
+            var canvas_width = {width: canvas.offsetWidth};
+            // console.log("canvas_width: " + canvas_width.width);
+            Render.render_bar("bar_" + current_bar, canvas_width, vex_string);
+
+            // Update data in div
+            div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+        }
+
         return {
             append_new_bar: _append_new_bar,
             remove_bar: _remove_bar,
-            edit: _edit
+            edit_bar: _edit_bar
         }
     })();
-
-    /*
-     * Place Holder
-     * */
 
     /* Register response to events */
     $("#new_bar").click(Editor.append_new_bar);
     $("#remove_bar").click(Editor.remove_bar);
-
+    $("#bar_notes").keyup(_.throttle(Editor.edit_bar, 250));
 });
-
