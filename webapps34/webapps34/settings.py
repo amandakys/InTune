@@ -64,11 +64,11 @@ redis_host = os.environ.get('REDIS_HOST', 'localhost')
 CHANNEL_LAYERS = {
     "default": {
         # This example app uses the Redis channel layer implementation asgi_redis
-        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "BACKEND": "asgi_ipc.IPCChannelLayer",
+        "ROUTING": "webapps34.routing.channel_routing",
         "CONFIG": {
-            "hosts": [(redis_host, 6379)],
+            "prefix": "intune",
         },
-       "ROUTING": "webapps34.routing.channel_routing", # We will create it in a moment
     },
 }
 
