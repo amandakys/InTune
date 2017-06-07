@@ -52,8 +52,10 @@ $(document).ready(function () {
             var canvas = document.createElement('canvas');
             canvas.id = "bar" + bar_count;
             canvas.setAttribute("class", "bar-block");
-
             document.getElementById('render_block').appendChild(canvas);
+
+            var canvas_size = {width: canvas.offsetWidth};
+            Render.render_bar(canvas.id, canvas_size, "");
         } else {
             console.log("Maximum bars that can be rendered has been reached.");
         }

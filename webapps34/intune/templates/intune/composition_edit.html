@@ -11,6 +11,7 @@
 <script src="{% static 'lib/vextab-div.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="{% static 'intune/render.js' %}"></script>
 <script src="{% static 'intune/editor.js' %}"></script>
 
 <script type="text/javascript">
@@ -21,7 +22,7 @@ var VexTab = vt.VexTab;
 var Artist = vt.Artist;
 var Renderer = vt.Flow.Renderer;
 
-var artist = new Artist(10, 10, 200, {scale: 1});
+var artist = new Artist(0, 0, 200);
 var vextab = new VexTab(artist);
 
 function edit_bar(bar_id) {
