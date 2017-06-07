@@ -56,6 +56,15 @@ $(document).ready(function () {
 
                 // Register click event for canvas
                 $("#bar_" + bar_count).click(_change_scope);
+
+                // Update server about new bar
+                $.ajax({
+                    method: "POST",
+                    url: $("#new_bar").attr("data-ajax-target"),
+                    dataType: "json",
+                    encode: true
+                });
+
             } else {
                 console.log("Maximum bars that can be rendered has been reached.");
             }

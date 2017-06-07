@@ -10,6 +10,18 @@ class Profile(models.Model):
         return self.user.username
 
 
+# Composition Attributes
+# -> data: JSON String
+#       {'bars':
+#           < List of bars in the following format:
+#               {'options': <string for options>,
+#                'tabstave': <string for tabstave>,
+#                'clef': <"treble", "bass" or "none">,
+#                'time_sig': <string of form: "<num>/<num>">,
+#                'notes': <string containing notes>
+#               }
+#           >
+#       }
 class Composition(models.Model):
     title = models.CharField(max_length=200)
     owner = models.ForeignKey(Profile, related_name='owner',
