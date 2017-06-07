@@ -9,6 +9,7 @@ $(document).ready(function () {
         "use strict";
         // Module specific constants
         var MAX_BARS = 5;
+        var DEFAULT_TABSTAVE = "tabstave notation=true tablature=false";
 
         // Module specific variables
         var bar_count = 0;
@@ -20,81 +21,95 @@ $(document).ready(function () {
                 bar_count++;
 
                 // Add to HTML DOM
+                // Canvas
                 var canvas = document.createElement("canvas");
-                canvas.id = "bar" + bar_count;
+                canvas.id = "bar_" + bar_count;
                 canvas.setAttribute("class", "bar-block");
+                // VexTab JSON String
+                var vt_json = document.createElement("div");
+                vt_json.id = "vt_" + bar_count;
+                vt_json.setAttribute("class", "vex-string-hidden");
+
                 document.getElementById("render_block").appendChild(canvas);
+                document.getElementById("render_block").appendChild(vt_json);
 
-                // JS/JQUERY Management
-                // Bar Object
-                var EditableBar = (function () {
-                    var bar_number = bar_count;
-
-                    var DEFAULT_TABSTAVE = "tabstave notation=true tablature=false";
-                    // Defaults that can be overridden
-                    var clef = "none";
-                    var time_sig = "";
-                    var notes = "";
-
+                // Default JSON Object (representing VexTab) for new bar
+                var json_obj = {};
+                json_obj["options"] = "";
+                json_obj["tabstave"] = DEFAULT_TABSTAVE;
+                if (bar_count === 1) {
                     // First bar
-                    if (bar_count === 1) {
-                        clef = "treble";
-                        time_sig = "4/4";
-                    }
+                    json_obj["clef"] = "treble";
+                    json_obj["time_sig"] = "4/4";
+                } else {
+                    json_obj["clef"] = "none";
+                    json_obj["time_sig"] = "";
+                }
+                json_obj["notes"] = "";
 
-                    // Canvas to render to
-                    var bar_canvas = canvas;
+                $("#vt_" + bar_count).data("vt_json", JSON.stringify(json_obj));
 
-                    function _edit() {
-                        console.log("Editing bar: " + bar_number);
+                // console.log("Default bar vextab:" + vt_json.value);
 
-                        // Selects this bar to edit
-                        _select()
-                    }
+                _select(bar_count);
 
-                    function _select() {
-                        // Selects this bar for editing
-                        var vex_string = _build_vextab();
-
-                        var bar_canvas_size = {width: bar_canvas.offsetWidth};
-                        Render.render_bar(bar_canvas.id, bar_canvas_size, vex_string);
-                    }
-
-                    function _build_vextab() {
-                        var vex_string = DEFAULT_TABSTAVE;
-                        vex_string += " clef=" + clef;
-
-                        if (time_sig !== "") {
-                            vex_string += " time=" + time_sig;
-                        }
-
-                        vex_string += "\n";
-
-                        if (notes !== "") {
-                            vex_string += "notes " + notes + "\n";
-                        }
-
-                        return vex_string;
-                    }
-
-                    return {
-                        edit: _edit
-                    }
-                })();
-
-                // Register click event
-                $("#bar" + bar_count).click(EditableBar.edit);
-
-                EditableBar.edit();
+                // Register click event for canvas
+                $("#bar_" + bar_count).click(_edit);
             } else {
                 console.log("Maximum bars that can be rendered has been reached.");
             }
         }
 
+        function _select(bar_id) {
+            // console.log("Selecting: " + "vt_" + bar_id);
+            var vt_json_string = $("#vt_" + bar_id).data("vt_json");
+            // console.log("vt_json_string: " + vt_json_string);
+            var vt_json = JSON.parse(vt_json_string);
+
+            // Selects this bar for editing
+            $("#bar_notes").val(vt_json["notes"]);
+            var vex_string = _build_vextab(vt_json);
+
+            // console.log("vexstring: " + vex_string);
+
+            var canvas = document.getElementById("bar_" + bar_id);
+            var canvas_width = {width: canvas.offsetWidth};
+            // console.log("canvas_width: " + canvas_width.width);
+            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
+        }
+
+        function _build_vextab(json) {
+            var vex_string = json["options"] + "\n";
+            vex_string += json["tabstave"];
+
+            if (json["clef"] !== ""){
+                vex_string += " clef=" + json["clef"];
+            }
+
+            if (json["time_sig"] !== "") {
+                vex_string += " time=" + json["time_sig"];
+            }
+
+            vex_string += "\n";
+
+            if (json["notes"] !== "") {
+                vex_string += json["notes"];
+            }
+
+            return vex_string;
+        }
+
+        function _edit() {
+            console.log("Edit Bar: " + this.id);
+            var id = this.id;
+            id = id.replace("bar_", "");
+            _select(id);
+        }
+
         function _remove_bar() {
             if (bar_count === 0) {
                 // All compositions must have at least one bar
-                console.log("All compositions must have at least a bar!")
+                console.log("All compositions must have at least a bar!");
                 return;
             }
 
@@ -116,7 +131,8 @@ $(document).ready(function () {
 
         return {
             append_new_bar: _append_new_bar,
-            remove_bar: _remove_bar
+            remove_bar: _remove_bar,
+            edit: _edit
         }
     })();
 

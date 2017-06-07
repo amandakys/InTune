@@ -52,6 +52,10 @@ canvas.bar-block {
     height:120px;
 }
 
+.vex-string-hidden {
+    display: none;
+}
+
 /* Footer Configuration */
 .footer {
     position: absolute;
