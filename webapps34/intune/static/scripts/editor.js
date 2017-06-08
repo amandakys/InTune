@@ -98,8 +98,6 @@ $(document).ready(function () {
         // Appends a new bar to render block
         function _append_new_bar() {
             if (bar_count < MAX_BARS) {
-                bar_count++;
-
                 // Add to HTML DOM
                 // Canvas
                 var canvas = document.createElement("canvas");
@@ -143,6 +141,7 @@ $(document).ready(function () {
                     encode: true
                 });
 
+                bar_count++;
             } else {
                 console.log("Maximum bars that can be rendered has been reached.");
             }
@@ -229,7 +228,7 @@ $(document).ready(function () {
 
         function _edit_bar() {
             console.log("Edit Bar: " + current_bar);
-            if (current_bar === 0) {
+            if (current_bar < 0) {
                 console.log("No Bar to edit!");
                 return;
             }
@@ -254,12 +253,45 @@ $(document).ready(function () {
             div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
         }
 
+        function _save_bar(event) {
+            if (current_bar < 0 || current_bar >= editable_bars.length) {
+                // Verify valid bar
+                $("#save_error").html("Please select a bar to edit!");
+            } else if ($("#edit_error").html().length > 0) {
+                // Verify no compile errors
+                $("#save_error").html("Can't save invalid bar!");
+            } else {
+                var form = $("#edit_form");
+
+                // Specify the bar, composition id
+                var form_data = {
+                    'composition_id': form.attr('composition-id'),
+                    'bar_id': current_bar,
+                    'bar_contents': $("#edit_text").val()
+                };
+                // Submit
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form_data,
+                    dataType: "json",
+                    encode: true
+                }).done(function(result) {
+                    console.log(result);
+                });
+            }
+            event.preventDefault();
+        }
+
+        /* Initialisation code */
+
         _load_init();
 
         return {
             append_new_bar: _append_new_bar,
             remove_bar: _remove_bar,
-            edit_bar: _edit_bar
+            edit_bar: _edit_bar,
+            save_bar: _save_bar
         }
     })();
 
@@ -267,4 +299,5 @@ $(document).ready(function () {
     $("#new_bar").click(Editor.append_new_bar);
     $("#remove_bar").click(Editor.remove_bar);
     $("#bar_notes").keyup(_.throttle(Editor.edit_bar, 250));
+    $("#edit_form").submit(Editor.save_bar);
 });
