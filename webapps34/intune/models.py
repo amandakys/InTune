@@ -76,3 +76,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+
+class Notification(models.Model):
+    recipients = models.ManyToManyField(Profile, blank=False)
+    msg = models.CharField(max_length=10000)
+    sent_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    composition = models.ForeignKey(Composition, default=Composition.objects.first())

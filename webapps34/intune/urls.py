@@ -60,5 +60,9 @@ urlpatterns = [
     url(r'^composition/attribute/(?P<pk>[0-9]+)/$',
         login_required(views.get_composition_attribute),
         name="composition_attribute"
-        )
+        ),
+
+    url(r'^notifications/$', views.NotificationList.as_view(), name='notifications'),
+
+    url(r'^notifications/count/$', views.notification_count, name='notification_count'),
 ]
