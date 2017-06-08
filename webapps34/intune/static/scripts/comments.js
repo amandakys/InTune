@@ -61,8 +61,14 @@ $(document).ready(function () {
         }
 
         function _display_comments(comments) {
-            $('#comments').html("Comments for bar " + Editor.get_current_bar() + ": " +
-                JSON.stringify(comments.comments, null, 2));
+            $('#comments').html( function() {
+                var string = "";
+                var i;
+                for (i = 0; i < comments.comments.length; i++) {
+                    string += "<p> Comment: " + comments.comments[i].comment + "</p>\n"
+                }
+                return string;
+            }) ()
         }
 
         return {
