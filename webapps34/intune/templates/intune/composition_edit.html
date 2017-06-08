@@ -16,68 +16,7 @@
 <script src="{% static 'scripts/editor.js' %}"></script>
 
 <script type="text/javascript">
-<!-- Rendering and edit box -->
-current_bar = -1;
-var vt = VexTabDiv;
-var VexTab = vt.VexTab;
-var Artist = vt.Artist;
-var Renderer = vt.Flow.Renderer;
-
-var artist = new Artist(0, 0, 200);
-var vextab = new VexTab(artist);
-
-function edit_bar(bar_id) {
-    $("#edit_text").val($("#render_" + bar_id).val());
-    $('label[for="edit_text"]').html("Bar " + (bar_id + 1));
-    current_bar = bar_id;
-    var comments = $.getJSON("{% url 'intune:comments' %}", { composition: {{ composition.id }}, bar: bar_id, })
-                    .done(function(comments){
-                        $('#comments').html("Comments for bar " + bar_id + ": " + JSON.stringify(comments.comments, null, 2));
-                    });
-    $('#comment_form').show();
-}
-
-function render(bar_id, from_edit) {
-    try {
-        vextab.reset();
-        artist.reset();
-        var renderer = new Renderer($('#canvas_bar_' + bar_id)[0], Renderer.Backends.CANVAS);
-        var stave = "tabstave notation=true tablature = false";
-        if (bar_id > 0) { stave += " clef=none"; }
-        var source = from_edit ? '#edit_text' : ('#render_' + bar_id);
-        vextab.parse(stave + "\nnotes " + $(source).val());
-        artist.render(renderer);
-        $("#edit_error").text("");
-    } catch (e) {
-        console.log(e);
-        $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
-    }
-}
-
-function render_edit() {
-    if (current_bar >= 0)
-        render(current_bar, true);
-}
-
-$(function () {
-    $("#edit_text").keyup(_.throttle(render_edit, 250));
-    render_edit();
-});
-</script>
-
-<script type="text/javascript">
-<!-- Saving -->
-function add_bar() {
-    $.ajax({
-        method: "POST",
-        url: "{% url 'intune:bar_add' composition.id %}",
-        dataType: "json",
-        encode: true,
-    });
-    // TODO: add dynamically instead of reloading
-    location.reload();
-}
-
+{# Comments #}
 $(function () {
     $('#comment_form').hide();
     $('#comment_form').submit(function(event) {
@@ -169,16 +108,6 @@ $(function () {
              data-ajax-target="{% url 'intune:composition_attribute' composition.id %}">
         </div>
     </div>
-
-    <div class="row">
-    {% for bar in composition.get_bar_list %}
-        <canvas id="canvas_bar_{{ forloop.counter0 }}" onclick="edit_bar({{ forloop.counter0 }})"></canvas>
-        <input type="text" style="display: none;" id="render_{{ forloop.counter0 }}" value="{{ bar }}"/>
-        <script>
-            render({{ forloop.counter0 }}, false);
-        </script>
-    {% endfor %}
-    </div>
 </div>
 
 
@@ -201,72 +130,47 @@ $(function () {
         <div class="row text-center">
             <div class="btn-group" role="group" aria-label="Notation Selection">
                 {# Semibreve #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1D2;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
                 {# Minim #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1D3;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1D3;</button>
                 {# Crotchet #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1D5;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1D5;</button>
                 {# Quaver #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1D7;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1D7;</button>
                 {# Semiquaver #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1D9;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1D9;</button>
                 {# Dotted Note #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE1E7;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE1E7;</button>
                 {# Rest #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE4E5;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE4E5;</button>
                 {# Flat #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE260;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE260;</button>
                 {# Double Flat #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE264;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE264;</button>
                 {# Natural #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE261;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE261;</button>
                 {# Sharp #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE262;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE262;</button>
                 {# Double Sharp #}
-                <button type="button" class="btn btn-default bravura">
-                    &#xE263;
-                </button>
+                <button type="button" class="btn btn-default bravura">&#xE263;</button>
             </div>
         </div>
     </div>
     <div class="row text-center">
-        <form method="post" action="{% url 'intune:bar_edit' %}"
-              id="edit_form" data-composition-id="{{ composition.id }}">
-            <label for="edit_text"></label>
-            <input type="text" class="form-control dynamic-textbox" id="edit_text" width="200" maxlength="30" placeholder="Select a bar to begin editing" />
-            <div class="container">
-                <input type="text" class="form-control" placeholder="Playground!"
-                          id="bar_notes" />
+        <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form"
+              data-composition-id="{{ composition.id }}">
+
+            <label for="bar_notes"></label>
+            <input type="text" class="form-control dynamic-textbox" placeholder="Select a bar to begin editing!"
+                   id="bar_notes" />
+
+            <div class="btn-group" role = "group" aria-label="bar modifications">
+                <button type="submit" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-default" id="new_bar"
+                        data-ajax-target="{% url 'intune:bar_add' composition.id %}">New Bar</button>
+                <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-primary" onclick="add_bar()">Add Bar</button>
-            <button type="button" class="btn btn-default" id="new_bar"
-                    data-ajax-target="{% url 'intune:bar_add' composition.id %}">
-                New Bar
-            </button>
-            <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
+            {# Error Messages to User #}
             <div id="edit_error"></div>
             <div id="save_error"></div>
         </form>

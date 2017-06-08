@@ -223,7 +223,7 @@ $(document).ready(function () {
                 current_bar = bar_count - 1;
             }
 
-            $("#bar" + to_remove).remove();
+            $("#bar_" + to_remove).remove();
         }
 
         function _edit_bar() {
