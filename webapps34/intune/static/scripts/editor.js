@@ -165,13 +165,16 @@ $(document).ready(function () {
             // console.log("vexstring: " + vex_string);
 
             // Display vextab notes to editor textbox
-            $("#bar_notes").val(vt_json["notes"]);
+            $("#edit_text").val(vt_json["notes"]);
 
             // Render to canvas
             var canvas = document.getElementById("bar_" + bar_id);
             var canvas_width = {width: canvas.offsetWidth};
             // console.log("canvas_width: " + canvas_width.width);
             Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
+
+            // Display to user which bar is selected
+            $('label[for="edit_text"]').html("Editing Bar " + bar_id);
         }
 
         function _build_vextab(json) {
@@ -237,7 +240,7 @@ $(document).ready(function () {
             var vt_json_string = div_storage.data(VT_DATA_NAME);
 
             var vt_json = JSON.parse(vt_json_string);
-            vt_json["notes"] = $("#bar_notes").val();
+            vt_json["notes"] = $("#edit_text").val();
 
             // vt_json_string = JSON.stringify(vt_json);
             // console.log("vt_json_string: " + vt_json_string);
@@ -267,7 +270,7 @@ $(document).ready(function () {
                 var form_data = {
                     'composition_id': form.attr('data-composition-id'),
                     'bar_id': current_bar,
-                    'bar_contents': $("#bar_notes").val()
+                    'bar_contents': $("#edit_text").val()
                 };
                 // Submit
                 $.ajax({
@@ -298,6 +301,6 @@ $(document).ready(function () {
     /* Register response to events */
     $("#new_bar").click(Editor.append_new_bar);
     $("#remove_bar").click(Editor.remove_bar);
-    $("#bar_notes").keyup(_.throttle(Editor.edit_bar, 250));
+    $("#edit_text").keyup(_.throttle(Editor.edit_bar, 250));
     $("#edit_form").submit(Editor.save_bar);
 });

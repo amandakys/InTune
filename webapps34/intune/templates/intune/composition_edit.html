@@ -160,9 +160,9 @@ $(function () {
         <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form"
               data-composition-id="{{ composition.id }}">
 
-            <label for="bar_notes"></label>
+            <label for="edit_text"></label>
             <input type="text" class="form-control dynamic-textbox" placeholder="Select a bar to begin editing!"
-                   id="bar_notes" />
+                   id="edit_text" />
 
             <div class="btn-group" role = "group" aria-label="bar modifications">
                 <button type="submit" class="btn btn-default">Save</button>
