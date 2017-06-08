@@ -14,35 +14,7 @@
 <script src="{% static 'scripts/csrf.js' %}"></script>
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
-
-<script type="text/javascript">
-{# Comments #}
-$(function () {
-    $('#comment_form').hide();
-    $('#comment_form').submit(function(event) {
-        if (current_bar < 0 || current_bar >= {{ composition.get_bar_list|length }}) {
-            // Verify valid bar
-            console.log("No bar selected to comment on");
-        } else {
-            var form_data = {
-                'composition_id': {{ composition.id }},
-                'bar_id': current_bar,
-                'comment': $("#comment_text").val(),
-            };
-            $.ajax({
-                type: $('#comment_form').attr('method'),
-                url: $('#comment_form').attr('action'),
-                data: form_data,
-                dataType: "json",
-                encode: true,
-            }).done(function(result) {
-                if (result.success) { $('#comment_text').val(""); }
-            });
-        }
-        event.preventDefault();
-    });
-});
-</script>
+<script src="{% static 'scripts/comments.js' %}"></script>
 
 {% endblock imports %}
 
@@ -192,8 +164,9 @@ $(function () {
 <div class="container">
     <div class="row">
         <h3>Comments</h3>
-        <div id="comments"></div>
-        <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form">
+        <div id="comments" data-ajax-target="{% url 'intune:comments' %}"></div>
+        <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
+            data-composition-id="{{ composition.id }}">
             {% csrf_token %}
             <input type="text" id="comment_text" placeholder="Write a comment" />
             {% buttons %}

@@ -1,11 +1,19 @@
-/**
- * Editor Interface APIs
- */
 $(document).ready(function () {
     // Enforce module to load only when DOM is ready
 
-    // Module "Editor"
-    var Editor = (function () {
+    /**
+     * Editor Module
+     * Support operations are listed in "@type"
+     * Remaining functions are declared "private" and should not be used
+     * outside of this module!
+     *
+     * Refactor_2: Refactoring may be needed to remove excessive duplication,
+     * especially in _composition_handler and _append_bar
+     *
+     * @type {{append_new_bar, remove_bar, edit_bar, save_bar, get_bar_count
+     *          get_current_bar}}
+     */
+    window.Editor = (function () {
         "use strict";
         // Module specific constants
         var MAX_BARS = 5;
@@ -175,6 +183,8 @@ $(document).ready(function () {
 
             // Display to user which bar is selected
             $('label[for="edit_text"]').html("Editing Bar " + bar_id);
+
+            BarComment.retrieve_comments(current_bar);
         }
 
         function _build_vextab(json) {
@@ -286,6 +296,14 @@ $(document).ready(function () {
             event.preventDefault();
         }
 
+        function _get_bar_count() {
+            return bar_count;
+        }
+
+        function _get_current_bar() {
+            return current_bar;
+        }
+
         /* Initialisation code */
 
         _load_init();
@@ -294,7 +312,9 @@ $(document).ready(function () {
             append_new_bar: _append_new_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,
-            save_bar: _save_bar
+            save_bar: _save_bar,
+            get_bar_count: _get_bar_count,
+            get_current_bar: _get_current_bar
         }
     })();
 
