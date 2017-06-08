@@ -28,6 +28,11 @@ $(document).ready(function () {
             var size = bars.length;
 
             for (var i = 0; i < size; i++) {
+                if (bar_count >= MAX_BARS) {
+                    console.log("Max number of bars that can be rendered reached");
+                    return;
+                }
+
                 console.log("Bar [" + i + "]: " + bars[i]);
                 // JSON Object representing vt string
                 // Repackaging required as data model does not contain every
@@ -109,22 +114,21 @@ $(document).ready(function () {
                 document.getElementById("render_block").appendChild(vt_json);
 
                 // Default JSON Object (representing VexTab) for new bar
-                var json_obj = {};
-                json_obj["options"] = "";
-                json_obj["tabstave"] = DEFAULT_TABSTAVE;
+                var editable_bar = {};
+                editable_bar["options"] = "";
+                editable_bar["tabstave"] = DEFAULT_TABSTAVE;
                 if (bar_count === 1) {
                     // First bar
-                    json_obj["clef"] = "treble";
-                    json_obj["time_sig"] = "4/4";
+                    editable_bar["clef"] = "treble";
+                    editable_bar["time_sig"] = "4/4";
                 } else {
-                    json_obj["clef"] = "none";
-                    json_obj["time_sig"] = "";
+                    editable_bar["clef"] = "none";
+                    editable_bar["time_sig"] = "";
                 }
-                json_obj["notes"] = "";
+                editable_bar["notes"] = "";
 
-                $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(json_obj));
-
-                // console.log("Default bar vextab:" + vt_json.value);
+                $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(editable_bar));
+                editable_bars.push(editable_bar);
 
                 _select(bar_count);
 
