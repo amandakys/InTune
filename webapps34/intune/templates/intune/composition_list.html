@@ -5,6 +5,12 @@
     <title>User Homepage</title>
 {% endblock %}
 
+{% block notification %}
+    {% if notification_list %}
+    {{ notification_list.count }}
+    {% endif %}
+{% endblock notification %}
+
 {% block content %}
     <h2>Your Compositions</h2>
     <div class="btn-new-composition">

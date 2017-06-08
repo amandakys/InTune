@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'intune:notifications' %}">NOTIFICATIONS</a></li>
+                    <li><a href="{% url 'intune:notifications' %}">NOTIFICATIONS ({% block notification %}{% endblock notification %})</a></li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>
                     <li><a href="#">SETTINGS</a></li>
                     <li><a href="{% url 'logout' %}">LOGOUT</a></li>
