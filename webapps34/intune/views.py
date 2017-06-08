@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
@@ -106,5 +107,11 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 class NotificationList(generic.ListView):
+    template_name = "intune/notification_list.html"
     def get_queryset(self):
         return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
+
+
+def notification_count(request):
+    count = Notification.objects.filter(Q(recipients__user=request.user)).distinct().order_by("-sent_at").count()
+    return JsonResponse({'count': count})

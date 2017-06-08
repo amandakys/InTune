@@ -13,6 +13,17 @@
     {% endblock imports %}
 </head>
 
+<script>
+    $(document).ready(function () {
+        var notification_count = $("#notification_count");
+        $.get(notification_count.attr("data-ajax-target"),
+            function(data) {
+                console.log("count:" + data.count);
+                $("#notification_count").html(data.count);
+            }, "json");
+    })
+</script>
+
 <body>
 <nav class="navbar navbar-default">
     <div class="container">
@@ -27,7 +38,8 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'intune:notifications' %}">NOTIFICATIONS ({% block notification %}{% endblock notification %})</a></li>
+                    <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS (<span id="notification_count" data-ajax-target = "{% url 'intune:notification_count' %}">
+    </span>)</a></li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>
                     <li><a href="#">SETTINGS</a></li>
                     <li><a href="{% url 'logout' %}">LOGOUT</a></li>

@@ -38,4 +38,6 @@ urlpatterns = [
 
     url(r'^notifications/$', views.NotificationList.as_view(), name='notifications'),
 
+    url(r'^notifications/count/$', views.notification_count, name='notification_count'),
+
 ]
