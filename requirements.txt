@@ -3,7 +3,6 @@ psycopg2
 django-bootstrap3
 django-autocomplete-light
 channels
-asgi-redis
 asgi_ipc
 
 # Tests Module
