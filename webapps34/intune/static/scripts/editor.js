@@ -265,9 +265,9 @@ $(document).ready(function () {
 
                 // Specify the bar, composition id
                 var form_data = {
-                    'composition_id': form.attr('composition-id'),
+                    'composition_id': form.attr('data-composition-id'),
                     'bar_id': current_bar,
-                    'bar_contents': $("#edit_text").val()
+                    'bar_contents': $("#bar_notes").val()
                 };
                 // Submit
                 $.ajax({
