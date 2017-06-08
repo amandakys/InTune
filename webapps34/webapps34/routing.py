@@ -1,4 +1,5 @@
 from channels import route
+from channels.staticfiles import StaticFilesConsumer
 
 # This function will display all messages received in the console
 def message_handler(message):
@@ -6,5 +7,6 @@ def message_handler(message):
 
 
 channel_routing = [
-    route("websocket.receive", message_handler)  # we register our message handler
+    route("websocket.receive", message_handler),
+    route("http.request", StaticFilesConsumer())
 ]
