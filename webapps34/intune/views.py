@@ -176,7 +176,7 @@ def comment_get(request):
         return Http404()
 
     comments = Comment.objects.filter(composition=composition,
-                                      bar=int(request.GET['bar']))
+                                      bar=int(request.GET['bar'])).order_by('time')
     comments = [{   "commenter": str(comment.commenter),
                     "time": str(comment.time),
                     "comment": str(comment.comment),
