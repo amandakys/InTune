@@ -65,7 +65,7 @@ $(document).ready(function () {
                 var string = "";
                 var i;
                 for (i = 0; i < comments.comments.length; i++) {
-                    string += "<p> Comment: " + comments.comments[i].comment + "</p>\n"
+                    string += "<p> " + comments.comments[i].commenter + ": " + comments.comments[i].comment + "</p>\n"
                 }
                 return string;
             }) ()
