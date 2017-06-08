@@ -83,3 +83,6 @@ class Notification(models.Model):
     msg = models.CharField(max_length=10000)
     sent_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     composition = models.ForeignKey(Composition, default=Composition.objects.first())
+
+    def __str__(self):
+        return self.msg
