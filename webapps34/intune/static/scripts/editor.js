@@ -16,6 +16,68 @@ $(document).ready(function () {
         var bar_count = 0;
         var current_bar = 0;
 
+        // List of editable bars as JSON Objects
+        var editable_bars = [];
+
+        function _composition_handler(data) {
+            // Debug Statement
+            var json_string = JSON.stringify(data);
+            console.log("Composition data:\n" + json_string);
+
+            var bars = data["bars"];
+            var size = bars.length;
+
+            for (var i = 0; i < size; i++) {
+                console.log("Bar [" + i + "]: " + bars[i]);
+                // JSON Object representing vt string
+                // Repackaging required as data model does not contain every
+                // required information
+                var editable_bar = {};
+                editable_bar["options"] = "";
+                editable_bar["tabstave"] = DEFAULT_TABSTAVE;
+                if (i === 0) {
+                    // First bar
+                    editable_bar["clef"] = "treble";
+                    editable_bar["time_sig"] = "4/4";
+                } else {
+                    editable_bar["clef"] = "none";
+                    editable_bar["time_sig"] = "";
+                }
+                editable_bar["notes"] = bars[i];
+
+                // console.log(JSON.stringify(vt_json));
+                editable_bars.push(editable_bar);
+
+                _render_bar(editable_bar, i);
+
+                bar_count++;
+            }
+        }
+
+        function _render_bar(bar_json, canvas_no) {
+            var canvas = document.createElement("canvas");
+            canvas.id = "bar_" + canvas_no;
+            canvas.setAttribute("class", "bar-block");
+            // VexTab JSON String
+            var vt_json = document.createElement("div");
+            vt_json.id = "vt_" + canvas_no;
+            vt_json.setAttribute("class", "vex-string-hidden");
+
+            document.getElementById("render_block").appendChild(canvas);
+            document.getElementById("render_block").appendChild(vt_json);
+
+            $("#vt_" + canvas_no).data(VT_DATA_NAME,
+                JSON.stringify(editable_bars[canvas_no]));
+
+            var vex_string = _build_vextab(bar_json);
+            var canvas_width = {width: canvas.offsetWidth};
+            // console.log("canvas_width: " + canvas_width.width);
+            Render.render_bar(canvas.id, canvas_width, vex_string);
+
+            // Register click event for canvas
+            $("#bar_" + canvas_no).click(_change_scope);
+        }
+
         /**
          * Accepts a JSON object representing composition
          * Renders it to the canvas block
@@ -25,12 +87,7 @@ $(document).ready(function () {
             /* Get composition attributes from server */
             // var composition_json;
             $.get($("#render_block").attr("data-ajax-target"),
-                function(data) {
-                    var json_string = JSON.stringify(data);
-                    console.log("Composition data:\n" + json_string);
-                },
-                "json"
-            );
+                _composition_handler, "json");
         }
 
         // Appends a new bar to render block
