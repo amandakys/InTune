@@ -14,7 +14,6 @@
 <script src="{% static 'scripts/csrf.js' %}"></script>
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
-<script src="{% static 'scripts/comments.js' %}"></script>
 
 {% endblock imports %}
 
@@ -187,7 +186,12 @@
 <div class="container">
     <div class="row">
         <h3>Comments</h3>
-        <div id="comments" data-ajax-target="{% url 'intune:comments' %}"></div>
+        <div id="comments"
+             data-room-id="{{ composition.id }}"
+             data-username="{{ user.username }}"
+             data-ajax-target="{% url 'intune:comments' %}",
+             data-user-id="{{ user.id }}">
+        </div>
         <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
             data-composition-id="{{ composition.id }}">
             {% csrf_token %}
@@ -330,3 +334,7 @@
 </div>
 
 {% endblock footer %}
+
+{% block afterbody %}
+    <script src="{% static 'scripts/comments.js' %}"></script>
+{% endblock afterbody %}

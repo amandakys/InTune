@@ -9,38 +9,46 @@
 $(document).ready(function () {
     window.BarComment = (function () {
         "use strict";
-        function _submit_comment() {
-            var bar_count = Editor.get_bar_count();
-            var current_bar = Editor.get_current_bar();
 
-            if (current_bar < 0 || current_bar >= bar_count) {
-                // Verify valid bar
-                console.log("No bar selected to comment on");
-            } else {
+        // only connect when one of the bars are selected
+        $("#render_block").on("click", function() {
+            var comment_div = $("#comments");
+            var room_id = comment_div.attr("data-room-id");
+            var username = comment_div.attr("data-username");
+            var user_id = comment_div.attr("data-user-id");
+            var bar_id = Editor.get_current_bar();
+
+            // connect to socket at chat-<room_id>-<bar-id>
+            var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "-" + bar_id + "/");
+
+            // refresh comments page onmessage
+            socket.onmessage = function (e) {
+                var data = JSON.parse(e.data);
+                var comment = {"commenter": data["user"],
+                            "time": new Date().toLocaleString(),
+                            "comment": data["msg"]};
+                display_new_comment(comment);
+            };
+
+            socket.onopen = function () {
                 var comment_form = $("#comment_form");
 
-                var form_data = {
-                    'composition_id': comment_form.attr("data-composition-id"),
-                    'bar_id': current_bar,
-                    'comment': $("#comment_text").val()
-                };
-
-                $.ajax({
-                    type: comment_form.attr('method'),
-                    url: comment_form.attr('action'),
-                    data: form_data,
-                    dataType: "json",
-                    encode: true
-                }).done(function (result) {
-                    if (result.success) {
-                        $('#comment_text').val("");
-                    }
-
-                    _retrieve_comments(current_bar);
+                comment_form.submit (function() {
+                    bar_id = Editor.get_current_bar();
+                    var text = $("#comment_text").val();
+                    var msg = {
+                        "room": room_id,
+                        "msg": text,
+                        "user": user_id,
+                        "bar": bar_id,
+                        "type": "comment"
+                    };
+                    socket.send(JSON.stringify(msg));
+                    event.preventDefault();
+                    $("#comment_text").val("");
                 });
-            }
-            event.preventDefault();
-        }
+            };
+        });
 
         /**
          * Retrieves comments that correspond to the current_bar index
@@ -63,42 +71,34 @@ $(document).ready(function () {
         function _display_comments(comments) {
             $('#comments').html("");
             for (var i = 0; i < comments.comments.length; i++) {
-                var comment_element = document.createElement("div");
-                comment_element.setAttribute("class", "comment-element");
-                comment_element.id = "comment-element-" + i;
-                document.getElementById("comments").appendChild(comment_element);
-
-                var name_col = document.createElement("div");
-                name_col.setAttribute("class", "comment col-sm-8");
-                name_col.id = "text" + i;
-                document.getElementById("comment-element-" + i).appendChild(name_col);
-                document.getElementById("text" + i).innerHTML = "<p><b>" + comments.comments[i].commenter + "</b>: " + comments.comments[i].comment + "</p>";
-
-                // var comment_col = document.createElement("div");
-                // comment_col.setAttribute("class", "comment col-sm-6");
-                // comment_col.id = "comment";
-                // document.getElementById("comment-element").appendChild(comment_col);
-                // document.getElementById("comment").innerHTML = "<p>" + comments.comments[i].comment + "</p>";
-
-                var time_col = document.createElement("div");
-                time_col.setAttribute("class", "comment col-sm-4");
-                time_col.id = "time" + i;
-                document.getElementById("comment-element-" + i).appendChild(time_col);
-                var time = new Date(comments.comments[i].time);
-                var hours = ('0' + time.getHours()).slice(-2);
-                var mins = ('0' + time.getMinutes()).slice(-2);
-                document.getElementById("time" + i).innerHTML = "<p>" + hours + ":" + mins + " " + time.toDateString() + "</p>";
+                display_new_comment(comments.comments[i])
             }
         }
 
+        function display_new_comment(comment) {
+            var comment_element = document.createElement("div");
+            comment_element.setAttribute("class", "comment-element");
+            document.getElementById("comments").appendChild(comment_element);
+
+            var name_col = document.createElement("div");
+            name_col.setAttribute("class", "comment col-sm-8");
+            comment_element.appendChild(name_col);
+            name_col.innerHTML = "<p><b>" + comment.commenter + "</b>: " + comment.comment + "</p>";
+
+            var time_col = document.createElement("div");
+            time_col.setAttribute("class", "comment col-sm-4");
+            comment_element.appendChild(time_col);
+            var time = new Date(comment.time);
+            var hours = ('0' + time.getHours()).slice(-2);
+            var mins = ('0' + time.getMinutes()).slice(-2);
+            time_col.innerHTML = "<p>" + hours + ":" + mins + " " + time.toDateString() + "</p>";
+        }
+
         return {
-            submit_comment: _submit_comment,
             retrieve_comments: _retrieve_comments
         }
     })();
 
     var comment_form = $("#comment_form");
     comment_form.hide();
-
-    comment_form.submit(BarComment.submit_comment);
 });
