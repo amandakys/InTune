@@ -72,16 +72,33 @@ ol > li {
     padding-left: 0;
 }
 
+span.canvas-outer {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    width: 180px;
+    height: 80px;
+}
+
+span.selected {
+    box-shadow: 0 0 10px #ffb200;
+}
+
+canvas {
+    padding: 0;
+}
+
 canvas.bar-block {
+    margin: -20px -5px 0 -5px;
     width:200px;
     height:110px;
     box-shadow: none;
 }
 
 canvas.selected {
+    margin: -20px -5px 0 -5px;
     width:200px;
     height:110px;
-    box-shadow: 0 0 10px #ffb200;
 }
 
 .vex-string-hidden {

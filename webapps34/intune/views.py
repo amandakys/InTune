@@ -77,7 +77,7 @@ class ProfileDetail(generic.DetailView):
 class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
-    fields = ['data', 'users']
+    fields = ['users']
 
     # added chatmessage_list variable so that included chatroom.html can access it
     def get_context_data(self, **kwargs):
