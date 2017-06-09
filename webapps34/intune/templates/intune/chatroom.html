@@ -6,26 +6,23 @@
 
 {% load humanize %}
 
-{% block content %}
-    <h2> Chat for {{ composition.title }}</h2>
-    <div class="msgs"></div>
-    <div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}" data-user-id="{{ user.id }}">
-        <div id="chats">
-        {% for msg in chatmessage_list %}
-            <div class="message">
-                {{ msg.sender.user.username }}: {{ msg }}
-                {{ msg.time|naturaltime }}
-            </div>
-        {% endfor %}
+<h2> Chat for {{ composition.title }}</h2>
+<div class="msgs"></div>
+<div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}" data-user-id="{{ user.id }}">
+    <div id="chats">
+    {% for msg in chatmessage_list %}
+        <div class="message">
+            {{ msg.sender.user.username }}: {{ msg }}
+            {{ msg.time|naturaltime }}
         </div>
-        <form>
-            <input type="text" name="msg">
-            <button id="send-msg" type="button">Send</button>
-        </form>
-
+    {% endfor %}
     </div>
+    <form>
+        <input type="text" name="msg">
+        <button id="send-msg" type="button">Send</button>
+    </form>
+</div>
 
-{%  endblock %}
 
 {% block afterbody %}
     <script src="{% static 'intune/chat.js' %}"></script>

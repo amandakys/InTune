@@ -79,6 +79,12 @@ class CompositionEdit(generic.edit.UpdateView):
     model = Composition
     fields = ['data', 'users']
 
+    # added chatmessage_list variable so that included chatroom.html can access it
+    def get_context_data(self, **kwargs):
+        context = super(CompositionEdit, self).get_context_data(**kwargs)
+        context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
+        return context
+
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
@@ -175,7 +181,7 @@ class Chat(generic.ListView):
         return context
 
     def get_queryset(self):
-        return ChatMessage.objects.filter(room__id=self.kwargs['pk'])
+        return ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
 
 
 def comment_get(request):
@@ -215,6 +221,7 @@ def comment_create_ajax(request):
 
 class NotificationList(generic.ListView):
     template_name = "intune/notification_list.html"
+
     def get_queryset(self):
         return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
 
