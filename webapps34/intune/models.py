@@ -52,8 +52,11 @@ class Composition(models.Model):
         return self.owner.user == user or user.profile in self.users.all()
 
     def add_bar(self):
+        self.append_bar(":w ##")
+
+    def append_bar(self, contents):
         data = self.get_data()
-        data['bars'].append(":w ##")
+        data['bars'].append(contents)
         self.data = dumps(data)
         self.save()
 
