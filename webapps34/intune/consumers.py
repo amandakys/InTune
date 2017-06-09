@@ -10,6 +10,12 @@ def ws_add(message):
     # Accept the connection
     message.reply_channel.send({"accept": True})
     path = message.content['path'].strip("/")
+    # check that path is unicode (Channel group name must be unicode)
+    try:
+        path.decode('utf-8')
+    except UnicodeError:
+        print("invalid path name ", path)
+        pass
     Group("%s" % path).add(message.reply_channel)
 
 
@@ -36,6 +42,10 @@ def ws_message(message):
 
 # Connected to websocket.disconnect
 def ws_disconnect(message):
-    text = json.loads(message.content['text'])
-    room_id = text['room']
-    Group("chat-%s" % room_id).discard(message.reply_channel)
+    # check that disconnect is called by chatbox
+    if 'text' in message.content.keys():
+        text = json.loads(message.content['text'])
+        room_id = text['room']
+        Group("chat-%s" % room_id).discard(message.reply_channel)
+    else:
+        print("Unexpected disconnect, message: ", message)
