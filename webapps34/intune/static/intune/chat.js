@@ -12,7 +12,7 @@ $( document ).ready(function() {
         console.log("Got message")
         var data = JSON.parse(e.data)
         var msg_div = $(
-            "<div class='messages'>" + data.user + ": " + data.msg + "</div>"
+            "<div class='messages'>" + data.user + ": " + data.msg +  "Just now </div>"
         );
         $("#chats").append(msg_div);
     }

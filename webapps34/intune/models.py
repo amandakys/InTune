@@ -67,15 +67,8 @@ class Composition(models.Model):
         return self.title
 
 
-class Room(models.Model):
-    composition = models.ForeignKey(Composition, related_name='composition', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.composition.title
-
-
 class ChatMessage(models.Model):
-    room = models.ForeignKey(Room, related_name='room', on_delete=models.CASCADE)
+    room = models.ForeignKey(Composition, related_name='room', on_delete=models.CASCADE)
     msg = models.CharField(max_length=200)
     sender = models.ForeignKey(Profile, related_name='sender', default=1)
     time = models.DateTimeField(auto_now_add=True)

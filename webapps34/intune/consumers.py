@@ -1,7 +1,7 @@
 import json
 
 from channels import Group
-from .models import ChatMessage, Room, Profile
+from .models import ChatMessage, Composition, Profile
 
 
 # Connected to websocket.connect
@@ -22,7 +22,7 @@ def ws_message(message):
     sender_name = Profile.objects.get(id=user_id).user.username
 
     ChatMessage.objects.create(
-        room=Room.objects.get(id=room_id),
+        room=Composition.objects.get(id=room_id),
         msg=msg,
         sender=Profile.objects.get(id=user_id),
     )
