@@ -10,12 +10,6 @@ def ws_add(message):
     # Accept the connection
     message.reply_channel.send({"accept": True})
     path = message.content['path'].strip("/")
-    # check that path is unicode (Channel group name must be unicode)
-    try:
-        path.decode('utf-8')
-    except UnicodeError:
-        print("invalid path name ", path)
-        pass
     Group("%s" % path).add(message.reply_channel)
 
 

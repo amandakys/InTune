@@ -31,6 +31,7 @@ $( document ).ready(function() {
             console.log("text = ", msg)
             socket.send(JSON.stringify(msg));
             event.preventDefault()
+            $("#chat-msg").val("")
         });
     }
 });
