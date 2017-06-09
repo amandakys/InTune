@@ -1,11 +1,13 @@
 $( document ).ready(function() {
     console.log( "ready!" );
-
-    var socket = new WebSocket("ws://" + window.location.host);
+    var room_id = roomId = $("div.roomdiv").attr("data-room-id");
+    var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "/");
+    socket.connect
     socket.onmessage = function (e) {
         console.log("Got message")
+        var username = $("div.roomdiv").attr("data-username");
         var msg_div = $(
-            "<div class='messages'>" + e.data + "</div>"
+            "<div class='messages'>" + username + ": " + e.data + "</div>"
         );
         $("#chats").append(msg_div);
     }
@@ -15,8 +17,13 @@ $( document ).ready(function() {
 
         $("#send-msg").click (function() {
             var text = $("div.roomdiv").find("input").val()
-            console.log("text = ", text)
-            socket.send(text)
+            var room_id = roomId = $("div.roomdiv").attr("data-room-id");
+            msg = {
+                "room": room_id,
+                "msg": text,
+            }
+            console.log("text = ", msg)
+            socket.send(JSON.stringify(msg));
         });
     }
 });

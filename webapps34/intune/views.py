@@ -146,5 +146,11 @@ def composition_add_bar(request, pk):
 class Chat(generic.ListView):
     template_name = "intune/chatroom.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(Chat, self).get_context_data(**kwargs)
+        context["composition"] = Composition.objects.get(id=self.kwargs['pk'])
+        context["user"] = self.request.user
+        return context
+
     def get_queryset(self):
         return ChatMessage.objects.filter(room__id=self.kwargs['pk'])
