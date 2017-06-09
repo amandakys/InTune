@@ -1,0 +1,28 @@
+{% extends "intune/base_layer.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Room list</title>
+{% endblock %}
+
+{% block content %}
+    <h2>{{ chatmessage_list.first.room.composition.title }}</h2>
+    <div class="msgs"></div>
+    <div class="roomdiv">
+        <div id="chats">
+        {% for msg in chatmessage_list %}
+            <div class="message">{{ msg }}</div>
+        {% endfor %}
+        </div>
+        <form>
+            <input type="text" name="msg">
+            <button id="send-msg" type="button">Send</button>
+        </form>
+
+    </div>
+
+{%  endblock %}
+
+{% block afterbody %}
+    <script src="{% static 'intune/chat.js' %}"></script>
+{% endblock afterbody %}

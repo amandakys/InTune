@@ -48,7 +48,7 @@ urlpatterns = [
         name='profile-autocomplete',
     ),
 
-    url(r'chats/$',
-        login_required(views.Chats.as_view()),
+    url(r'^composition/(?P<pk>[0-9]+)/chat/$',
+        login_required(views.Chat.as_view()),
         name="chats"),
 ]

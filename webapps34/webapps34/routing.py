@@ -1,10 +1,8 @@
-from channels import route
-
-# This function will display all messages received in the console
-def message_handler(message):
-    print(message['text'])
-
+from channels.routing import route
+from intune.consumers import ws_add, ws_message, ws_disconnect
 
 channel_routing = [
-    route("websocket.receive", message_handler)  # we register our message handler
+    route("websocket.connect", ws_add),
+    route("websocket.receive", ws_message),
+    route("websocket.disconnect", ws_disconnect),
 ]

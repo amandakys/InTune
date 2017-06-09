@@ -5,7 +5,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 
-from .models import Composition, Profile, Room
+from .models import Composition, Profile, Room, ChatMessage
 from dal import autocomplete
 
 
@@ -143,6 +143,8 @@ def composition_add_bar(request, pk):
     return JsonResponse({'success': True})
 
 
-class Chats(generic.ListView):
+class Chat(generic.ListView):
+    template_name = "intune/chatroom.html"
+
     def get_queryset(self):
-        return Room.objects.all()
+        return ChatMessage.objects.filter(room__id=self.kwargs['pk'])

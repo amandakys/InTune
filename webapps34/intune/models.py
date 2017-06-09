@@ -52,3 +52,11 @@ class Room(models.Model):
 
     def __str__(self):
         return self.composition.title
+
+
+class ChatMessage(models.Model):
+    room = models.ForeignKey(Room, related_name='room', on_delete=models.CASCADE)
+    msg = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.msg
