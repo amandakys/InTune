@@ -61,14 +61,13 @@ $(document).ready(function () {
         }
 
         function _display_comments(comments) {
-            $('#comments').html( function() {
-                var string = "";
-                var i;
-                for (i = 0; i < comments.comments.length; i++) {
-                    string += "<p> " + comments.comments[i].commenter + ": " + comments.comments[i].comment + "</p>\n"
-                }
-                return string;
-            }) ()
+            var string = "";
+            var i;
+            for (i = 0; i < comments.comments.length; i++) {
+                string += "<p> " + comments.comments[i].commenter + ": " + comments.comments[i].comment + "</p>\n"
+            }
+
+            $('#comments').html(string);
         }
 
         return {
