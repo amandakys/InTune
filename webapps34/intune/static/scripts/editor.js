@@ -29,10 +29,16 @@ $(document).ready(function () {
         // List of editable bars as JSON Objects
         var editable_bars = [];
 
+        var DEBUG = true;
+
+        function _debug_log(msg) {
+            if (DEBUG) console.log(msg);
+        }
+
         function _composition_handler(data) {
             // Debug Statement
             var json_string = JSON.stringify(data);
-            console.log("Composition data:\n" + json_string);
+            _debug_log("Composition data:\n" + json_string);
 
             var bars = data["bars"];
             var size = bars.length;
@@ -43,7 +49,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                console.log("Bar [" + i + "]: " + bars[i]);
+                _debug_log("Bar [" + i + "]: " + bars[i]);
                 // JSON Object representing vt string
                 // Repackaging required as data model does not contain every
                 // required information
@@ -59,8 +65,6 @@ $(document).ready(function () {
                     editable_bar["time_sig"] = "";
                 }
                 editable_bar["notes"] = bars[i];
-
-                // console.log(JSON.stringify(vt_json));
                 editable_bars.push(editable_bar);
 
                 _render_bar(editable_bar, i);
@@ -86,7 +90,6 @@ $(document).ready(function () {
 
             var vex_string = _build_vextab(bar_json);
             var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
             Render.render_bar(canvas.id, canvas_width, vex_string);
 
             // Register click event for canvas
@@ -184,13 +187,10 @@ $(document).ready(function () {
 
             current_bar = bar_id;
 
-            // console.log("Selecting: " + "vt_" + bar_id);
             var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
-            // console.log("vt_json_string: " + vt_json_string);
             var vt_json = JSON.parse(vt_json_string);
 
             var vex_string = _build_vextab(vt_json);
-            // console.log("vexstring: " + vex_string);
 
             // Display vextab notes to editor textbox
             $("#edit_text").val(vt_json["notes"]);
@@ -198,7 +198,6 @@ $(document).ready(function () {
             // Render to canvas
             var canvas = document.getElementById("bar_" + bar_id);
             var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
             Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
 
             // Display to user which bar is selected
@@ -229,7 +228,7 @@ $(document).ready(function () {
         }
 
         function _change_scope() {
-            console.log("Select Bar: " + this.id);
+            _debug_log("Select Bar: " + this.id);
             var id = this.id;
             id = id.replace("bar_", "");
             id = parseInt(id);
@@ -277,7 +276,7 @@ $(document).ready(function () {
         }
 
         function _edit_bar() {
-            console.log("Edit Bar: " + current_bar);
+            _debug_log("Edit Bar: " + current_bar);
             if (current_bar < 0) {
                 console.log("No Bar to edit!");
                 return;
