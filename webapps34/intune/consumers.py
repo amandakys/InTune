@@ -1,12 +1,14 @@
+from channels import Group
+from channels.auth import channel_session_user, channel_session_user_from_http
 import json
 
 from channels import Group
 from .models import ChatMessage, Composition, Profile, Comment
 
+# TODO: Check user permissions
 
 # Connected to websocket.connect
-# def ws_add(message, room):
-def ws_add(message):
+def ws_chat_add(message):
     # Accept the connection
     message.reply_channel.send({"accept": True})
     path = message.content['path'].strip("/")
@@ -15,8 +17,7 @@ def ws_add(message):
 
 
 # Connected to websocket.receive
-def ws_message(message):
-    print("ws message ", message.content)
+def ws_chat_message(message):
     text = json.loads(message.content['text'])
     room_id = text['room']
     user_id = text['user']
@@ -24,7 +25,6 @@ def ws_message(message):
     sender_name = Profile.objects.get(id=user_id).user.username
     type = text['type']
     if type == "chatmsg":
-        bar_id = 0
         ChatMessage.objects.create(
             room=Composition.objects.get(id=room_id),
             msg=msg,
@@ -41,7 +41,7 @@ def ws_message(message):
     else:
         print("wrong type")
 
-    group_postfix = get_group_postfix(type, room_id, bar_id)
+    group_postfix = get_group_postfix(text)
     print("group postfix", group_postfix)
     Group("chat-%s" % group_postfix).send({
         "text": json.dumps({
@@ -51,36 +51,52 @@ def ws_message(message):
     })
 
 
-def ws_disconnect(message):
+# Connected to websocket.disconnect
+def ws_chat_disconnect(message):
     # check that disconnect is called by chatbox
     if 'text' in message.content.keys():
         text = json.loads(message.content['text'])
-        room_id = text['room']
-        type = text['type']
-        bar_id = get_bar_id(text)
-        group_postfix = get_group_postfix(type, room_id, bar_id)
+        group_postfix = get_group_postfix(text)
         Group("chat-%s" % group_postfix).discard(message.reply_channel)
     else:
         print("Unexpected disconnect, message: ", message)
 
 
-def get_group_postfix(type, room_id, bar_id):
+def get_group_postfix(text):
+    type = text["type"]
     if type == "chatmsg":
-        return room_id
+        return str(text["room"])
     elif type == "comment":
-        return str(room_id) + "-" + str(bar_id)
+        return str(text["room"]) + "-" + str(text["bar"])
     else:
         print("error: unexpected msg type ", type)
         return
 
 
-def get_bar_id(text):
-    type = text["text"]
-    if type == "chatmsg":
-        # return default bar number for composition wide channels
-        return 0
-    elif type == "comment":
-        return text["bar"]
-    else:
-        print("error: unexpected msg type ", type)
-        return
+@channel_session_user_from_http
+def ws_bar_connect(message, comp):
+    message.reply_channel.send({"accept": True})
+    Group("comp-%s" % comp).add(message.reply_channel)
+
+
+@channel_session_user
+def ws_bar_receive(message, comp):
+    contents = json.loads(message.content['text'])
+    bar_id = int(contents['bar_id'])
+    bar_contents = contents['bar_contents']
+
+    composition = Composition.objects.get(pk=comp)
+    if composition.has_access(message.user):
+        composition.set_bar(bar_id, bar_contents)
+        Group("comp-%s" % comp).send({
+            "text": json.dumps({
+                "bar_mod": "update",
+                "bar_id": bar_id,
+                "bar_contents": bar_contents,
+            }),
+        })
+
+
+@channel_session_user
+def ws_bar_disconnect(message, comp):
+    Group("comp-%s" % comp).discard(message.reply_channel)

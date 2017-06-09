@@ -36,15 +36,32 @@ var Render = (function () {
             // console.log("Parsing:\n" + vex_string);
             vextab.parse(vex_string);
             artist.render(renderer);
-            $("#error2").text("");
+            $("#edit_error").text("");
+        } catch (e) {
+            $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
+        }
+    }
+
+    function _syntax_verify(notes) {
+        var vt = VexTabDiv;
+        var VexTab = vt.VexTab;
+        var Artist = vt.Artist;
+        var artist = new Artist(0, 0, 200);
+        var vextab = new VexTab(artist);
+
+        try {
+            vextab.reset(); artist.reset();
+            vextab.parse(notes);
+            return true;
         } catch (e) {
             console.log(e);
-            $("#error2").html(e.message.replace(/[\n]/g, "<br/>"));
+            return false;
         }
     }
 
     return {
-        render_bar: _render_bar
+        render_bar: _render_bar,
+        syntax_verify: _syntax_verify
     }
 
 })();

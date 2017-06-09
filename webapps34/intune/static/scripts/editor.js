@@ -18,19 +18,28 @@ $(document).ready(function () {
         // Module specific constants
         var MAX_BARS = 5;
         var DEFAULT_TABSTAVE = "tabstave notation=true tablature=false";
+        var DEFAULT_NOTES = ":w ##";
         var VT_DATA_NAME = "vt_data";
 
         // Module specific variables
+        var composition_id = -1;
         var bar_count = 0;
         var current_bar = 0;
+        var socket = null;
 
         // List of editable bars as JSON Objects
         var editable_bars = [];
 
+        var DEBUG = true;
+
+        function _debug_log(msg) {
+            if (DEBUG) console.log(msg);
+        }
+
         function _composition_handler(data) {
             // Debug Statement
             var json_string = JSON.stringify(data);
-            console.log("Composition data:\n" + json_string);
+            _debug_log("Composition data:\n" + json_string);
 
             var bars = data["bars"];
             var size = bars.length;
@@ -41,7 +50,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                console.log("Bar [" + i + "]: " + bars[i]);
+                _debug_log("Bar [" + i + "]: " + bars[i]);
                 // JSON Object representing vt string
                 // Repackaging required as data model does not contain every
                 // required information
@@ -57,8 +66,6 @@ $(document).ready(function () {
                     editable_bar["time_sig"] = "";
                 }
                 editable_bar["notes"] = bars[i];
-
-                // console.log(JSON.stringify(vt_json));
                 editable_bars.push(editable_bar);
 
                 _render_bar(editable_bar, i);
@@ -76,7 +83,12 @@ $(document).ready(function () {
             vt_json.id = "vt_" + canvas_no;
             vt_json.setAttribute("class", "vex-string-hidden");
 
-            document.getElementById("render_block").appendChild(canvas);
+            var outer_span = document.createElement("span");
+            outer_span.id = "bar_outer_" + canvas_no;
+            outer_span.setAttribute("class", "canvas-outer");
+            outer_span.appendChild(canvas);
+
+            document.getElementById("render_block").appendChild(outer_span);
             document.getElementById("render_block").appendChild(vt_json);
 
             $("#vt_" + canvas_no).data(VT_DATA_NAME,
@@ -84,7 +96,6 @@ $(document).ready(function () {
 
             var vex_string = _build_vextab(bar_json);
             var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
             Render.render_bar(canvas.id, canvas_width, vex_string);
 
             // Register click event for canvas
@@ -101,6 +112,19 @@ $(document).ready(function () {
             // var composition_json;
             $.get($("#render_block").attr("data-ajax-target"),
                 _composition_handler, "json");
+
+            composition_id = $("#render_block").attr("data-composition-id");
+            socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
+
+            socket.onopen = function() { $("#edit_form").submit(Editor.save_bar_click); };
+            socket.onmessage = function(e) {
+                var data = JSON.parse(e.data);
+                if (data.bar_mod == "update") {
+                    _update_bar_div(data.bar_id, data.bar_contents)
+                } else {
+                    console.log("Invalid WebSocket message received");
+                }
+            }
         }
 
         // Appends a new bar to render block
@@ -131,7 +155,7 @@ $(document).ready(function () {
                     editable_bar["clef"] = "none";
                     editable_bar["time_sig"] = "";
                 }
-                editable_bar["notes"] = "";
+                editable_bar["notes"] = DEFAULT_NOTES;
 
                 $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(editable_bar));
                 editable_bars.push(editable_bar);
@@ -155,6 +179,11 @@ $(document).ready(function () {
             }
         }
 
+        function _deselect(bar_id) {
+            $("#bar_outer_" + current_bar).attr("class", "canvas-outer");
+            _save_bar(bar_id);
+        }
+
         /**
          * Takes an INTEGER bar_id and makes the bar corresponding to this id to
          * be the current editing scope
@@ -163,19 +192,16 @@ $(document).ready(function () {
          */
         function _select(bar_id) {
             // Deselect the previous canvas
-            $("#bar_" + current_bar).attr("class", "bar-block");
+            _deselect(current_bar);
             // Highlight the selected canvas
-            $("#bar_" + bar_id).attr("class", "selected");
+            $("#bar_outer_" + bar_id).attr("class", "selected canvas-outer");
 
             current_bar = bar_id;
 
-            // console.log("Selecting: " + "vt_" + bar_id);
             var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
-            // console.log("vt_json_string: " + vt_json_string);
             var vt_json = JSON.parse(vt_json_string);
 
             var vex_string = _build_vextab(vt_json);
-            // console.log("vexstring: " + vex_string);
 
             // Display vextab notes to editor textbox
             $("#edit_text").val(vt_json["notes"]);
@@ -183,7 +209,6 @@ $(document).ready(function () {
             // Render to canvas
             var canvas = document.getElementById("bar_" + bar_id);
             var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
             Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
 
             // Display to user which bar is selected
@@ -214,7 +239,7 @@ $(document).ready(function () {
         }
 
         function _change_scope() {
-            console.log("Select Bar: " + this.id);
+            _debug_log("Select Bar: " + this.id);
             var id = this.id;
             id = id.replace("bar_", "");
             id = parseInt(id);
@@ -244,60 +269,57 @@ $(document).ready(function () {
             $("#bar_" + to_remove).remove();
         }
 
-        function _edit_bar() {
-            console.log("Edit Bar: " + current_bar);
-            if (current_bar < 0) {
-                console.log("No Bar to edit!");
-                return;
-            }
-
-            var div_storage = $("#vt_" + current_bar);
+        function _update_bar_div(bar_id, bar_contents) {
+            var div_storage = $("#vt_" + bar_id);
             var vt_json_string = div_storage.data(VT_DATA_NAME);
 
             var vt_json = JSON.parse(vt_json_string);
-            vt_json["notes"] = $("#edit_text").val();
-
-            // vt_json_string = JSON.stringify(vt_json);
-            // console.log("vt_json_string: " + vt_json_string);
+            vt_json["notes"] = bar_contents;
 
             var vex_string = _build_vextab(vt_json);
             // Render to canvas
-            var canvas = document.getElementById("bar_" + current_bar);
+            var canvas = document.getElementById("bar_" + bar_id);
             var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
-            Render.render_bar("bar_" + current_bar, canvas_width, vex_string);
+            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
 
             // Update data in div
             div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
         }
 
-        function _save_bar(event) {
-            if (current_bar < 0 || current_bar >= editable_bars.length) {
+        function _edit_bar() {
+            _debug_log("Edit Bar: " + current_bar);
+            if (current_bar < 0) {
+                console.log("No Bar to edit!");
+                return;
+            }
+
+            _update_bar_div(current_bar, $("#edit_text").val());
+        }
+
+        function _save_bar(bar_id) {
+            if (bar_id < 0 || bar_id >= editable_bars.length) {
                 // Verify valid bar
                 $("#save_error").html("Please select a bar to edit!");
-            } else if ($("#edit_error").html().length > 0) {
-                // Verify no compile errors
-                $("#save_error").html("Can't save invalid bar!");
             } else {
-                var form = $("#edit_form");
+                var div_storage = $("#vt_" + bar_id);
+                var vt_json_string = div_storage.data(VT_DATA_NAME);
+                var vt_json = JSON.parse(vt_json_string);
+                var vex_string = _build_vextab(vt_json);
 
-                // Specify the bar, composition id
-                var form_data = {
-                    'composition_id': form.attr('data-composition-id'),
-                    'bar_id': current_bar,
-                    'bar_contents': $("#edit_text").val()
-                };
-                // Submit
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: form_data,
-                    dataType: "json",
-                    encode: true
-                }).done(function(result) {
-                    console.log(result);
-                });
+                if (Render.syntax_verify(vex_string)) {
+                    // Submit
+                    socket.send(JSON.stringify({
+                        'bar_id': current_bar,
+                        'bar_contents': vt_json["notes"]
+                    }));
+                } else {
+                    console.log("Failed to validate bar contents");
+                }
             }
+        }
+
+        function _save_bar_click(event) {
+            _save_bar(current_bar);
             event.preventDefault();
         }
 
@@ -317,7 +339,7 @@ $(document).ready(function () {
             append_new_bar: _append_new_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,
-            save_bar: _save_bar,
+            save_bar_click: _save_bar_click,
             get_bar_count: _get_bar_count,
             get_current_bar: _get_current_bar
         }
@@ -327,5 +349,4 @@ $(document).ready(function () {
     $("#new_bar").click(Editor.append_new_bar);
     $("#remove_bar").click(Editor.remove_bar);
     $("#edit_text").keyup(_.throttle(Editor.edit_bar, 250));
-    $("#edit_form").submit(Editor.save_bar);
 });

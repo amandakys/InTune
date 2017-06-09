@@ -20,6 +20,7 @@ $(document).ready(function () {
 
             // connect to socket at chat-<room_id>-<bar-id>
             var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "-" + bar_id + "/");
+            // var socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + room_id + "/");
 
             // refresh comments page onmessage
             socket.onmessage = function (e) {
