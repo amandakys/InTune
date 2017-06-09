@@ -162,6 +162,11 @@ $(document).ready(function () {
          * @private
          */
         function _select(bar_id) {
+            // Deselect the previous canvas
+            $("#bar_" + current_bar).attr("class", "bar-block");
+            // Highlight the selected canvas
+            $("#bar_" + bar_id).attr("class", "selected");
+
             current_bar = bar_id;
 
             // console.log("Selecting: " + "vt_" + bar_id);
