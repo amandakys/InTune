@@ -59,14 +59,13 @@ ROOT_URLCONF = 'webapps34.urls'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_ipc.IPCChannelLayer",
-        "ROUTING": "webapps34.routing.channel_routing",
+        "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "prefix": "intune",
+            "hosts": [("localhost", 6379)],
         },
+        "ROUTING": "webapps34.routing.channel_routing",
     },
 }
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
