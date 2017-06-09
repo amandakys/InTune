@@ -1,13 +1,12 @@
+from dal import autocomplete
 from django.contrib.auth.forms import UserCreationForm
-
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
-from django.views import generic, View
+from django.views import generic
 
-from .models import Composition, Profile, ChatMessage, Comment, Notification
-from dal import autocomplete
+from intune.models import Composition, Profile, ChatMessage, Comment, Notification
 
 
 class CompositionList(generic.ListView):
