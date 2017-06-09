@@ -3,7 +3,10 @@ FROM python:latest
 WORKDIR /build/webapps34
 ADD . /build/
 
-RUN pip install -r /build/requirements.txt
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python2.7 get-pip.py
+RUN pip2.7 install supervisor
+RUN pip3 install -r /build/requirements.txt
 
 EXPOSE 80
 
@@ -13,4 +16,5 @@ RUN ./manage.py test
 RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
 RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
-CMD uwsgi --ini /build/uwsgi.ini
+RUN cp /build/patch/asgi_ipc/store.py /usr/local/lib/python3.6/site-packages/asgi_ipc/
+CMD supervisord -c /build/supervisord.conf

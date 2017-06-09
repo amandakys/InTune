@@ -1,11 +1,9 @@
 Django==1.11.1
-uwsgi
 psycopg2
 django-bootstrap3
 django-autocomplete-light
 channels
-asgi-redis
+asgi_ipc
 
 # Tests Module
 PyHamcrest==1.9.0
-

@@ -59,11 +59,11 @@ ROOT_URLCONF = 'webapps34.urls'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        },
+        "BACKEND": "asgi_ipc.IPCChannelLayer",
         "ROUTING": "webapps34.routing.channel_routing",
+        "CONFIG": {
+            "prefix": "intune",
+        },
     },
 }
 
