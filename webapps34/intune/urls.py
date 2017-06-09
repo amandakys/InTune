@@ -40,6 +40,14 @@ urlpatterns = [
         login_required(views.composition_add_bar),
         name="bar_add"),
 
+    url(r'^comments/$',
+        login_required(views.comment_get),
+        name="comments"),
+
+    url(r'^comments/create/$',
+        login_required(views.comment_create_ajax),
+        name="comment_create"),
+
     # (auxillary url used for django-autocomplete)
     # TODO: make this url not visible?
     url(
@@ -51,4 +59,14 @@ urlpatterns = [
     url(r'^composition/(?P<pk>[0-9]+)/chat/$',
         login_required(views.Chat.as_view()),
         name="chats"),
+
+    # Retrieve Composition Attributes as JSON
+    url(r'^composition/attribute/(?P<pk>[0-9]+)/$',
+        login_required(views.get_composition_attribute),
+        name="composition_attribute"
+        ),
+
+    url(r'^notifications/$', views.NotificationList.as_view(), name='notifications'),
+
+    url(r'^notifications/count/$', views.notification_count, name='notification_count'),
 ]

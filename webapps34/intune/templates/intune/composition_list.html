@@ -5,6 +5,12 @@
     <title>User Homepage</title>
 {% endblock %}
 
+{% block notification %}
+    {% if notification_list %}
+    {{ notification_list.count }}
+    {% endif %}
+{% endblock notification %}
+
 {% block content %}
     <h2>Your Compositions</h2>
     <div class="btn-new-composition">
@@ -24,12 +30,12 @@
                         </div>
                         <div class="edit col-sm-2">
                             <a href="{% url 'intune:song_edit' composition.id %}">
-                                <button type="button" class="btn btn-dark">
+                                <button style="margin-bottom: 5px" type="button" class="btn btn-dark pull-right">
                                     <span class="glyphicon glyphicon-pencil"></span> Edit
                                 </button>
                             </a>
                             <a href="{% url 'intune:song_delete' composition.id %}">
-                                <button type="button" class="btn btn-dark">
+                                <button type="button" class="btn btn-dark pull-right">
                                     <span class="glyphicon glyphicon-remove"></span> Delete
                                 </button>
                             </a>

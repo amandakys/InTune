@@ -1,3 +1,10 @@
+:root {
+    --background_color: #ffffff;
+    --element_color: #33cccc;
+    --dark_color: #34383b;
+    --light_color: #ebebeb;
+}
+
 /* Font and Text */
 @font-face {
     font-family: 'bravura';
@@ -25,6 +32,20 @@
     font-family: 'bravura-text', serif;
 }
 
+.bravura-text.large {
+    font-size: large;
+}
+
+.hint-text {
+    position: relative;
+    font-size: x-small;
+    color: #000099;
+    background-color: inherit;
+    /* Offset from notation on the left */
+    top: 3px;
+    padding-left: 5px;
+}
+
 h1 {
     color: #000000;
     font-family: "Lucida Handwriting", serif;
@@ -40,11 +61,31 @@ body {
     margin-bottom: 60px;
 }
 
+ol > li {
+    list-style: decimal;
+}
+
 /* Classes */
 
 /* Reset Row Padding */
 .row {
     padding-left: 0;
+}
+
+canvas.bar-block {
+    width:200px;
+    height:110px;
+    box-shadow: none;
+}
+
+canvas.selected {
+    width:200px;
+    height:110px;
+    box-shadow: 0 0 10px #ffb200;
+}
+
+.vex-string-hidden {
+    display: none;
 }
 
 /* Footer Configuration */
@@ -65,8 +106,7 @@ body {
 
 /* Text Input */
 .dynamic-textbox {
-    width: 40%;
-    font-size: 1.5em;
+    width: 80%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -78,4 +118,24 @@ body {
 .row.justify-content-between {
     display: flex;
     justify-content: space-between;
+}
+
+.comment-element {
+    background-color: var(--element_color);
+    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-right: 20px;
+    margin-bottom: 1%;
+    border-radius: 10px;
+    line-height: 20px;
+    min-height:20px;
+    color: var(--background_color);
+}
+
+.comment.col-sm-4 {
+    text-align: right;
+}
+
+.btn-group.top-padded {
+    padding-top: 15px;
 }

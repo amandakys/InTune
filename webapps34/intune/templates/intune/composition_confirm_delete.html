@@ -5,30 +5,55 @@
 {% block title %}<title>{{ composition }}: Delete</title>{% endblock title %}
 
 {% block imports %}
-<script src="{% static 'lib/vextab-div.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="{% static 'lib/vextab-div.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 {% endblock imports %}
 
 {% block content %}
-<h1>Delete {{ composition.title }}</h1>
-<div class="row">
-    <div class="col-sm-4">
-        <form method="post" action="">
-            {% csrf_token %}
-            <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
-            {% buttons %}
-            <button type="submit" class="btn btn-danger">Delete</button>
-            {% endbuttons %}
-        </form>
+    <h1>Delete {{ composition.title }}</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-xs-6">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="pull-right">
+                            <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-6">
+                    {% buttons %}
+                        <div class="pull-left">
+                            <button style="display: inline-block" type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    {% endbuttons %}
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+{#            <div class="text-center">#}
+{#                <form method="post" action="">#}
+{#                    {% csrf_token %}#}
+{#                    <div class="pull-left">#}
+{#                        <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>#}
+{#                    </div>#}
+{#                    {% buttons %}#}
+{#                        <div class="pull-right">#}
+{#                            <button style="display: inline-block" type="submit" class="btn btn-danger">Delete</button>#}
+{#                        </div>#}
+{#                    {% endbuttons %}#}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-<div class="row">
-    <div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
-    notation=true tablature=false
-    {% for bar in composition.get_bar_list %}{% if forloop.first %}notes {% endif %}{{ bar }} |{% endfor %}
+    <div class="row">
+        <div class="vex-tabdiv" style="text-align: center" width=680 scale=1.0 editor="false">tabstave
+            notation=true tablature=false
+            {% for bar in composition.get_bar_list %}{% if forloop.first %}notes {% endif %}{{ bar }} |{% endfor %}
+        </div>
     </div>
-</div>
 
 {% endblock content %}

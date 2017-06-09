@@ -1,11 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
+
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
-from django.views import generic
+from django.views import generic, View
 
-from .models import Composition, Profile, Room, ChatMessage
+from .models import Composition, Profile, ChatMessage, Comment, Notification
 from dal import autocomplete
 
 
@@ -40,9 +41,9 @@ class CompositionCreate(generic.edit.CreateView):
     def get_form(self):
         form = super(CompositionCreate, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
-                                        url='intune:profile-autocomplete')
+            url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user=self.request.user)
+            user=self.request.user)
         return form
 
     def form_valid(self, form):
@@ -82,9 +83,9 @@ class CompositionEdit(generic.edit.UpdateView):
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
-                                        url='intune:profile-autocomplete')
+            url='intune:profile-autocomplete')
         form.fields['users'].queryset = Profile.objects.exclude(
-                                        user=self.request.user)
+            user=self.request.user)
         return form
 
     def get_queryset(self):
@@ -116,12 +117,34 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
+def get_composition_attribute(request, pk):
+    """
+    Returns python dictionary containing composition attributes
+    :param request: Http request method
+    :type request: django.core.handlers.wsgi.WSGIRequest
+    :param pk: Composition id
+    :type pk: int
+    :return: Dictionary containing composition attributes
+    :rtype: dict
+    """
+    if request.method != "GET":
+        return Http404()
+
+    composition = Composition.objects.get(pk=pk)
+    if not composition.has_access(request.user):
+        return HttpResponseForbidden()
+
+    attributes = composition.get_full_attributes()
+
+    return JsonResponse(attributes)
+
+
 def composition_bar_edit_ajax(request):
     if not request.is_ajax() or request.method != "POST":
         return Http404()
 
     composition = Composition.objects.get(id=request.POST['composition_id'])
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
 
     bar_id = int(request.POST['bar_id'])
@@ -137,7 +160,7 @@ def composition_add_bar(request, pk):
         return Http404()
 
     composition = Composition.objects.get(pk=pk)
-    if not composition.has_access(request.user):
+    if not composition or not composition.has_access(request.user):
         return Http404()
     composition.add_bar()
     return JsonResponse({'success': True})
@@ -154,3 +177,49 @@ class Chat(generic.ListView):
 
     def get_queryset(self):
         return ChatMessage.objects.filter(room__id=self.kwargs['pk'])
+
+
+def comment_get(request):
+    if not request.is_ajax() or request.method != "GET":
+        return Http404()
+
+    composition = Composition.objects.get(pk=request.GET['composition'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    comments = Comment.objects.filter(composition=composition,
+                                      bar=int(request.GET['bar'])).order_by('time')
+    comments = [{   "commenter": str(comment.commenter),
+                    "time": comment.time.isoformat(),
+                    "comment": str(comment.comment),
+                } for comment in comments]
+    return JsonResponse({'comments': comments})
+
+
+def comment_create_ajax(request):
+    if not request.is_ajax() or request.method != "POST":
+        return Http404()
+
+    composition = Composition.objects.get(pk=request.POST['composition_id'])
+    if not composition or not composition.has_access(request.user):
+        return Http404()
+
+    # TODO: refactor into method in Composition
+    if len(request.POST['comment']) < 1:
+        return Http404()
+    Comment.objects.create(commenter=request.user.profile,
+                           composition=composition,
+                           bar=int(request.POST['bar_id']),
+                           comment=request.POST['comment'])
+    return JsonResponse({'success': True})
+
+
+class NotificationList(generic.ListView):
+    template_name = "intune/notification_list.html"
+    def get_queryset(self):
+        return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
+
+
+def notification_count(request):
+    count = Notification.objects.filter(Q(recipients__user=request.user)).distinct().order_by("-sent_at").count()
+    return JsonResponse({'count': count})

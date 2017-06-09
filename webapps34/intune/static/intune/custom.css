@@ -10,12 +10,11 @@
     padding-top: 20px;
     padding-bottom: 10px;
     padding-right: 20px;
-    border: 5px solid var(--background_color);
+    margin-bottom: 1%;
     border-radius: 10px;
     line-height: 20px;
     color: var(--background_color);
-    text-align: center;
-    min-height: 100px;
+    /*min-height: 100px;*/
 
 }
 
@@ -37,6 +36,11 @@ body {
 }
 
 ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
     list-style: none;
     padding-left: 0;
 }
@@ -149,8 +153,7 @@ form label {
 }
 
 .edit.col-sm-2 {
-    margin-top: 12px;
-    float: right;
+    margin-top: -5px;
 }
 
 .render.col-sm-12 {
@@ -174,6 +177,14 @@ form label {
     -moz-border-radius: 50%;
     border-radius: 50%;
     border: 5px solid rgba(255,255,255,0.5);
+}
+
+.notifications {
+    text-align: left;
+}
+
+.notification.col-sm-4 {
+    text-align: right;
 }
 
 .btn.btn-light {
@@ -214,6 +225,11 @@ form label {
 .btn-new-composition {
     text-align: center;
     margin-bottom: 3%;
+}
+
+.btn.btn-danger {
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 /*.btn:hover, .btn:focus, .btn:active, .btn.active, .btn:active:focus, .btn:active:hover, .btn.active:focus, .btn.active:hover, .open > .btn.dropdown-toggle, .open > .btn.dropdown-toggle:focus, .open > .btn.dropdown-toggle:hover {*/

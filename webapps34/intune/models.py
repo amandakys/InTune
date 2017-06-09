@@ -10,14 +10,34 @@ class Profile(models.Model):
         return self.user.username
 
 
+# Composition Attributes
+# -> data: JSON String
+#       {'bars':
+#           < List of bars in the following format:
+#               {'options': <string for options>,
+#                'tabstave': <string for tabstave>,
+#                'clef': <"treble", "bass" or "none">,
+#                'time_sig': <string of form: "<num>/<num>">,
+#                'notes': <string containing notes>
+#               }
+#           >
+#       }
 class Composition(models.Model):
     title = models.CharField(max_length=200)
-    owner = models.ForeignKey(Profile, related_name='owner', on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, related_name='owner',
+                              on_delete=models.CASCADE)
     users = models.ManyToManyField(Profile, blank=True)
     # data = models.BinaryField()
     data = models.CharField(max_length=10000, blank=True)
     lastEdit = models.DateTimeField(auto_now=True, auto_now_add=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def get_full_attributes(self):
+        attributes = {'title': self.title,
+                      'owner': self.owner.user.username,
+                      'users': [str(p) for p in self.users.all()]}
+        attributes.update(self.get_data())
+        return attributes
 
     def get_bar_list(self):
         return self.get_data()['bars']
@@ -58,6 +78,27 @@ class ChatMessage(models.Model):
     room = models.ForeignKey(Room, related_name='room', on_delete=models.CASCADE)
     msg = models.CharField(max_length=200)
     sender = models.ForeignKey(Profile, related_name='sender', default=1)
+
+    def __str__(self):
+        return self.msg
+
+
+class Comment(models.Model):
+    commenter = models.ForeignKey(Profile)
+    time = models.DateTimeField(auto_now_add=True)
+    composition = models.ForeignKey(Composition)
+    bar = models.PositiveIntegerField()
+    comment = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.comment
+
+
+class Notification(models.Model):
+    recipients = models.ManyToManyField(Profile, blank=False)
+    msg = models.CharField(max_length=10000)
+    sent_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    composition = models.ForeignKey(Composition)
 
     def __str__(self):
         return self.msg
