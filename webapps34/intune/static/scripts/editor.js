@@ -309,6 +309,7 @@ $(document).ready(function () {
                 if (Render.syntax_verify(vex_string)) {
                     // Submit
                     socket.send(JSON.stringify({
+                        'action': "update",
                         'bar_id': current_bar,
                         'bar_contents': vt_json["notes"]
                     }));
