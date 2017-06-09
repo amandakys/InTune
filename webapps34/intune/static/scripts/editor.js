@@ -110,7 +110,7 @@ $(document).ready(function () {
             composition_id = $("#render_block").attr("data-composition-id");
             socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
 
-            socket.onopen = function() { $("#edit_form").submit(Editor.save_bar); };
+            socket.onopen = function() { $("#edit_form").submit(Editor.save_bar_click); };
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
                 if (data.bar_mod == "update") {
@@ -173,6 +173,11 @@ $(document).ready(function () {
             }
         }
 
+        function _deselect(bar_id) {
+            $("#bar_" + bar_id).attr("class", "bar-block");
+            _save_bar(bar_id);
+        }
+
         /**
          * Takes an INTEGER bar_id and makes the bar corresponding to this id to
          * be the current editing scope
@@ -181,7 +186,7 @@ $(document).ready(function () {
          */
         function _select(bar_id) {
             // Deselect the previous canvas
-            $("#bar_" + current_bar).attr("class", "bar-block");
+            _deselect(current_bar);
             // Highlight the selected canvas
             $("#bar_" + bar_id).attr("class", "selected");
 
@@ -285,23 +290,30 @@ $(document).ready(function () {
             _update_bar_div(current_bar, $("#edit_text").val());
         }
 
-        function _save_bar(event) {
-            if (current_bar < 0 || current_bar >= editable_bars.length) {
+        function _save_bar(bar_id) {
+            if (bar_id < 0 || bar_id >= editable_bars.length) {
                 // Verify valid bar
                 $("#save_error").html("Please select a bar to edit!");
-            } else if ($("#edit_error").html().length > 0) {
-                // Verify no compile errors
-                $("#save_error").html("Can't save invalid bar!");
             } else {
-                var form = $("#edit_form");
+                var div_storage = $("#vt_" + bar_id);
+                var vt_json_string = div_storage.data(VT_DATA_NAME);
+                var vt_json = JSON.parse(vt_json_string);
+                var vex_string = _build_vextab(vt_json);
 
-                var form_data = {
-                    'bar_id': current_bar,
-                    'bar_contents': $("#edit_text").val()
-                };
-                // Submit
-                socket.send(JSON.stringify(form_data));
+                if (Render.syntax_verify(vex_string)) {
+                    // Submit
+                    socket.send(JSON.stringify({
+                        'bar_id': current_bar,
+                        'bar_contents': vt_json["notes"]
+                    }));
+                } else {
+                    console.log("Failed to validate bar contents");
+                }
             }
+        }
+
+        function _save_bar_click(event) {
+            _save_bar(current_bar);
             event.preventDefault();
         }
 
@@ -321,7 +333,7 @@ $(document).ready(function () {
             append_new_bar: _append_new_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,
-            save_bar: _save_bar,
+            save_bar_click: _save_bar_click,
             get_bar_count: _get_bar_count,
             get_current_bar: _get_current_bar
         }
