@@ -62,13 +62,34 @@ $(document).ready(function () {
 
         function _display_comments(comments) {
             $('#comments').html( function() {
-                var string = "";
-                var i;
-                for (i = 0; i < comments.comments.length; i++) {
-                    string += "<p> " + comments.comments[i].commenter + ": " + comments.comments[i].comment + "</p>\n"
+                for (var i = 0; i < comments.comments.length; i++) {
+                    var comment_element = document.createElement("div");
+                    comment_element.setAttribute("class", "comment-element");
+                    comment_element.id = "comment-element-" + i;
+                    document.getElementById("comments").appendChild(comment_element);
+
+                    var name_col = document.createElement("div");
+                    name_col.setAttribute("class", "comment col-sm-8");
+                    name_col.id = "text" + i;
+                    document.getElementById("comment-element-" + i).appendChild(name_col);
+                    document.getElementById("text" + i).innerHTML = "<p><b>" + comments.comments[i].commenter + "</b>: " + comments.comments[i].comment + "</p>";
+
+                    // var comment_col = document.createElement("div");
+                    // comment_col.setAttribute("class", "comment col-sm-6");
+                    // comment_col.id = "comment";
+                    // document.getElementById("comment-element").appendChild(comment_col);
+                    // document.getElementById("comment").innerHTML = "<p>" + comments.comments[i].comment + "</p>";
+
+                    var time_col = document.createElement("div");
+                    time_col.setAttribute("class", "comment col-sm-4");
+                    time_col.id = "time" + i;
+                    document.getElementById("comment-element-" + i).appendChild(time_col);
+                    var time = new Date(comments.comments[i].time);
+                    var hours = ('0' + time.getHours()).slice(-2);
+                    var mins = ('0' + time.getMinutes()).slice(-2);
+                    document.getElementById("time" + i).innerHTML = "<p>" + hours + ":" + mins + " " + time.toDateString() + "</p>";
                 }
-                return string;
-            }) ()
+            })
         }
 
         return {
