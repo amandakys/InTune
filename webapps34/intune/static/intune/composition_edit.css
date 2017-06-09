@@ -72,6 +72,8 @@ canvas.bar-block {
 }
 
 canvas.selected {
+    width:200px;
+    height:110px;
     box-shadow: 0 0 10px #ffb200;
 }
 

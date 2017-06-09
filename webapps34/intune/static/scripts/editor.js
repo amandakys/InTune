@@ -123,7 +123,7 @@ $(document).ready(function () {
                 var editable_bar = {};
                 editable_bar["options"] = "";
                 editable_bar["tabstave"] = DEFAULT_TABSTAVE;
-                if (bar_count === 1) {
+                if (bar_count === 0) {
                     // First bar
                     editable_bar["clef"] = "treble";
                     editable_bar["time_sig"] = "4/4";
@@ -187,7 +187,7 @@ $(document).ready(function () {
             Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
 
             // Display to user which bar is selected
-            $('label[for="edit_text"]').html("Editing Bar " + bar_id);
+            $('label[for="edit_text"]').html("Editing Bar " + (bar_id + 1));
 
             BarComment.retrieve_comments(current_bar);
         }
