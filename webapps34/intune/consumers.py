@@ -1,7 +1,7 @@
 import json
 
 from channels import Group
-from .models import ChatMessage, Room
+from .models import ChatMessage, Room, Profile
 
 
 # Connected to websocket.connect
@@ -17,14 +17,20 @@ def ws_add(message):
 def ws_message(message):
     text = json.loads(message.content['text'])
     room_id = text['room']
+    user_id = text['user']
     msg = text['msg']
+    sender_name = Profile.objects.get(id=user_id).user.username
 
     ChatMessage.objects.create(
         room=Room.objects.get(id=room_id),
         msg=msg,
+        sender=Profile.objects.get(id=user_id),
     )
     Group("chat-%s" % room_id).send({
-        "text": msg,
+        "text": json.dumps({
+            "user": str(sender_name),
+            "msg": str(msg),
+        })
     })
 
 

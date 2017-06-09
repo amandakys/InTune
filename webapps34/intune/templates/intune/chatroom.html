@@ -8,10 +8,12 @@
 {% block content %}
     <h2>{{ composition.title }}</h2>
     <div class="msgs"></div>
-    <div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}">
+    <div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}" data-user-id="{{ user.id }}">
         <div id="chats">
         {% for msg in chatmessage_list %}
-            <div class="message">{{ msg }}</div>
+            <div class="message">
+                {{ msg.sender.user.username }}: {{ msg }}
+            </div>
         {% endfor %}
         </div>
         <form>

@@ -1,13 +1,18 @@
 $( document ).ready(function() {
     console.log( "ready!" );
     var room_id = roomId = $("div.roomdiv").attr("data-room-id");
+    var username = $("div.roomdiv").attr("data-username");
+    var user_id = $("div.roomdiv").attr("data-user-id");
+
     var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "/");
+
+
     socket.connect
     socket.onmessage = function (e) {
         console.log("Got message")
-        var username = $("div.roomdiv").attr("data-username");
+        var data = JSON.parse(e.data)
         var msg_div = $(
-            "<div class='messages'>" + username + ": " + e.data + "</div>"
+            "<div class='messages'>" + data.user + ": " + data.msg + "</div>"
         );
         $("#chats").append(msg_div);
     }
@@ -21,6 +26,7 @@ $( document ).ready(function() {
             msg = {
                 "room": room_id,
                 "msg": text,
+                "user": user_id
             }
             console.log("text = ", msg)
             socket.send(JSON.stringify(msg));

@@ -57,6 +57,7 @@ class Room(models.Model):
 class ChatMessage(models.Model):
     room = models.ForeignKey(Room, related_name='room', on_delete=models.CASCADE)
     msg = models.CharField(max_length=200)
+    sender = models.ForeignKey(Profile, related_name='sender', default=1)
 
     def __str__(self):
         return self.msg
