@@ -103,8 +103,33 @@ $(document).ready(function () {
             // var composition_json;
             $.get($("#render_block").attr("data-ajax-target"),
                 _composition_handler, "json");
+
             composition_id = $("#render_block").attr("data-composition-id");
             socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
+
+            socket.onopen = function() { $("#edit_form").submit(Editor.save_bar); };
+            socket.onmessage = function(e) {
+                var data = JSON.parse(e.data);
+                if (data.bar_mod == "update") {
+                    var div_storage = $("#vt_" + data.bar_id);
+                    var vt_json_string = div_storage.data(VT_DATA_NAME);
+
+                    var vt_json = JSON.parse(vt_json_string);
+                    vt_json["notes"] = data.bar_contents;
+
+                    var vex_string = _build_vextab(vt_json);
+                    // Render to canvas
+                    var canvas = document.getElementById("bar_" + data.bar_id);
+                    var canvas_width = {width: canvas.offsetWidth};
+                    // console.log("canvas_width: " + canvas_width.width);
+                    Render.render_bar("bar_" + data.bar_id, canvas_width, vex_string);
+
+                    // Update data in div
+                    div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+                } else {
+                    console.log("Invalid WebSocket message received");
+                }
+            }
         }
 
         // Appends a new bar to render block
@@ -323,5 +348,4 @@ $(document).ready(function () {
     $("#new_bar").click(Editor.append_new_bar);
     $("#remove_bar").click(Editor.remove_bar);
     $("#edit_text").keyup(_.throttle(Editor.edit_bar, 250));
-    $("#edit_form").submit(Editor.save_bar);
 });

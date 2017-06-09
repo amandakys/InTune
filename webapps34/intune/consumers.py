@@ -67,7 +67,7 @@ def ws_bar_receive(message, comp):
             "text": json.dumps({
                 "bar_mod": "update",
                 "bar_id": bar_id,
-                "bar_contents": contents,
+                "bar_contents": bar_contents,
             }),
         })
 
