@@ -5,6 +5,8 @@
     <title>Room list</title>
 {% endblock %}
 
+{% load humanize %}
+
 {% block content %}
     <h2>{{ composition.title }}</h2>
     <div class="msgs"></div>
@@ -13,6 +15,7 @@
         {% for msg in chatmessage_list %}
             <div class="message">
                 {{ msg.sender.user.username }}: {{ msg }}
+                {{ msg.time|naturaltime }}
             </div>
         {% endfor %}
         </div>
