@@ -76,7 +76,12 @@ $(document).ready(function () {
             vt_json.id = "vt_" + canvas_no;
             vt_json.setAttribute("class", "vex-string-hidden");
 
-            document.getElementById("render_block").appendChild(canvas);
+            var outer_span = document.createElement("span");
+            outer_span.id = "bar_outer_" + canvas_no;
+            outer_span.setAttribute("class", "canvas-outer");
+            outer_span.appendChild(canvas);
+
+            document.getElementById("render_block").appendChild(outer_span);
             document.getElementById("render_block").appendChild(vt_json);
 
             $("#vt_" + canvas_no).data(VT_DATA_NAME,
@@ -163,9 +168,9 @@ $(document).ready(function () {
          */
         function _select(bar_id) {
             // Deselect the previous canvas
-            $("#bar_" + current_bar).attr("class", "bar-block");
+            $("#bar_outer_" + current_bar).attr("class", "canvas-outer");
             // Highlight the selected canvas
-            $("#bar_" + bar_id).attr("class", "selected");
+            $("#bar_outer_" + bar_id).attr("class", "selected canvas-outer");
 
             current_bar = bar_id;
 
