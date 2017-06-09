@@ -9,7 +9,7 @@
 <h2> Chat for {{ composition.title }}</h2>
 <div class="msgs"></div>
 <div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}" data-user-id="{{ user.id }}">
-    <div id="chats">
+    <div id="chats" class="pre-scrollable">
     {% for msg in chatmessage_list %}
         <div class="message">
             <span class='username'> {{ msg.sender.user.username }}:</span>
