@@ -12,8 +12,9 @@
     <div id="chats">
     {% for msg in chatmessage_list %}
         <div class="message">
-            {{ msg.sender.user.username }}: {{ msg }}
-            {{ msg.time|naturaltime }}
+            <span class='username'> {{ msg.sender.user.username }}:</span>
+            <span class='msg'> {{ msg }} </span>
+            <span class='time'> {{ msg.time|naturaltime }} </span>
         </div>
     {% endfor %}
     </div>
