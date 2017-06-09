@@ -20,7 +20,7 @@ $( document ).ready(function() {
     socket.onopen = function () {
         console.log("Socket Connected")
 
-        $("#send-msg").click (function() {
+        $("#chat-box").submit (function() {
             var text = $("div.roomdiv").find("input").val()
             var room_id = roomId = $("div.roomdiv").attr("data-room-id");
             msg = {
@@ -30,6 +30,7 @@ $( document ).ready(function() {
             }
             console.log("text = ", msg)
             socket.send(JSON.stringify(msg));
+            event.preventDefault()
         });
     }
 });
