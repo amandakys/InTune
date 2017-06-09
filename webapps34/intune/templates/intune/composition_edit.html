@@ -102,29 +102,53 @@
         <div class="row text-center">
             <div class="btn-group" role="group" aria-label="Notation Selection">
                 {# Semibreve #}
-                <button type="button" class="btn btn-default bravura">&#xE1D2;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1D2;</span><span class="hint-text">(:w)</span>
+                </button>
                 {# Minim #}
-                <button type="button" class="btn btn-default bravura">&#xE1D3;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1D3;</span><span class="hint-text">(:h)</span>
+                </button>
                 {# Crotchet #}
-                <button type="button" class="btn btn-default bravura">&#xE1D5;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1D5;</span><span class="hint-text">(:q)</span>
+                </button>
                 {# Quaver #}
-                <button type="button" class="btn btn-default bravura">&#xE1D7;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1D7;</span><span class="hint-text">(:8)</span>
+                </button>
                 {# Semiquaver #}
-                <button type="button" class="btn btn-default bravura">&#xE1D9;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1D9;</span><span class="hint-text">(:16)</span>
+                </button>
                 {# Dotted Note #}
-                <button type="button" class="btn btn-default bravura">&#xE1E7;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE1E7;</span><span class="hint-text">(d)</span>
+                </button>
                 {# Rest #}
-                <button type="button" class="btn btn-default bravura">&#xE4E5;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE4E5;</span><span class="hint-text">(##)</span>
+                </button>
                 {# Flat #}
-                <button type="button" class="btn btn-default bravura">&#xE260;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE260;</span><span class="hint-text">(@)</span>
+                </button>
                 {# Double Flat #}
-                <button type="button" class="btn btn-default bravura">&#xE264;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE264;</span><span class="hint-text">(@@)</span>
+                </button>
                 {# Natural #}
-                <button type="button" class="btn btn-default bravura">&#xE261;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE261;</span><span class="hint-text">(n)</span>
+                </button>
                 {# Sharp #}
-                <button type="button" class="btn btn-default bravura">&#xE262;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE262;</span><span class="hint-text">(#)</span>
+                </button>
                 {# Double Sharp #}
-                <button type="button" class="btn btn-default bravura">&#xE263;</button>
+                <button type="button" class="btn btn-default">
+                    <span class="bravura">&#xE263;</span><span class="hint-text">(##)</span>
+                </button>
             </div>
         </div>
     </div>
@@ -185,29 +209,66 @@
 {% block footer %}
     <footer class="footer">
         <div class="container footer-text">
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-                User Guide
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#syntax_guide">
+                Notation Guide
             </button>
         </div>
         <div class="container footer-text">
-            *Placeholder*
+            *PLACEHOLDER*
         </div>
         <div class="container footer-text">
-            Notifications
+            *PLACEHOLDER* (Chat Box)
         </div>
     </footer>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="syntax_guide" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
+                <h4 class="modal-title">Notation Guide</h4>
             </div>
             <div class="modal-body">
-                <p>Some text in the modal.</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Text Representation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="bravura-text large">&#xE1D2;</td>
+                            <td>Whole Note / Semibreve</td>
+                            <td>":w" or ":1"</td>
+                        </tr>
+                        <tr>
+                            <td class="bravura-text large">&#xE1D3;</td>
+                            <td>Half Note / Minim</td>
+                            <td>":h" or ":2"</td>
+                        </tr>
+                        <tr>
+                            <td class="bravura-text large">&#xE1D5;</td>
+                            <td>Quarter Note / Crotchet</td>
+                            <td>":q" or ":4"</td>
+                        </tr>
+                        <tr>
+                            <td class="bravura-text large">&#xE1D7;</td>
+                            <td>Quaver</td>
+                            <td>":8"</td>
+                        </tr>
+                        <tr>
+                            <td class="bravura-text large">&#xE1D9;</td>
+                            <td>Semi-quaver</td>
+                            <td>":16"</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

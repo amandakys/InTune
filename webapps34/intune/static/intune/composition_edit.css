@@ -25,6 +25,20 @@
     font-family: 'bravura-text', serif;
 }
 
+.bravura-text.large {
+    font-size: large;
+}
+
+.hint-text {
+    position: relative;
+    font-size: x-small;
+    color: #000099;
+    background-color: inherit;
+    /* Offset from notation on the left */
+    top: 3px;
+    padding-left: 5px;
+}
+
 h1 {
     color: #000000;
     font-family: "Lucida Handwriting", serif;
