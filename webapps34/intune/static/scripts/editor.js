@@ -68,35 +68,34 @@ $(document).ready(function () {
                 editable_bar["notes"] = bars[i];
                 editable_bars.push(editable_bar);
 
-                _render_bar(editable_bar, i);
-
-                bar_count++;
+                _render_append_bar(i);
             }
         }
 
-        function _render_bar(bar_json, canvas_no) {
+        function _render_append_bar(bar_id) {
             var canvas = document.createElement("canvas");
-            canvas.id = "bar_" + canvas_no;
+            canvas.id = "bar_" + bar_id;
             canvas.setAttribute("class", "bar-block");
+
             // VexTab JSON String
             var vt_json = document.createElement("div");
-            vt_json.id = "vt_" + canvas_no;
+            vt_json.id = "vt_" + bar_id;
             vt_json.setAttribute("class", "vex-string-hidden");
 
             var outer_span = document.createElement("span");
-            outer_span.id = "bar_outer_" + canvas_no;
+            outer_span.id = "bar_outer_" + bar_id;
             outer_span.setAttribute("class", "canvas-outer");
             outer_span.appendChild(canvas);
 
             document.getElementById("render_block").appendChild(outer_span);
             document.getElementById("render_block").appendChild(vt_json);
 
-            $("#vt_" + canvas_no).data(VT_DATA_NAME,
-                JSON.stringify(editable_bars[canvas_no]));
-            _rerender_bar(canvas_no);
+            $("#vt_" + bar_id).data(VT_DATA_NAME, JSON.stringify(editable_bars[bar_id]));
+            _rerender_bar(bar_id);
 
             // Register click event for canvas
-            $("#bar_" + canvas_no).click(_change_scope);
+            $("#bar_" + bar_id).click(_change_scope);
+            bar_count++;
         }
 
         function _rerender_bar(bar_id) {
@@ -143,24 +142,6 @@ $(document).ready(function () {
 
         // Appends a new bar to render block
         function _receive_append_bar(bar_contents) {
-            // Add to HTML DOM
-            // Canvas
-            var canvas = document.createElement("canvas");
-            canvas.id = "bar_" + bar_count;
-            canvas.setAttribute("class", "bar-block");
-            // VexTab JSON String
-            var vt_json = document.createElement("div");
-            vt_json.id = "vt_" + bar_count;
-            vt_json.setAttribute("class", "vex-string-hidden");
-
-            var outer_span = document.createElement("span");
-            outer_span.id = "bar_outer_" + bar_count;
-            outer_span.setAttribute("class", "canvas-outer");
-            outer_span.appendChild(canvas);
-
-            document.getElementById("render_block").appendChild(outer_span);
-            document.getElementById("render_block").appendChild(vt_json);
-
             // Default JSON Object (representing VexTab) for new bar
             var editable_bar = {};
             editable_bar["options"] = "";
@@ -174,15 +155,9 @@ $(document).ready(function () {
                 editable_bar["time_sig"] = "";
             }
             editable_bar["notes"] = bar_contents;
-
-            $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(editable_bar));
             editable_bars.push(editable_bar);
-            _rerender_bar(bar_count);
 
-            // Register click event for canvas
-            $("#bar_" + bar_count).click(_change_scope);
-
-            bar_count++;
+            _render_append_bar(bar_count);
         }
 
         // Sends instruction to append bar to the server
