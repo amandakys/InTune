@@ -3,6 +3,8 @@ FROM python:latest
 WORKDIR /build/webapps34
 ADD . /build/
 
+RUN apt-get update
+RUN apt-get install -y redis-server
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python2.7 get-pip.py
 RUN pip2.7 install supervisor
@@ -16,5 +18,4 @@ RUN ./manage.py test
 RUN ./manage.py collectstatic --noinput --settings=webapps34.deploy_settings
 RUN ./manage.py migrate --settings=webapps34.deploy_settings
 
-RUN cp /build/patch/asgi_ipc/store.py /usr/local/lib/python3.6/site-packages/asgi_ipc/
 CMD supervisord -c /build/supervisord.conf
