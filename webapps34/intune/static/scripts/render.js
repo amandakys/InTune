@@ -36,10 +36,10 @@ var Render = (function () {
             // console.log("Parsing:\n" + vex_string);
             vextab.parse(vex_string);
             artist.render(renderer);
-            $("#error2").text("");
+            $("#edit_error").text("");
         } catch (e) {
             console.log(e);
-            $("#error2").html(e.message.replace(/[\n]/g, "<br/>"));
+            $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
         }
     }
 

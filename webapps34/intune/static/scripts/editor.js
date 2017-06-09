@@ -131,7 +131,7 @@ $(document).ready(function () {
                     editable_bar["clef"] = "none";
                     editable_bar["time_sig"] = "";
                 }
-                editable_bar["notes"] = "";
+                editable_bar["notes"] = ":w ##";
 
                 $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(editable_bar));
                 editable_bars.push(editable_bar);
