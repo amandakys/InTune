@@ -72,6 +72,16 @@ def ws_bar_receive(message, comp):
                     "bar_contents": bar_contents,
                 }),
             })
+        elif contents['action'] == "append":
+            bar_contents = contents['bar_contents']
+
+            composition.append_bar(bar_contents)
+            Group("comp-%s" % comp).send({
+                "text": json.dumps({
+                    "bar_mod": "append",
+                    "bar_contents": bar_contents,
+                }),
+            })
         else:
             print("Invalid WebSocket composition request")
 
