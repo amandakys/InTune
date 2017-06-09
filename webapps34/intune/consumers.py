@@ -1,8 +1,11 @@
+from channels import Group
+from channels.auth import channel_session_user_from_http
 import json
 
-from channels import Group
 from .models import ChatMessage, Composition, Profile
 
+
+# TODO: Check user permissions
 
 # Connected to websocket.connect
 # def ws_add(message, room):
@@ -43,3 +46,30 @@ def ws_chat_disconnect(message):
         Group("chat-%s" % room_id).discard(message.reply_channel)
     else:
         print("Unexpected disconnect, message: ", message)
+
+
+def ws_bar_connect(message, comp):
+    message.reply_channel.send({"accept": True})
+    Group("comp-%s" % comp).add(message.reply_channel)
+
+
+@channel_session_user_from_http
+def ws_bar_receive(message, comp):
+    contents = json.loads(message.content['text'])
+    bar_id = int(contents['bar_id'])
+    bar_contents = context['bar_contents']
+
+    composition = Composition.objects.get(pk=comp)
+    if composition.has_access(message.user):
+        composition.set_bar(bar_id, bar_contents)
+        Group("comp-%s" % comp).send({
+            "text": json.dumps({
+                "bar_mod": "update",
+                "bar_id": bar_id,
+                "bar_contents": contents,
+            }),
+        })
+
+
+def ws_bar_disconnect(message, comp):
+    Group("comp-%s" % comp).discard(message.reply_channel)
