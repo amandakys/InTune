@@ -65,7 +65,6 @@
     </div>
 </div>
 
-
 <div class="container">
     <div class="row">
         <h1>{{ composition.title }}</h1>
@@ -198,6 +197,10 @@
             {% endbuttons %}
         </form>
     </div>
+</div>
+
+<div class="container" id="chatbox">
+{% include "intune/chatroom.html" %}
 </div>
 
 {# needed for autocomplete to work #}
