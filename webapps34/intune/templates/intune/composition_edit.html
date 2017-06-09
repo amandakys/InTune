@@ -157,10 +157,10 @@
               data-composition-id="{{ composition.id }}">
 
             <label for="edit_text"></label>
-            <input type="text" class="form-control dynamic-textbox" placeholder="Select a bar to begin editing!"
-                   id="edit_text" />
+            <input type="text" class="form-control input-lg dynamic-textbox"
+                   placeholder="Select a bar to begin editing!" id="edit_text" />
 
-            <div class="btn-group" role = "group" aria-label="bar modifications">
+            <div class="btn-group top-padded" role = "group" aria-label="bar modifications">
                 <button type="submit" class="btn btn-default">Save</button>
                 <button type="button" class="btn btn-default" id="new_bar"
                         data-ajax-target="{% url 'intune:bar_add' composition.id %}">New Bar</button>
@@ -214,7 +214,9 @@
             </button>
         </div>
         <div class="container footer-text">
-            *PLACEHOLDER*
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#symbol_table">
+                Symbol Table
+            </button>
         </div>
         <div class="container footer-text">
             *PLACEHOLDER* (Chat Box)
@@ -230,6 +232,43 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Notation Guide</h4>
             </div>
+
+            <div class="modal-body">
+                <p>
+                    The text input for notes is based on
+                    <a href="http://www.vexflow.com/vextab/" target="_blank">VexTab</a>.
+                </p>
+                <p>
+                    Although it may seem daunting to read and understand the language, once you get the
+                    basic understanding of it, VexTab is actually a very versatile language for
+                    music notation.
+                </p>
+                <p>
+                    The basic layout of the notation that make up a note comprises <u>two</u> parts:
+                </p>
+                <ol>
+                    <li>Duration</li>
+                    <li>Pitch</li>
+                </ol>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="symbol_table" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Symbol Table</h4>
+            </div>
+
             <div class="modal-body">
                 <div class="table-responsive">
                     <table class="table">
@@ -270,10 +309,12 @@
                     </table>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock footer %}

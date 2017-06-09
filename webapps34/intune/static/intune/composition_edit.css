@@ -54,6 +54,10 @@ body {
     margin-bottom: 60px;
 }
 
+li {
+    list-style: decimal;
+}
+
 /* Classes */
 
 /* Reset Row Padding */
@@ -88,7 +92,7 @@ canvas.bar-block {
 
 /* Text Input */
 .dynamic-textbox {
-    width: 60%;
+    width: 80%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -100,4 +104,9 @@ canvas.bar-block {
 .row.justify-content-between {
     display: flex;
     justify-content: space-between;
+}
+
+
+.btn-group.top-padded {
+    padding-top: 15px;
 }
