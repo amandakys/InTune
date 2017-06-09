@@ -21,8 +21,10 @@ $(document).ready(function () {
         var VT_DATA_NAME = "vt_data";
 
         // Module specific variables
+        var composition_id = -1;
         var bar_count = 0;
         var current_bar = 0;
+        var socket = null;
 
         // List of editable bars as JSON Objects
         var editable_bars = [];
@@ -101,6 +103,8 @@ $(document).ready(function () {
             // var composition_json;
             $.get($("#render_block").attr("data-ajax-target"),
                 _composition_handler, "json");
+            composition_id = $("#render_block").attr("data-composition-id");
+            socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
         }
 
         // Appends a new bar to render block
@@ -288,15 +292,7 @@ $(document).ready(function () {
                     'bar_contents': $("#edit_text").val()
                 };
                 // Submit
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: form_data,
-                    dataType: "json",
-                    encode: true
-                }).done(function(result) {
-                    console.log(result);
-                });
+                socket.send(JSON.stringify(form_data));
             }
             event.preventDefault();
         }

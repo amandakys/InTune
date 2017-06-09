@@ -1,5 +1,5 @@
 from channels import Group
-from channels.auth import channel_session_user_from_http
+from channels.auth import channel_session_user, channel_session_user_from_http
 import json
 
 from .models import ChatMessage, Composition, Profile
@@ -48,16 +48,17 @@ def ws_chat_disconnect(message):
         print("Unexpected disconnect, message: ", message)
 
 
+@channel_session_user_from_http
 def ws_bar_connect(message, comp):
     message.reply_channel.send({"accept": True})
     Group("comp-%s" % comp).add(message.reply_channel)
 
 
-@channel_session_user_from_http
+@channel_session_user
 def ws_bar_receive(message, comp):
     contents = json.loads(message.content['text'])
     bar_id = int(contents['bar_id'])
-    bar_contents = context['bar_contents']
+    bar_contents = contents['bar_contents']
 
     composition = Composition.objects.get(pk=comp)
     if composition.has_access(message.user):
@@ -71,5 +72,6 @@ def ws_bar_receive(message, comp):
         })
 
 
+@channel_session_user
 def ws_bar_disconnect(message, comp):
     Group("comp-%s" % comp).discard(message.reply_channel)
