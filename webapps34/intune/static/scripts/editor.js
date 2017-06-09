@@ -111,21 +111,7 @@ $(document).ready(function () {
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
                 if (data.bar_mod == "update") {
-                    var div_storage = $("#vt_" + data.bar_id);
-                    var vt_json_string = div_storage.data(VT_DATA_NAME);
-
-                    var vt_json = JSON.parse(vt_json_string);
-                    vt_json["notes"] = data.bar_contents;
-
-                    var vex_string = _build_vextab(vt_json);
-                    // Render to canvas
-                    var canvas = document.getElementById("bar_" + data.bar_id);
-                    var canvas_width = {width: canvas.offsetWidth};
-                    // console.log("canvas_width: " + canvas_width.width);
-                    Render.render_bar("bar_" + data.bar_id, canvas_width, vex_string);
-
-                    // Update data in div
-                    div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+                    _update_bar_div(data.bar_id, data.bar_contents)
                 } else {
                     console.log("Invalid WebSocket message received");
                 }
@@ -273,6 +259,23 @@ $(document).ready(function () {
             $("#bar_" + to_remove).remove();
         }
 
+        function _update_bar_div(bar_id, bar_contents) {
+            var div_storage = $("#vt_" + bar_id);
+            var vt_json_string = div_storage.data(VT_DATA_NAME);
+
+            var vt_json = JSON.parse(vt_json_string);
+            vt_json["notes"] = bar_contents;
+
+            var vex_string = _build_vextab(vt_json);
+            // Render to canvas
+            var canvas = document.getElementById("bar_" + bar_id);
+            var canvas_width = {width: canvas.offsetWidth};
+            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
+
+            // Update data in div
+            div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+        }
+
         function _edit_bar() {
             console.log("Edit Bar: " + current_bar);
             if (current_bar < 0) {
@@ -280,24 +283,7 @@ $(document).ready(function () {
                 return;
             }
 
-            var div_storage = $("#vt_" + current_bar);
-            var vt_json_string = div_storage.data(VT_DATA_NAME);
-
-            var vt_json = JSON.parse(vt_json_string);
-            vt_json["notes"] = $("#edit_text").val();
-
-            // vt_json_string = JSON.stringify(vt_json);
-            // console.log("vt_json_string: " + vt_json_string);
-
-            var vex_string = _build_vextab(vt_json);
-            // Render to canvas
-            var canvas = document.getElementById("bar_" + current_bar);
-            var canvas_width = {width: canvas.offsetWidth};
-            // console.log("canvas_width: " + canvas_width.width);
-            Render.render_bar("bar_" + current_bar, canvas_width, vex_string);
-
-            // Update data in div
-            div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+            _update_bar_div(current_bar, $("#edit_text").val());
         }
 
         function _save_bar(event) {
@@ -310,9 +296,7 @@ $(document).ready(function () {
             } else {
                 var form = $("#edit_form");
 
-                // Specify the bar, composition id
                 var form_data = {
-                    'composition_id': form.attr('data-composition-id'),
                     'bar_id': current_bar,
                     'bar_contents': $("#edit_text").val()
                 };
