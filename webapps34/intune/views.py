@@ -1,7 +1,9 @@
-from json import dumps
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
+import json
+# from django.core.serializers import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse, HttpResponseForbidden
@@ -179,7 +181,7 @@ def comment_get(request):
     comments = Comment.objects.filter(composition=composition,
                                       bar=int(request.GET['bar'])).order_by('time')
     comments = [{   "commenter": str(comment.commenter),
-                    "time": str(comment.time),
+                    "time": comment.time.isoformat(),
                     "comment": str(comment.comment),
                 } for comment in comments]
     return JsonResponse({'comments': comments})

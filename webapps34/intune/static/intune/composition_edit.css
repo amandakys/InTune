@@ -1,3 +1,10 @@
+:root {
+    --background_color: #ffffff;
+    --element_color: #33cccc;
+    --dark_color: #34383b;
+    --light_color: #ebebeb;
+}
+
 /* Font and Text */
 @font-face {
     font-family: 'bravura';
@@ -86,4 +93,20 @@ canvas.bar-block {
 .row.justify-content-between {
     display: flex;
     justify-content: space-between;
+}
+
+.comment-element {
+    background-color: var(--element_color);
+    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-right: 20px;
+    margin-bottom: 1%;
+    border-radius: 10px;
+    line-height: 20px;
+    min-height:20px;
+    color: var(--background_color);
+}
+
+.comment.col-sm-4 {
+    text-align: right;
 }
