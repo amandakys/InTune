@@ -6,7 +6,7 @@ from .models import ChatMessage, Composition, Profile
 
 # Connected to websocket.connect
 # def ws_add(message, room):
-def ws_add(message):
+def ws_chat_add(message):
     # Accept the connection
     message.reply_channel.send({"accept": True})
     path = message.content['path'].strip("/")
@@ -14,7 +14,7 @@ def ws_add(message):
 
 
 # Connected to websocket.receive
-def ws_message(message):
+def ws_chat_message(message):
     text = json.loads(message.content['text'])
     room_id = text['room']
     user_id = text['user']
@@ -35,7 +35,7 @@ def ws_message(message):
 
 
 # Connected to websocket.disconnect
-def ws_disconnect(message):
+def ws_chat_disconnect(message):
     # check that disconnect is called by chatbox
     if 'text' in message.content.keys():
         text = json.loads(message.content['text'])

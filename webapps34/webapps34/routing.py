@@ -1,11 +1,20 @@
+from channels import include
 from channels.routing import route
 from channels.staticfiles import StaticFilesConsumer
 
-from intune.consumers import ws_add, ws_message, ws_disconnect
+from intune import consumers
+
+http_routing = [
+    route("http.request", StaticFilesConsumer()),
+]
+
+chat_routing = [
+    route("websocket.connect", consumers.ws_chat_add),
+    route("websocket.receive", consumers.ws_chat_message),
+    route("websocket.disconnect", consumers.ws_chat_disconnect),
+]
 
 channel_routing = [
-    route("websocket.connect", ws_add),
-    route("websocket.receive", ws_message),
-    route("websocket.disconnect", ws_disconnect),
-    route("http.request", StaticFilesConsumer()),
+    include(chat_routing, path=r"^/chat"),
+    include(http_routing),
 ]
