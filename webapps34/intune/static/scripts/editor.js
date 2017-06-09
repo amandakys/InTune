@@ -30,7 +30,7 @@ $(document).ready(function () {
         // List of editable bars as JSON Objects
         var editable_bars = [];
 
-        var DEBUG = true;
+        var DEBUG = false;
 
         function _debug_log(msg) {
             if (DEBUG) console.log(msg);
@@ -93,13 +93,22 @@ $(document).ready(function () {
 
             $("#vt_" + canvas_no).data(VT_DATA_NAME,
                 JSON.stringify(editable_bars[canvas_no]));
-
-            var vex_string = _build_vextab(bar_json);
-            var canvas_width = {width: canvas.offsetWidth};
-            Render.render_bar(canvas.id, canvas_width, vex_string);
+            _rerender_bar(canvas_no);
 
             // Register click event for canvas
             $("#bar_" + canvas_no).click(_change_scope);
+        }
+
+        function _rerender_bar(bar_id) {
+            var div_storage = $("#vt_" + bar_id);
+            var vt_json_string = div_storage.data(VT_DATA_NAME);
+            var vt_json = JSON.parse(vt_json_string);
+            var vex_string = _build_vextab(vt_json);
+            var canvas = document.getElementById("bar_" + bar_id);
+            var canvas_width = {width: canvas.offsetWidth};
+
+            // Render to canvas
+            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
         }
 
         /**
@@ -168,14 +177,7 @@ $(document).ready(function () {
 
             $("#vt_" + bar_count).data(VT_DATA_NAME, JSON.stringify(editable_bar));
             editable_bars.push(editable_bar);
-
-            var vt_json_string = $("#vt_" + bar_count).data(VT_DATA_NAME);
-            var vt_json_notes = JSON.parse(vt_json_string);
-            var vex_string = _build_vextab(vt_json_notes);
-
-            // Render to canvas
-            var canvas_width = {width: canvas.offsetWidth};
-            Render.render_bar("bar_" + bar_count, canvas_width, vex_string);
+            _rerender_bar(bar_count);
 
             // Register click event for canvas
             $("#bar_" + bar_count).click(_change_scope);
@@ -196,7 +198,7 @@ $(document).ready(function () {
         }
 
         function _deselect(bar_id) {
-            if (bar_id > 0) {
+            if (bar_id >= 0) {
                 $("#bar_outer_" + current_bar).attr("class", "canvas-outer");
                 _save_bar(bar_id);
             }
@@ -219,15 +221,9 @@ $(document).ready(function () {
             var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
             var vt_json = JSON.parse(vt_json_string);
 
-            var vex_string = _build_vextab(vt_json);
-
             // Display vextab notes to editor textbox
             $("#edit_text").val(vt_json["notes"]);
-
-            // Render to canvas
-            var canvas = document.getElementById("bar_" + bar_id);
-            var canvas_width = {width: canvas.offsetWidth};
-            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
+            _rerender_bar(bar_id);
 
             // Display to user which bar is selected
             $('label[for="edit_text"]').html("Editing Bar " + (bar_id + 1));
@@ -290,18 +286,11 @@ $(document).ready(function () {
         function _update_bar_div(bar_id, bar_contents) {
             var div_storage = $("#vt_" + bar_id);
             var vt_json_string = div_storage.data(VT_DATA_NAME);
-
             var vt_json = JSON.parse(vt_json_string);
             vt_json["notes"] = bar_contents;
 
-            var vex_string = _build_vextab(vt_json);
-            // Render to canvas
-            var canvas = document.getElementById("bar_" + bar_id);
-            var canvas_width = {width: canvas.offsetWidth};
-            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
-
-            // Update data in div
             div_storage.data(VT_DATA_NAME, JSON.stringify(vt_json));
+            _rerender_bar(bar_id);
         }
 
         function _edit_bar() {
