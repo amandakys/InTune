@@ -6,21 +6,20 @@
 
 {% load humanize %}
 
-<h2> Chat for {{ composition.title }}</h2>
 <div class="msgs"></div>
 <div class="roomdiv" data-room-id="{{ composition.id }}" data-username="{{ user.username }}" data-user-id="{{ user.id }}">
     <div id="chats" class="pre-scrollable">
     {% for msg in chatmessage_list %}
         <div class="message">
-            <span class='username'> {{ msg.sender.user.username }}:</span>
-            <span class='msg'> {{ msg }} </span>
-            <span class='time'> {{ msg.time|naturaltime }} </span>
+            <strong> {{ msg.sender.user.username }}:</strong>
+            {{ msg }}
+            <span class='pull-right text-muted small'> {{ msg.time|naturaltime }} </span>
         </div>
     {% endfor %}
     </div>
-    <form id="chat-box">
-        <input type="text" name="msg" id="chat-msg">
-        <button id="send-msg" type="submit">Send</button>
+    <form id="chat-box" class="form-inline">
+        <input type="text" name="msg" id="chat-msg" class="form-control">
+        <button id="send-msg" class="btn" type="submit">Send</button>
     </form>
 </div>
 
