@@ -135,8 +135,8 @@ form label {
     margin: 20px;
 }
 
-#comments{
-    min-width: 550px;
+#comments-dropdown{
+    min-width: 600px;
 }
 
 .info.col-sm-8 {

@@ -185,14 +185,16 @@
 <div class="container">
     <div class="row dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
-            Comments (<span id="total-comments">0</span>)
+            Comments (<span id="total-comments">Select a bar to show comments</span>)
             <span class="caret"></span>
         </button>
-        <div id="comments" class="dropdown-menu pre-scrollable"
-             data-room-id="{{ composition.id }}"
-             data-username="{{ user.username }}"
-             data-ajax-target="{% url 'intune:comments' %}",
-             data-user-id="{{ user.id }}">
+        <div id="comments-dropdown" class="dropdown-menu pre-scrollable">
+             <div id="comments"
+                 data-room-id="{{ composition.id }}"
+                 data-username="{{ user.username }}"
+                 data-ajax-target="{% url 'intune:comments' %}",
+                 data-user-id="{{ user.id }}">
+             </div>
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
                 class="form-inline" data-composition-id="{{ composition.id }}">
                 {% csrf_token %}
