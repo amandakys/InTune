@@ -20,7 +20,6 @@ $(document).ready(function () {
 
             // connect to socket at chat-<room_id>-<bar-id>
             var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "-" + bar_id + "/");
-            // var socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + room_id + "/");
 
             // refresh comments page onmessage
             socket.onmessage = function (e) {
@@ -28,6 +27,10 @@ $(document).ready(function () {
                 var comment = {"commenter": data["user"],
                             "time": new Date().toLocaleString(),
                             "comment": data["msg"]};
+
+                // update comment count
+                $("#total-comments").text(parseInt($("#total-comments").text()) + 1)
+
                 display_new_comment(comment);
             };
 
@@ -71,6 +74,7 @@ $(document).ready(function () {
 
         function _display_comments(comments) {
             $('#comments').html("");
+            $("#total-comments").text(comments.comments.length);
             for (var i = 0; i < comments.comments.length; i++) {
                 display_new_comment(comments.comments[i])
             }

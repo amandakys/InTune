@@ -185,7 +185,7 @@
 
 <div class="container">
     <div class="row">
-        <h3>Comments</h3>
+        <h3>Comments (<span id="total-comments">0</span>)</h3>
         <div id="comments"
              data-room-id="{{ composition.id }}"
              data-username="{{ user.username }}"
@@ -193,9 +193,9 @@
              data-user-id="{{ user.id }}">
         </div>
         <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
-            data-composition-id="{{ composition.id }}">
+            class="form-inline" data-composition-id="{{ composition.id }}">
             {% csrf_token %}
-            <input type="text" id="comment_text" placeholder="Write a comment" />
+            <input type="text" id="comment_text" class="form-control" placeholder="Write a comment" />
             {% buttons %}
             <button type="submit" class="btn btn-light">Add Comment</button>
             {% endbuttons %}
