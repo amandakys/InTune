@@ -7,9 +7,13 @@ $( document ).ready(function() {
     socket.onmessage = function (e) {
         var data = JSON.parse(e.data);
         var msg_div = $(
-            "<div class='messages'><span class='username'>" +  data.user + ": </span><span class='msg'>" + data.msg +  "</span><span class='time'> Just now</span></div>"
+            "<div class='messages'><strong>" +  data.user + ": </strong>" + data.msg +
+            "<span class='pull-right text-muted small'> Just now</span></div>"
         );
         $("#chats").append(msg_div);
+
+        // auto scroll to bottom of chat
+        $("#chats").scrollTop($("#chats")[0].scrollHeight);
     };
 
     socket.onopen = function () {
