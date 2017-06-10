@@ -36,10 +36,6 @@ urlpatterns = [
         login_required(views.composition_bar_edit_ajax),
         name="bar_edit"),
 
-    url(r'^composition/bar_append/(?P<pk>[0-9]+)/$',
-        login_required(views.composition_add_bar),
-        name="bar_add"),
-
     url(r'^comments/$',
         login_required(views.comment_get),
         name="comments"),
@@ -55,6 +51,10 @@ urlpatterns = [
         login_required(views.ProfileAutocomplete.as_view()),
         name='profile-autocomplete',
     ),
+
+    url(r'^composition/(?P<pk>[0-9]+)/chat/$',
+        login_required(views.Chat.as_view()),
+        name="chats"),
 
     # Retrieve Composition Attributes as JSON
     url(r'^composition/attribute/(?P<pk>[0-9]+)/$',

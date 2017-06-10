@@ -104,7 +104,7 @@ class CompositionTests(TestCase):
 
     def test_bar_add_integrity(self):
         bar_list = self.composition.get_bar_list()
-        self.composition.add_bar()
+        self.composition.append_bar(":w ##")
         self.assertSequenceEqual(bar_list, self.composition.get_bar_list()[:-1])
 
     def test_has_access(self):

@@ -1,17 +1,12 @@
+from dal import autocomplete
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-
-import json
-# from django.core.serializers import json
-from django.core.serializers.json import DjangoJSONEncoder
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
-from django.views import generic, View
+from django.views import generic
 
-from .models import Comment, Composition, Notification, Profile
-from dal import autocomplete
+from intune.models import Composition, Profile, ChatMessage, Comment, Notification
 
 
 class CompositionList(generic.ListView):
@@ -82,7 +77,13 @@ class ProfileDetail(generic.DetailView):
 class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
-    fields = ['data', 'users']
+    fields = ['users']
+
+    # added chatmessage_list variable so that included chatroom.html can access it
+    def get_context_data(self, **kwargs):
+        context = super(CompositionEdit, self).get_context_data(**kwargs)
+        context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
+        return context
 
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
@@ -159,15 +160,17 @@ def composition_bar_edit_ajax(request):
     return JsonResponse({'success': True})
 
 
-def composition_add_bar(request, pk):
-    if not request.is_ajax() or request.method != "POST":
-        return Http404()
+class Chat(generic.ListView):
+    template_name = "intune/chatroom.html"
 
-    composition = Composition.objects.get(pk=pk)
-    if not composition or not composition.has_access(request.user):
-        return Http404()
-    composition.add_bar()
-    return JsonResponse({'success': True})
+    def get_context_data(self, **kwargs):
+        context = super(Chat, self).get_context_data(**kwargs)
+        context["composition"] = Composition.objects.get(id=self.kwargs['pk'])
+        context["user"] = self.request.user
+        return context
+
+    def get_queryset(self):
+        return ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
 
 
 def comment_get(request):
@@ -207,6 +210,7 @@ def comment_create_ajax(request):
 
 class NotificationList(generic.ListView):
     template_name = "intune/notification_list.html"
+
     def get_queryset(self):
         return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
 

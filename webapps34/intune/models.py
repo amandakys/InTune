@@ -51,9 +51,9 @@ class Composition(models.Model):
     def has_access(self, user):
         return self.owner.user == user or user.profile in self.users.all()
 
-    def add_bar(self):
+    def append_bar(self, contents):
         data = self.get_data()
-        data['bars'].append(":w ##")
+        data['bars'].append(contents)
         self.data = dumps(data)
         self.save()
 
@@ -65,6 +65,16 @@ class Composition(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ChatMessage(models.Model):
+    room = models.ForeignKey(Composition, related_name='room', on_delete=models.CASCADE)
+    msg = models.CharField(max_length=200)
+    sender = models.ForeignKey(Profile, related_name='sender', default=1)
+    time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.msg
 
 
 class Comment(models.Model):

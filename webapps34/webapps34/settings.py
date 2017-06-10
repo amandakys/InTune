@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'dal',
     'dal_select2',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'webapps34.urls'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "webapps34.routing.channel_routing",
+    },
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

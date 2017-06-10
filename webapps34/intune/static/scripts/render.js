@@ -38,13 +38,30 @@ var Render = (function () {
             artist.render(renderer);
             $("#edit_error").text("");
         } catch (e) {
-            console.log(e);
             $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
         }
     }
 
+    function _syntax_verify(notes) {
+        var vt = VexTabDiv;
+        var VexTab = vt.VexTab;
+        var Artist = vt.Artist;
+        var artist = new Artist(0, 0, 200);
+        var vextab = new VexTab(artist);
+
+        try {
+            vextab.reset(); artist.reset();
+            vextab.parse(notes);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
     return {
-        render_bar: _render_bar
+        render_bar: _render_bar,
+        syntax_verify: _syntax_verify
     }
 
 })();
