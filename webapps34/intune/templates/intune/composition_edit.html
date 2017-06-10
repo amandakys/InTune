@@ -184,11 +184,11 @@
 
 <div class="container">
     <div class="row dropdown">
-        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="collapse" data-target="#comments-div">
             Comments (<span id="total-comments">Select a bar to show comments</span>)
             <span class="caret"></span>
         </button>
-        <div id="comments-dropdown" class="dropdown-menu pre-scrollable">
+        <div class="collapse" id="comments-div">
              <div id="comments"
                  data-room-id="{{ composition.id }}"
                  data-username="{{ user.username }}"
