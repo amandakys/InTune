@@ -19,7 +19,8 @@ $( document ).ready(function() {
             msg = {
                 "room": room_id,
                 "msg": text,
-                "user": user_id
+                "user": user_id,
+                "type": "chatmsg"
             };
             socket.send(JSON.stringify(msg));
             event.preventDefault();
