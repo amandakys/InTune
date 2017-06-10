@@ -135,6 +135,10 @@ form label {
     margin: 20px;
 }
 
+#comments{
+    min-width: 550px;
+}
+
 .info.col-sm-8 {
     margin-top: 12px;
     text-align: left;
