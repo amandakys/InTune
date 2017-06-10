@@ -160,17 +160,6 @@ def composition_bar_edit_ajax(request):
     return JsonResponse({'success': True})
 
 
-def composition_add_bar(request, pk):
-    if not request.is_ajax() or request.method != "POST":
-        return Http404()
-
-    composition = Composition.objects.get(pk=pk)
-    if not composition or not composition.has_access(request.user):
-        return Http404()
-    composition.add_bar()
-    return JsonResponse({'success': True})
-
-
 class Chat(generic.ListView):
     template_name = "intune/chatroom.html"
 
