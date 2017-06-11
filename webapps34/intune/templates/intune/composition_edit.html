@@ -15,7 +15,17 @@
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
 <script src="{% static 'scripts/comments.js' %}"></script>
+<script>
+    $( document ).ready(function() {
+        // toggle drop-down menu by clicking button
+        $('#chat-dropdown-toggle').on('click', function (e) {
+            $(this).parent().toggleClass('open');
 
+            // auto scroll to bottom of chat
+            $("#chats").scrollTop($("#chats")[0].scrollHeight);
+        });
+    });
+</script>
 {% endblock imports %}
 
 {% block content %}
@@ -184,22 +194,28 @@
 </div>
 
 <div class="container">
-    <div class="row">
-        <h3>Comments</h3>
-        <div id="comments" data-ajax-target="{% url 'intune:comments' %}"></div>
-        <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
-            data-composition-id="{{ composition.id }}">
-            {% csrf_token %}
-            <input type="text" id="comment_text" placeholder="Write a comment" />
-            {% buttons %}
-            <button type="submit" class="btn btn-light">Add Comment</button>
-            {% endbuttons %}
-        </form>
+    <div class="row dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="collapse" data-target="#comments-div">
+            Comments (<span id="total-comments">Select a bar to show comments</span>)
+            <span class="caret"></span>
+        </button>
+        <div class="collapse" id="comments-div">
+             <div id="comments"
+                 data-room-id="{{ composition.id }}"
+                 data-username="{{ user.username }}"
+                 data-ajax-target="{% url 'intune:comments' %}",
+                 data-user-id="{{ user.id }}">
+             </div>
+            <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
+                class="form-inline" data-composition-id="{{ composition.id }}">
+                {% csrf_token %}
+                <input type="text" id="comment_text" class="form-control" placeholder="Write a comment" />
+                {% buttons %}
+                <button type="submit" class="btn btn-light">Add Comment</button>
+                {% endbuttons %}
+            </form>
+        </div>
     </div>
-</div>
-
-<div class="container" id="chatbox">
-{% include "intune/chatroom.html" %}
 </div>
 
 {# needed for autocomplete to work #}
@@ -220,8 +236,17 @@
                 Symbol Table
             </button>
         </div>
-        <div class="container footer-text">
-            *PLACEHOLDER* (Chat Box)
+
+        {# --- Chatbox --- #}
+        <div class="container footer-text pull-right dropup" id="chatbox">
+            <button class="btn btn-info btn-lg" id="chat-dropdown-toggle"
+                    type="button">
+                Chat
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu" id="chatbox-dropdown">
+                {% include "intune/chatroom.html" %}
+            </div>
         </div>
     </footer>
 
@@ -329,3 +354,7 @@
 </div>
 
 {% endblock footer %}
+
+{% block afterbody %}
+    <script src="{% static 'scripts/comments.js' %}"></script>
+{% endblock afterbody %}

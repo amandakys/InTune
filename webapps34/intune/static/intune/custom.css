@@ -135,6 +135,13 @@ form label {
     margin: 20px;
 }
 
+#chatbox-dropdown {
+    line-height: 32px;
+    padding: 20px;
+    margin: 10px;
+    min-width: 250px;
+}
+
 .info.col-sm-8 {
     margin-top: 12px;
     text-align: left;
