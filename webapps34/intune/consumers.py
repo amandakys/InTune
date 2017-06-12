@@ -73,10 +73,47 @@ def get_group_postfix(text):
         return
 
 
+class Selection:
+    compositions = {}
+    # Each { comp_id: { user: bar } }
+
+    @classmethod
+    def select(cls, composition, bar, user):
+        Selection.deselect(composition, user)
+        compositions[composition][user] = bar
+        Group("comp-%s" % composition).send({
+            "text": json.dumps({
+                "bar_mod": "select",
+                "bar_id": bar,
+                "user": str(user),
+            }),
+        })
+
+    @classmethod
+    def deselect(cls, composition, user):
+        if composition in compositions:
+            bar = compositions[composition].pop(user, None)
+            Group("comp-%s" % composition).send({
+                "text": json.dumps({
+                    "bar_mod": "deselect",
+                    "bar_id": bar,
+                    "user": str(user),
+                }),
+            })
+        else:
+            compositions[composition] = {}
+
+    @classmethod
+    def get_selection(cls, composition, user):
+        Selection.deselect(composition, user)
+        return compositions[composition]
+
+
 @channel_session_user_from_http
 def ws_bar_connect(message, comp):
     message.reply_channel.send({"accept": True})
     Group("comp-%s" % comp).add(message.reply_channel)
+    message.reply_channel.send(Selection.get_selection(comp, message.user))
 
 
 @channel_session_user
@@ -107,6 +144,10 @@ def ws_bar_receive(message, comp):
                     "bar_contents": bar_contents,
                 }),
             })
+        elif contents['action'] == "select":
+            Selection.select(comp, bar_id, message.user)
+        elif contents['action'] == "deselect":
+            Selection.select(comp, message.user)
         else:
             print("Invalid WebSocket composition request")
 
@@ -114,3 +155,4 @@ def ws_bar_receive(message, comp):
 @channel_session_user
 def ws_bar_disconnect(message, comp):
     Group("comp-%s" % comp).discard(message.reply_channel)
+    Selection.deselect(comp, message.user)
