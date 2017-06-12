@@ -20,8 +20,16 @@ bar_routing = [
     route("websocket.disconnect", consumers.ws_bar_disconnect, path=r"^/(?P<comp>\d+)/$"),
 ]
 
+
+comment_routing = [
+    route("websocket.connect", consumers.ws_comment_add),
+    route("websocket.receive", consumers.ws_comment_message),
+    route("websocket.disconnect", consumers.ws_comment_disconnect),
+]
+
 channel_routing = [
     include(chat_routing, path=r"^/chat"),
     include(bar_routing, path=r"^/ws_comp"),
+    include(comment_routing, path=r"^/comment"),
     include(http_routing),
 ]

@@ -10,49 +10,51 @@ $(document).ready(function () {
     window.BarComment = (function () {
         "use strict";
 
-        // only connect when one of the bars are selected
-        $("#render_block").on("click", function() {
-            var comment_div = $("#comments");
-            var room_id = comment_div.attr("data-room-id");
-            var username = comment_div.attr("data-username");
-            var user_id = comment_div.attr("data-user-id");
-            var bar_id = Editor.get_current_bar();
+        var comment_div = $("#comments");
+        var room_id = comment_div.attr("data-room-id");
+        var username = comment_div.attr("data-username");
+        var user_id = comment_div.attr("data-user-id");
+        var bar_id = Editor.get_current_bar();
 
-            // connect to socket at chat-<room_id>-<bar-id>
-            var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "-" + bar_id + "/");
+        // connect to socket at chat-<room_id>-<bar-id>
+        var socket = new WebSocket("ws://" + window.location.host + "/comment-" + room_id + "/");
 
-            // refresh comments page onmessage
-            socket.onmessage = function (e) {
-                var data = JSON.parse(e.data);
-                var comment = {"commenter": data["user"],
-                            "time": new Date().toLocaleString(),
-                            "comment": data["msg"]};
+        // refresh comments page onmessage
+        socket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+
+            // only show comment if its for current bar
+            if (data.bar == bar_id) {
+                var comment = {
+                    "commenter": data["user"],
+                    "time": new Date().toLocaleString(),
+                    "comment": data["msg"]
+                };
 
                 // update comment count
                 $("#total-comments").text(parseInt($("#total-comments").text()) + 1)
 
                 display_new_comment(comment);
-            };
+            }
+        };
 
-            socket.onopen = function () {
-                var comment_form = $("#comment_form");
+        socket.onopen = function () {
+            var comment_form = $("#comment_form");
 
-                comment_form.submit (function() {
-                    bar_id = Editor.get_current_bar();
-                    var text = $("#comment_text").val();
-                    var msg = {
-                        "room": room_id,
-                        "msg": text,
-                        "user": user_id,
-                        "bar": bar_id,
-                        "type": "comment"
-                    };
-                    socket.send(JSON.stringify(msg));
-                    event.preventDefault();
-                    $("#comment_text").val("");
-                });
-            };
-        });
+            comment_form.submit (function() {
+                bar_id = Editor.get_current_bar();
+                var text = $("#comment_text").val();
+                var msg = {
+                    "room": room_id,
+                    "msg": text,
+                    "user": user_id,
+                    "bar": bar_id,
+                };
+                socket.send(JSON.stringify(msg));
+                event.preventDefault();
+                $("#comment_text").val("");
+            });
+        };
 
         /**
          * Retrieves comments that correspond to the current_bar index
