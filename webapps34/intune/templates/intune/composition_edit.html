@@ -15,17 +15,7 @@
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
 <script src="{% static 'scripts/comments.js' %}"></script>
-<script>
-    $( document ).ready(function() {
-        // toggle drop-down menu by clicking button
-        $('#chat-dropdown-toggle').on('click', function (e) {
-            $(this).parent().toggleClass('open');
 
-            // auto scroll to bottom of chat
-            $("#chats").scrollTop($("#chats")[0].scrollHeight);
-        });
-    });
-</script>
 {% endblock imports %}
 
 {% block content %}
@@ -184,7 +174,7 @@
              <div id="comments"
                  data-room-id="{{ composition.id }}"
                  data-username="{{ user.username }}"
-                 data-ajax-target="{% url 'intune:comments' %}",
+                 data-ajax-target="{% url 'intune:comments' %}"
                  data-user-id="{{ user.id }}">
              </div>
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"

@@ -207,7 +207,7 @@ $(document).ready(function () {
             // Highlight the selected canvas
             socket.send(JSON.stringify({
                 'action': "select",
-                'bar_id': bar_id,
+                'bar_id': bar_id
             }));
 
             $("#bar_outer_" + bar_id).attr("class", "selected canvas-outer");
@@ -352,4 +352,14 @@ $(document).ready(function () {
     /* Register response to events */
     $("#remove_bar").click(Editor.remove_bar);
     $("#edit_text").keyup(_.throttle(Editor.edit_bar, 250));
+
+    // toggle drop-down menu by clicking button
+    $('#chat-dropdown-toggle').click(function() {
+        $(this).parent().toggleClass('open');
+
+        var chat_box = $("#chats");
+
+        // auto scroll to bottom of chat
+        chat_box.scrollTop(chat_box[0].scrollHeight);
+    });
 });
