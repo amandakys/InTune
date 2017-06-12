@@ -62,6 +62,7 @@ $(document).ready(function () {
          * @private
          */
         function _retrieve_comments(current_bar) {
+            console.log("retrieveing comments...");
             var comment_form = $("#comment_form");
 
             var comments = $.getJSON($("#comments").attr("data-ajax-target"),

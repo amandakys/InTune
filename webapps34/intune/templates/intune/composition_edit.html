@@ -15,17 +15,7 @@
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
 <script src="{% static 'scripts/comments.js' %}"></script>
-<script>
-    $( document ).ready(function() {
-        // toggle drop-down menu by clicking button
-        $('#chat-dropdown-toggle').on('click', function (e) {
-            $(".dropdown").toggleClass('open');
 
-            // auto scroll to bottom of chat
-            $("#chats").scrollTop($("#chats")[0].scrollHeight);
-        });
-    });
-</script>
 {% endblock imports %}
 
 {% block content %}
@@ -76,7 +66,7 @@
                     <span class="glyphicon glyphicon-comment"></span>
                     <span class="caret"></span>
                 </button>
-                <div class="container dropdown">
+                <div id="chat-dropdown" class="container dropdown">
                     <div class="dropdown-menu" id="chatbox-dropdown">
                         {% include "intune/chatroom.html" %}
                     </div>
@@ -97,27 +87,18 @@
 <div class="container text-center">
     <div class="row">
         <div class="canvas-block" id="render_block" data-composition-id="{{ composition.id }}"
-             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}">
+             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
+             data-user-id="{{ request.user.id }}">
         </div>
     </div>
 </div>
 
 
 {# --- Main Editor interface --- #}
-{# Left Column #}
 <div class="row">
-<div class="col-md-2 text-center">
-    <div class="btn-group-vertical" role="group"
-         aria-label="Left Editor Buttons">
-        <button type="button" class="btn btn-default">Octave Change
-        </button>
-        <button type="button" class="btn btn-default">Select Multiple
-        </button>
-    </div>
-</div>
 
 {# Center Column #}
-<div class="col-md-8">
+<div class="col-md-8 col-md-offset-2">
     <div class="container">
         <div class="row text-center">
             <div class="btn-group" role="group" aria-label="Notation Selection">
@@ -195,7 +176,6 @@
 {# Right Column #}
 {# -- space for chatbox -- #}
 <div class="col-sm-2">
-
 </div>
 
 {# -- Comments -- #}
@@ -214,14 +194,13 @@
                 <button type="submit" class="btn btn-dark">Add Comment</button>
                 {% endbuttons %}
             </form>
-             <div id="comments"
+            <div id="comments"
                  data-room-id="{{ composition.id }}"
                  data-username="{{ user.username }}"
-                 data-ajax-target="{% url 'intune:comments' %}",
+                 data-ajax-target="{% url 'intune:comments' %}"
                  data-user-id="{{ user.id }}"
                  class="pre-scrollable">
-             </div>
-
+            </div>
         </div>
     </div>
 </div>
