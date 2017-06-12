@@ -79,6 +79,20 @@
 <div class="container">
     <div class="row">
         <h1>{{ composition.title }}</h1>
+        <div class="dropdown pull-right">
+            <span class="glyphicon glyphicon-question-sign"
+                class="dropdown-toggle"
+                type="button"
+                data-toggle="dropdown"
+                style="cursor:help; font-size:20px"></span>
+            <ul id="canvas-help-menu" class="dropdown-menu">
+                <strong>What do the colours mean?</strong>
+                <li><span class="render-error">Render error</span></li>
+                <li><span class="selected">Currently selected bar</span></li>
+                <li><span class="oth-user">Other users are editing that bar</span></li>
+                <li>(changes made to that bar might be overwritten)</li>
+            </ul>
+        </div>
     </div>
 </div>
 

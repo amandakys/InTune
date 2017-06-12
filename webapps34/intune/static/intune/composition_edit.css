@@ -82,14 +82,17 @@ span.canvas-outer {
 
 span.selected {
     box-shadow: 0 0 10px #ffb200;
+    border-radius: 5px;
 }
 
 span.render-error {
     box-shadow: 0 0 10px red;
+    border-radius: 5px;
 }
 
 span.oth-user {
     box-shadow: 0 0 10px green;
+    border-radius: 5px;
 }
 
 canvas {
@@ -170,6 +173,13 @@ canvas.selected {
     padding: 20px;
     margin: 10px;
     min-width: 300px;
+    z-index: 1;
+}
+
+#canvas-help-menu {
+    line-height: 30px;
+    padding: 10px;
+    min-width: 250px;
     z-index: 1;
 }
 
