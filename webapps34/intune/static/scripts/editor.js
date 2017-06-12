@@ -364,6 +364,8 @@ $(document).ready(function () {
     // toggle drop-down menu by clicking button
     $('#chat-dropdown-toggle').click(function() {
         $("#chat-dropdown").toggleClass('open');
+        // auto-focus on chatbox input
+        $("#chat-msg").focus();
 
         var chat_box = $("#chats");
 
