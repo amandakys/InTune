@@ -117,13 +117,17 @@ $(document).ready(function () {
          * @private
          */
         function _load_init() {
+            var render_block = $("#render_block");
+
             /* Get composition attributes from server */
             // var composition_json;
-            $.get($("#render_block").attr("data-ajax-target"),
+            $.get(render_block.attr("data-ajax-target"),
                 _composition_handler, "json");
 
-            composition_id = $("#render_block").attr("data-composition-id");
-            user_id = $("#render_block").attr("data-user-id");
+            composition_id = render_block.attr("data-composition-id");
+            // Ensure that user_id is in fact an int.
+            user_id = parseInt(render_block.attr("data-user-id"));
+
             socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
 
             socket.onopen = function() {
@@ -132,19 +136,23 @@ $(document).ready(function () {
             };
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
-                if (data.bar_mod == "update") {
+                if (data.bar_mod === "update") {
                     _update_bar_div(data.bar_id, data.bar_contents)
-                } else if (data.bar_mod == "append") {
+                } else if (data.bar_mod === "append") {
                     _receive_append_bar(data.bar_contents)
-                } else if (data.bar_mod == "select") {
-                    if (data.user != user_id)
+
+                } else if (data.bar_mod === "select") {
+                    if (data.user !== user_id)
                         _oth_user_select(data.bar_id);
-                } else if (data.bar_mod == "deselect") {
-                    if (data.user != user_id)
+                } else if (data.bar_mod === "deselect") {
+                    if (data.user !== user_id)
                         $("#bar_outer_" + data.bar_id).attr("class", "canvas-outer");
-                } else if (data.bar_mod == "fresh_selects") {
+                } else if (data.bar_mod === "fresh_selects") {
                     for (var user in data.selection) {
-                        _oth_user_select(data.selection[user]);
+                        // Property check for JS
+                        if (data.selection.hasOwnProperty(user)) {
+                            _oth_user_select(data.selection[user]);
+                        }
                     }
                 } else {
                     console.log("Invalid WebSocket message received, data: " + JSON.stringify(data));

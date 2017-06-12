@@ -132,6 +132,42 @@ class Selection:
         return cls.compositions[composition]
 
 
+class Selection:
+    compositions = {}
+    # Each { comp_id: { user: bar } }
+
+    @classmethod
+    def select(cls, composition, bar, user):
+        Selection.deselect(composition, user)
+        cls.compositions[composition][user.id] = bar
+        Group("comp-%s" % composition).send({
+            "text": json.dumps({
+                "bar_mod": "select",
+                "bar_id": bar,
+                "user": user.id,
+            }),
+        })
+
+    @classmethod
+    def deselect(cls, composition, user):
+        if composition in cls.compositions:
+            bar = cls.compositions[composition].pop(user.id, None)
+            Group("comp-%s" % composition).send({
+                "text": json.dumps({
+                    "bar_mod": "deselect",
+                    "bar_id": bar,
+                    "user": user.id,
+                }),
+            })
+        else:
+            cls.compositions[composition] = {}
+
+    @classmethod
+    def get_selection(cls, composition, user):
+        Selection.deselect(composition, user)
+        return cls.compositions[composition]
+
+
 @channel_session_user_from_http
 def ws_bar_connect(message, comp):
     message.reply_channel.send({"accept": True})
