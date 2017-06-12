@@ -24,25 +24,15 @@ def ws_chat_message(message):
     user_id = text['user']
     msg = text['msg']
     sender_name = Profile.objects.get(id=user_id).user.username
-    type = text['type']
-    if type == "chatmsg":
-        ChatMessage.objects.create(
-            room=Composition.objects.get(id=room_id),
-            msg=msg,
-            sender=Profile.objects.get(id=user_id),
-        )
-    elif type == "comment":
-        bar_id = text['bar']
-        Comment.objects.create(
-            composition=Composition.objects.get(id=room_id),
-            comment=msg,
-            bar=bar_id,
-            commenter=Profile.objects.get(id=user_id)
-        )
-    else:
-        print("wrong type")
 
-    group_postfix = get_group_postfix(text)
+    ChatMessage.objects.create(
+        room=Composition.objects.get(id=room_id),
+        msg=msg,
+        sender=Profile.objects.get(id=user_id),
+    )
+
+    group_postfix = room_id
+    print("sending msg to ", group_postfix)
     Group("chat-%s" % group_postfix).send({
         "text": json.dumps({
             "user": str(sender_name),
@@ -56,21 +46,54 @@ def ws_chat_disconnect(message):
     # check that disconnect is called by chatbox
     if 'text' in message.content.keys():
         text = json.loads(message.content['text'])
-        group_postfix = get_group_postfix(text)
+        group_postfix = text["room"]
+        print("disconnecting from ", group_postfix)
         Group("chat-%s" % group_postfix).discard(message.reply_channel)
     else:
         print("Unexpected disconnect, message: ", message)
 
 
-def get_group_postfix(text):
-    type = text["type"]
-    if type == "chatmsg":
-        return str(text["room"])
-    elif type == "comment":
-        return str(text["room"]) + "-" + str(text["bar"])
+def ws_comment_add(message):
+    # Accept the connection
+    message.reply_channel.send({"accept": True})
+    path = message.content['path'].strip("/")
+    print("connected to ", path)
+    Group("%s" % path).add(message.reply_channel)
+
+
+def ws_comment_message(message):
+    text = json.loads(message.content['text'])
+    room_id = text['room']
+    user_id = text['user']
+    msg = text['msg']
+    sender_name = Profile.objects.get(id=user_id).user.username
+    bar_id = text['bar']
+    Comment.objects.create(
+        composition=Composition.objects.get(id=room_id),
+        comment=msg,
+        bar=bar_id,
+        commenter=Profile.objects.get(id=user_id)
+    )
+
+    group_postfix = room_id
+    print("sending msg to  comment ", group_postfix)
+    Group("comment-%s" % group_postfix).send({
+        "text": json.dumps({
+            "user": str(sender_name),
+            "msg": str(msg),
+            "bar": bar_id
+        })
+    })
+
+
+def ws_comment_disconnect(message):
+    if 'text' in message.content.keys():
+        text = json.loads(message.content['text'])
+        group_postfix = text["room"]
+        print("disconnecting from ", group_postfix)
+        Group("comment-%s" % group_postfix).discard(message.reply_channel)
     else:
-        print("error: unexpected msg type ", type)
-        return
+        print("Unexpected disconnect, message: ", message)
 
 
 @channel_session_user_from_http
