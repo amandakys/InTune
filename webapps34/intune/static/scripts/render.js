@@ -21,7 +21,7 @@ var Render = (function () {
         vt.DEBUG = false;
 
         // Create VexFlow Renderer from canvas element with id #boo.
-        var renderer = new Renderer(canvas_id, Renderer.Backends.CANVAS);
+        var renderer = new Renderer("bar_" + canvas_id, Renderer.Backends.CANVAS);
 
         var artist = new Artist(0, 0, canvas_size.width);
         var vextab = new VexTab(artist);
@@ -37,8 +37,12 @@ var Render = (function () {
             vextab.parse(vex_string);
             artist.render(renderer);
             $("#edit_error").text("");
+            var css_classes = $("#bar_outer_" + canvas_id).attr("class");
+            $("#bar_outer_" + canvas_id).attr("class", css_classes.replace(/render-error/, ""));
         } catch (e) {
             $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
+            var css_classes = $("#bar_outer_" + canvas_id).attr("class");
+            $("#bar_outer_" + canvas_id).attr("class", css_classes + " render-error");
         }
     }
 

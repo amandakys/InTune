@@ -107,7 +107,7 @@ $(document).ready(function () {
             var canvas_width = {width: canvas.offsetWidth};
 
             // Render to canvas
-            Render.render_bar("bar_" + bar_id, canvas_width, vex_string);
+            Render.render_bar(bar_id, canvas_width, vex_string);
         }
 
         /**

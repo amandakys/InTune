@@ -84,6 +84,10 @@ span.selected {
     box-shadow: 0 0 10px #ffb200;
 }
 
+span.render-error {
+    box-shadow: 0 0 10px red;
+}
+
 canvas {
     padding: 0;
 }
