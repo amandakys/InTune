@@ -39,7 +39,7 @@
 .hint-text {
     position: relative;
     font-size: x-small;
-    color: #000099;
+    color: #9f9f9f;
     background-color: inherit;
     /* Offset from notation on the left */
     top: 3px;
