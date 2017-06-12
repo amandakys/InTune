@@ -1,0 +1,34 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{tabular}{ll}
+\toprule
+Technology used & Remarks\\
+\midrule
+Django 1.11 & Server-side ORM and MVC \\
+Javascript & Client-side browser interface and socket interation \\
+django-channels & Websockets \\
+Redis server & Websockets \\
+PyHamcrest & Testing \\
+PostgreSQL database & Provided by CSG \\
+Gitlab & Git frontend and CI (Gitlab Runner); \\
+& Tests run on every push and deployment on pushes to master \\
+Docker & Containerisation and build/deploy automation \\
+\bottomrule
+\end{tabular}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{CI}
+    \caption{CI Overview}
+\end{figure}
+\end{document}
