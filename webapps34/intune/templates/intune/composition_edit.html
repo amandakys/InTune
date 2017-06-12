@@ -195,17 +195,11 @@
 
 <div class="container">
     <div class="row dropdown">
-        <button style="margin-bottom: 1%" class="btn btn-light dropdown-toggle" type="button" data-toggle="collapse" data-target="#comments-div">
-            Comments (<span id="total-comments">Select a bar to show comments</span>)
+        <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle" type="button" data-toggle="collapse" data-target="#comments-div">
+            Comments (<span id="total-comments">Select a bar to show comments</span>) <span class="glyphicon glyphicon-comment"></span>
             <span class="caret"></span>
         </button>
         <div class="collapse" id="comments-div">
-             <div id="comments"
-                 data-room-id="{{ composition.id }}"
-                 data-username="{{ user.username }}"
-                 data-ajax-target="{% url 'intune:comments' %}",
-                 data-user-id="{{ user.id }}">
-             </div>
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
                 class="form-inline" data-composition-id="{{ composition.id }}">
                 {% csrf_token %}
@@ -214,6 +208,14 @@
                 <button type="submit" class="btn btn-light">Add Comment</button>
                 {% endbuttons %}
             </form>
+             <div id="comments"
+                 data-room-id="{{ composition.id }}"
+                 data-username="{{ user.username }}"
+                 data-ajax-target="{% url 'intune:comments' %}",
+                 data-user-id="{{ user.id }}"
+                 class="pre-scrollable">
+             </div>
+
         </div>
     </div>
 </div>
