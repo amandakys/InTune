@@ -1,0 +1,41 @@
+6. Copyright/Legal Issues Report: (5 marks)
+In a list or table you should acknowledge any libraries, code or pictures that are used in your
+application and have not been written or created by your group. In a short paragraph you should
+also briefly discuss any legal issues that you would have to consider if you were to officially release
+your application. This document should be suitable for a future development team to understand
+the legal constraints placed upon them.
+
+libraries used:
+channels
+https://github.com/django/channels/
+[BSD 3-clause "New" or "Revised" License] {retain the above copyright notice}
+daphne
+https://github.com/django/daphne/
+asgiref
+https://github.com/django/asgiref/
+asgi_redis
+https://github.com/django/asgi_redis/
+
+vextab-div
+https://github.com/0xfe/vextab
+jquery
+https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
+bootstrap
+https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js
+
+dal
+https://github.com/yourlabs/django-autocomplete-light
+http://django-autocomplete-light.readthedocs.io/en/master/
+dal_select2
+
+bootstrap
+https://github.com/dyve/django-bootstrap3
+
+code used:
+bootstrap
+https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
+
+(vextab-renderer?)
+
+pictures:
+NA
