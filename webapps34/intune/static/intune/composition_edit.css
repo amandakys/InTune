@@ -164,3 +164,15 @@ canvas.selected {
 .btn-group.top-padded {
     padding-top: 15px;
 }
+
+#chatbox-dropdown {
+    line-height: 32px;
+    padding: 20px;
+    margin: 10px;
+    min-width: 300px;
+    z-index: 1;
+}
+
+.edit_users {
+    margin: 10px;
+}

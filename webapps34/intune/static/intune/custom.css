@@ -123,26 +123,6 @@ form label {
     margin: -0.5em auto 0px;
 }
 
-#updated_json {
-    background-color: white;
-    padding: 10px;
-    border: var(--element_color) solid;
-    border-radius: 5px;
-}
-
-#song-canvas{
-    background-color: white;
-    margin: 20px;
-}
-
-#chatbox-dropdown {
-    line-height: 32px;
-    padding: 20px;
-    margin: 10px;
-    min-width: 300px;
-    z-index: 1;
-}
-
 .info.col-sm-8 {
     margin-top: 12px;
     text-align: left;
@@ -300,7 +280,7 @@ form label {
 }
 
 @media print {
-    textarea, .edit_users, .btn {
+    input, textarea, .edit_users, .btn, #edit_text {
         display: none;
     }
     * {
