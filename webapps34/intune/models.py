@@ -82,7 +82,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     composition = models.ForeignKey(Composition)
     bar = models.PositiveIntegerField()
-    comment = models.CharField(max_length=255)
+    comment = models.CharField(max_length=255, blank=False)
 
     def __str__(self):
         return self.comment

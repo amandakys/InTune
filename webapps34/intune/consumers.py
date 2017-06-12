@@ -7,6 +7,7 @@ from .models import ChatMessage, Composition, Profile, Comment
 
 # TODO: Check user permissions
 
+
 # Connected to websocket.connect
 def ws_chat_add(message):
     # Accept the connection
@@ -42,7 +43,6 @@ def ws_chat_message(message):
         print("wrong type")
 
     group_postfix = get_group_postfix(text)
-    print("group postfix", group_postfix)
     Group("chat-%s" % group_postfix).send({
         "text": json.dumps({
             "user": str(sender_name),
