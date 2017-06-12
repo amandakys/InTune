@@ -88,6 +88,10 @@ span.render-error {
     box-shadow: 0 0 10px red;
 }
 
+span.oth-user {
+    box-shadow: 0 0 10px green;
+}
+
 canvas {
     padding: 0;
 }

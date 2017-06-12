@@ -23,6 +23,7 @@ $(document).ready(function () {
 
         // Module specific variables
         var composition_id = -1;
+        var user_id = -1;
         var bar_count = 0;
         var current_bar = 0;
         var socket = null;
@@ -122,6 +123,7 @@ $(document).ready(function () {
                 _composition_handler, "json");
 
             composition_id = $("#render_block").attr("data-composition-id");
+            user_id = $("#render_block").attr("data-user-id");
             socket = new WebSocket("ws://" + window.location.host + "/ws_comp/" + composition_id + "/");
 
             socket.onopen = function() {
@@ -134,10 +136,24 @@ $(document).ready(function () {
                     _update_bar_div(data.bar_id, data.bar_contents)
                 } else if (data.bar_mod == "append") {
                     _receive_append_bar(data.bar_contents)
+                } else if (data.bar_mod == "select") {
+                    if (data.user != user_id)
+                        _oth_user_select(data.bar_id);
+                } else if (data.bar_mod == "deselect") {
+                    if (data.user != user_id)
+                        $("#bar_outer_" + data.bar_id).attr("class", "canvas-outer");
+                } else if (data.bar_mod == "fresh_selects") {
+                    for (var user in data.selection) {
+                        _oth_user_select(data.selection[user]);
+                    }
                 } else {
-                    console.log("Invalid WebSocket message received");
+                    console.log("Invalid WebSocket message received, data: " + JSON.stringify(data));
                 }
             }
+        }
+
+        function _oth_user_select(bar_id) {
+            $("#bar_outer_" + bar_id).attr("class", "oth-user canvas-outer");
         }
 
         // Appends a new bar to render block
@@ -189,6 +205,11 @@ $(document).ready(function () {
             // Deselect the previous canvas
             _deselect(current_bar);
             // Highlight the selected canvas
+            socket.send(JSON.stringify({
+                'action': "select",
+                'bar_id': bar_id,
+            }));
+
             $("#bar_outer_" + bar_id).attr("class", "selected canvas-outer");
 
             current_bar = bar_id;
