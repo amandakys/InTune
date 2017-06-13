@@ -1,8 +1,19 @@
 $(document).ready(function () {
     var notification_count = $("#notification_count");
-    $.get(notification_count.attr("data-ajax-target"),
-        function (data) {
-            console.log("count:" + data.count);
-            $("#notification_count").html(data.count);
-        }, "json");
+    var user_id = notification_count.attr("data-user-id");
+    var socket = new WebSocket("ws://" + window.location.host + "/notif/" + user_id + "/");
+
+    socket.onmessage = function (e) {
+        var data = e.data
+        console.log("recevied notif ", data);
+        var current_unread = notification_count.html();
+        if (current_unread) {
+                current_unread = parseInt(current_unread);
+            }
+        notification_count.html(current_unread + 1);
+    };
+
+    socket.onopen = function() {
+        console.log("connected!!", socket);
+    }
 });

@@ -30,8 +30,10 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS (<span id="notification_count" data-ajax-target = "{% url 'intune:notification_count' %}">
-    </span>)</a></li>
+                    <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS
+                        <span id="notification_count" class="badge"
+                              data-user-id = "{{ request.user.id }}"></span>
+                    </a></li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>
                     <li><a href="{% url 'logout' %}">LOGOUT</a></li>
                 {% endif %}
