@@ -7,10 +7,11 @@
 
 {% block content %}
     <h1>Notifications</h1>
-    <div class="notifications" id="notif-list">
+    <div class="col-sm-2"></div>
+    <div class="notifications col-sm-8" id="notif-list">
         {% if notification_list %}
             {% for notification in notification_list %}
-                <li><a href="{% url 'intune:song' notification.composition.id %}">
+                <li><a href="{% url 'intune:song_edit' notification.composition.id %}">
                     <div class="composition-element notification-element">
                         <div class="notification col-sm-8">
                             <p>{{ notification.sender }} {{ notification.msg }}</p>
@@ -24,4 +25,5 @@
             {% endfor %}
         {% endif %}
     </div>
+    <div class="col-sm-2"></div>
 {% endblock %}
