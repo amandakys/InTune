@@ -146,7 +146,7 @@ $(document).ready(function () {
                         _oth_user_select(data.bar_id);
                 } else if (data.bar_mod === "deselect") {
                     if (data.user !== user_id)
-                        $("#bar_outer_" + data.bar_id).attr("class", "canvas-outer");
+                        $("#bar_outer_" + data.bar_id).removeClass("oth-user");
                 } else if (data.bar_mod === "fresh_selects") {
                     for (var user in data.selection) {
                         // Property check for JS
@@ -172,7 +172,7 @@ $(document).ready(function () {
         }
 
         function _oth_user_select(bar_id) {
-            $("#bar_outer_" + bar_id).attr("class", "oth-user canvas-outer");
+            $("#bar_outer_" + bar_id).addClass("oth-user");
         }
 
         // Appends a new bar to render block
@@ -209,7 +209,7 @@ $(document).ready(function () {
 
         function _deselect(bar_id) {
             if (bar_id >= 0) {
-                $("#bar_outer_" + current_bar).attr("class", "canvas-outer");
+                $("#bar_outer_" + current_bar).removeClass("selected");
                 _save_bar(bar_id);
             }
         }
@@ -229,7 +229,7 @@ $(document).ready(function () {
                 'bar_id': bar_id
             }));
 
-            $("#bar_outer_" + bar_id).attr("class", "selected canvas-outer");
+            $("#bar_outer_" + bar_id).addClass("selected");
 
             current_bar = bar_id;
 
