@@ -357,6 +357,23 @@ $(document).ready(function () {
         }
     })();
 
+    // insert hint into input at cursor position
+    $(".notation-select").click(function(){
+        var input_field = $("#edit_text");
+        var cursorPos = input_field.prop("selectionStart");
+        var v = input_field.val();
+        var textBefore = v.substring(0, cursorPos);
+        var textAfter  = v.substring(cursorPos, v.length);
+        var hint_text = $(this).attr("data-text")
+        input_field.val(textBefore + hint_text + textAfter);
+
+        // refocus on text input and make cursor point to where we left off
+        input_field.focus();
+        var new_pos = cursorPos + hint_text.length
+        input_field[0].selectionStart = new_pos;
+        input_field[0].selectionEnd = new_pos;
+    });
+
     /* Register response to events */
     $("#remove_bar").click(Editor.remove_bar);
     $("#edit_text").keyup(_.throttle(Editor.edit_bar, 250));
