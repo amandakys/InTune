@@ -154,6 +154,16 @@ $(document).ready(function () {
                             _oth_user_select(data.selection[user]);
                         }
                     }
+                } else if (data.bar_mod === "delete_last") {
+                    var to_remove = bar_count - 1;
+
+                    _deselect(to_remove);
+                    if (current_bar === bar_count) {
+                        // Last bar removed, go to previous
+                        current_bar = bar_count - 1;
+                    }
+
+                    $("#bar_outer_" + to_remove).remove();
                 } else {
                     console.log("Invalid WebSocket message received, data: " + JSON.stringify(data));
                 }
@@ -277,14 +287,9 @@ $(document).ready(function () {
                 return;
             }
 
-            var to_remove = current_bar;
-
-            if (current_bar === bar_count) {
-                // Last bar removed, go to previous
-                current_bar = bar_count - 1;
-            }
-
-            $("#bar_" + to_remove).remove();
+            socket.send(JSON.stringify({
+                'action': "delete_last",
+            }));
         }
 
         function _update_bar_div(bar_id, bar_contents) {

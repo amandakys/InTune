@@ -63,6 +63,14 @@ class Composition(models.Model):
         self.data = dumps(data)
         self.save()
 
+    def delete_last_bar(self):
+        data = self.get_data()
+        del data['bars'][-1]
+        self.data = dumps(data)
+        self.save()
+        bar_id = len(data['bars'])
+        Comment.objects.filter(composition=self, bar=bar_id).delete()
+
     def __str__(self):
         return self.title
 
