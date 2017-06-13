@@ -5,12 +5,15 @@
 {% block title %}<title>{{ composition }}: Edit</title>{% endblock title %}
 
 {% block imports %}
-<meta charset="utf-8">
 <link rel="stylesheet" type="text/css"
       href="{% static 'intune/composition_edit.css' %}">
 <script src="{% static 'lib/vextab-div.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.2.1/lodash.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+{# needed for autocomplete to work #}
+{{ form.media }}
+
 <script src="{% static 'scripts/csrf.js' %}"></script>
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
@@ -223,9 +226,6 @@
 </div>
 
 </div>
-
-{# needed for autocomplete to work #}
-{{ form.media }}
 
 {% endblock content %}
 

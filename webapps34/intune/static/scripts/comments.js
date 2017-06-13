@@ -88,7 +88,7 @@ $(document).ready(function () {
         function display_new_comment(comment) {
             var comment_element = document.createElement("div");
             comment_element.setAttribute("class", "comment-element");
-            document.getElementById("comments").prepend(comment_element);
+            $("#comments").prepend(comment_element);
 
             var name_col = document.createElement("div");
             name_col.setAttribute("class", "comment col-sm-8");
