@@ -18,7 +18,7 @@ $(document).ready(function () {
         // connect to socket at chat-<room_id>-<bar-id>
         var socket = new WebSocket("ws://" + window.location.host + "/comment/" + room_id + "/");
 
-        // refresh comments page onmessage
+        // refresh comments page
         socket.onmessage = function (e) {
             var data = JSON.parse(e.data);
             console.log("received comment ", data);
@@ -32,7 +32,8 @@ $(document).ready(function () {
                 };
 
                 // update comment count
-                $("#total-comments").text(parseInt($("#total-comments").text()) + 1);
+                var total_comments = $("#total-comments");
+                total_comments.text(parseInt(total_comments.text()) + 1);
 
                 _display_new_comment(comment);
             }
@@ -55,7 +56,7 @@ $(document).ready(function () {
                 socket.send(JSON.stringify(msg));
                 event.preventDefault();
                 comment_text.val("");
-                console.log("sending comment ", socket, msg);
+                // console.log("sending comment ", socket, msg);
             });
         };
 
@@ -65,7 +66,7 @@ $(document).ready(function () {
          * @private
          */
         function _retrieve_comments(current_bar) {
-            console.log("retrieveing comments...");
+            console.log("retrieving comments...");
             var comment_form = $("#comment_form");
 
             // Reset comment display
