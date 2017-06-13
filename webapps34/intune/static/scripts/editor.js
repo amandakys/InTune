@@ -223,7 +223,6 @@ $(document).ready(function () {
         function _select(bar_id) {
             // Deselect the previous canvas
             _deselect(current_bar);
-            $('#editor-modal').modal('show');
             // Highlight the selected canvas
             socket.send(JSON.stringify({
                 'action': "select",
