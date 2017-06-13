@@ -181,8 +181,8 @@
                 <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
             </div>
             {# Error Messages to User #}
-            <div id="edit_error"></div>
-            <div id="save_error"></div>
+            <div id="edit_error" class="alert-danger" style="margin: 10px;"></div>
+            <div id="save_error" class="alert-warning" style="margin: 10px;"></div>
         </form>
     </div>
 </div>
@@ -199,7 +199,7 @@
                 class="btn btn-dark dropdown-toggle"
                 type="button" data-toggle="collapse"
                 data-target="#comments-div">
-            Comments (<span id="total-comments">Select a bar to show comments</span>)
+            Comments <span id="total-comments" class="badge">Select a bar to show comments</span>
             <span class="caret"></span>
         </button>
         <div class="collapse" id="comments-div">
