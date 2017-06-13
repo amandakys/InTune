@@ -10,11 +10,10 @@ $(document).ready(function () {
     window.BarComment = (function () {
         "use strict";
 
-        var comment_div = $("#comments");
+        var comment_div = $("#comment-table");
         var room_id = comment_div.attr("data-room-id");
         var username = comment_div.attr("data-username");
         var user_id = comment_div.attr("data-user-id");
-        var bar_id = Editor.get_current_bar();
 
         // connect to socket at chat-<room_id>-<bar-id>
         var socket = new WebSocket("ws://" + window.location.host + "/comment/" + room_id + "/");
@@ -25,7 +24,7 @@ $(document).ready(function () {
             console.log("received comment ", data);
 
             // only show comment if its for current bar
-            if (data.bar == bar_id) {
+            if (parseInt(data.bar) === Editor.get_current_bar()) {
                 var comment = {
                     "commenter": data["user"],
                     "time": new Date().toLocaleString(),
@@ -33,9 +32,9 @@ $(document).ready(function () {
                 };
 
                 // update comment count
-                $("#total-comments").text(parseInt($("#total-comments").text()) + 1)
+                $("#total-comments").text(parseInt($("#total-comments").text()) + 1);
 
-                display_new_comment(comment);
+                _display_new_comment(comment);
             }
         };
 
@@ -43,17 +42,19 @@ $(document).ready(function () {
             var comment_form = $("#comment_form");
 
             comment_form.submit (function() {
-                bar_id = Editor.get_current_bar();
-                var text = $("#comment_text").val();
+                var comment_text = $("#comment_text");
+                var text = comment_text.val();
+
                 var msg = {
                     "room": room_id,
                     "msg": text,
                     "user": user_id,
-                    "bar": bar_id,
+                    "bar": Editor.get_current_bar()
                 };
+
                 socket.send(JSON.stringify(msg));
                 event.preventDefault();
-                $("#comment_text").val("");
+                comment_text.val("");
                 console.log("sending comment ", socket, msg);
             });
         };
@@ -67,7 +68,9 @@ $(document).ready(function () {
             console.log("retrieveing comments...");
             var comment_form = $("#comment_form");
 
-            var comments = $.getJSON($("#comments").attr("data-ajax-target"),
+            // Reset comment display
+            $("#comment-list").empty();
+            var comments = $.getJSON($("#comment-table").attr("data-ajax-target"),
                 {
                     composition: comment_form.attr("data-composition-id"),
                     bar: current_bar
@@ -77,31 +80,41 @@ $(document).ready(function () {
             comment_form.show();
         }
 
-        function _display_comments(comments) {
-            $('#comments').html("");
-            $("#total-comments").text(comments.comments.length);
-            for (var i = 0; i < comments.comments.length; i++) {
-                display_new_comment(comments.comments[i])
+        /**
+         *
+         * @param comments_json
+         * @private
+         */
+        function _display_comments(comments_json) {
+            $("#total-comments").text(comments_json["comments"].length);
+            for (var i = 0; i < comments_json["comments"].length; i++) {
+                _display_new_comment(comments_json["comments"][i])
             }
         }
 
-        function display_new_comment(comment) {
-            var comment_element = document.createElement("div");
-            comment_element.setAttribute("class", "comment-element");
-            $("#comments").prepend(comment_element);
+        /**
+         *
+         * @param comment_json
+         * @private
+         */
+        function _display_new_comment(comment_json) {
+            // Create new row in table
+            var commenter = document.createElement("td");
+            commenter.innerHTML = comment_json["commenter"];
+            var comment = document.createElement("td");
+            comment.innerHTML = comment_json["comment"];
 
-            var name_col = document.createElement("div");
-            name_col.setAttribute("class", "comment col-sm-8");
-            comment_element.appendChild(name_col);
-            name_col.innerHTML = "<p><b>" + comment.commenter + "</b>: " + comment.comment + "</p>";
-
-            var time_col = document.createElement("div");
-            time_col.setAttribute("class", "comment col-sm-4");
-            comment_element.appendChild(time_col);
-            var time = new Date(comment.time);
+            var date = document.createElement("td");
+            var time = new Date(comment_json.time);
             var hours = ('0' + time.getHours()).slice(-2);
-            var mins = ('0' + time.getMinutes()).slice(-2);
-            time_col.innerHTML = "<p>" + hours + ":" + mins + " " + time.toDateString() + "</p>";
+            var min = ('0' + time.getMinutes()).slice(-2);
+            date.innerHTML = hours + ":" + min + " " + time.toDateString();
+
+            var comment_row = document.createElement("tr");
+            comment_row.appendChild(commenter);
+            comment_row.appendChild(comment);
+            comment_row.appendChild(date);
+            $("#comment-list").prepend(comment_row);
         }
 
         return {

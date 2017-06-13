@@ -82,25 +82,36 @@
 <div class="container">
     <div class="row">
         <h1>{{ composition.title }}</h1>
-        <div class="dropdown pull-right">
-            <span class="glyphicon glyphicon-question-sign"
-                class="dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                style="cursor:help; font-size:20px"></span>
-            <ul id="canvas-help-menu" class="dropdown-menu">
-                <strong>What do the colours mean?</strong>
-                <li><span class="render-error">Render error</span></li>
-                <li><span class="selected">Currently selected bar</span></li>
-                <li><span class="oth-user">Other users are editing that bar</span></li>
-                <li>(changes made to that bar might be overwritten)</li>
-            </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <div class="dropdown pull-right">
+            <span class="glyphicon glyphicon-question-sign dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  style="cursor:help; font-size:20px"></span>
+                <div class="dropdown-menu">
+                    <div class="container text-center">
+                        <strong>What do the colours mean?</strong>
+                    </div>
+                    <ul id="canvas-help-menu">
+                        <li><span class="render-error">Render error</span></li>
+                        <li><span class="selected">Currently selected bar</span></li>
+                        <li><span class="oth-user">Other users are editing that bar</span></li>
+                        <li>(changes made to that bar might be overwritten)</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
+        <div class="col-md-2"></div>
     </div>
 </div>
 
 {# --- Canvas/Render Block --- #}
-
 <div class="container text-center">
     <div class="row">
         <div class="canvas-block" id="render_block" data-composition-id="{{ composition.id }}"
@@ -113,10 +124,60 @@
 
 {# --- Main Editor interface --- #}
 <div class="row">
+    {# Left Column #}
+    <div class="col-md-3">
+        {# -- Comments -- #}
+        <div class="dropdown">
+            <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle"
+                    type="button" data-toggle="collapse" data-target="#comments-div">
+                Comments <span id="total-comments" class="badge">Select a bar to show comments</span>
+                <span class="caret"></span>
+            </button>
 
-{# Center Column #}
-<div class="col-md-8 col-md-offset-2">
-    <div class="container">
+            <div class="collapse" id="comments-div">
+                <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
+                      class="form-inline" data-composition-id="{{ composition.id }}"
+                      autocomplete="off">
+                    {% csrf_token %}
+                    <input type="text" id="comment_text" class="form-control" placeholder="Write a comment"
+                           required/>
+                    {% buttons %}
+                        <button type="submit" class="btn btn-dark">Add Comment</button>
+                    {% endbuttons %}
+                </form>
+
+                <div class="table-responsive" id="comment-table"
+                     data-room-id="{{ composition.id }}"
+                     data-username="{{ user.username }}"
+                     data-ajax-target="{% url 'intune:comments' %}"
+                     data-user-id="{{ user.id }}">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Comment</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="comment-list">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="comments"
+                     data-room-id="{{ composition.id }}"
+                     data-username="{{ user.username }}"
+                     data-ajax-target="{% url 'intune:comments' %}"
+                     data-user-id="{{ user.id }}">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {# Center Column #}
+    <div class="col-md-6">
         <div class="row text-center">
             <div class="btn-group" role="group" aria-label="Notation Selection">
                 {# Semibreve #}
@@ -169,80 +230,47 @@
                 </button>
             </div>
         </div>
-    </div>
-    <div class="row text-center">
-        <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form"
-              data-composition-id="{{ composition.id }}">
 
-            <label for="edit_text"></label>
-            <input type="text" class="form-control input-lg dynamic-textbox"
-                   placeholder="Select a bar to begin editing!" id="edit_text" />
+        <div class="row text-center">
+            <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form"
+                  data-composition-id="{{ composition.id }}">
 
-            <div class="btn-group top-padded" role = "group" aria-label="bar modifications">
-                <button type="submit" class="btn btn-default">Save</button>
-                <button type="button" class="btn btn-default" id="new_bar">New Bar</button>
-                <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
-            </div>
-            {# Error Messages to User #}
-            <div id="edit_error" class="alert-danger" style="margin: 10px;"></div>
-            <div id="save_error" class="alert-warning" style="margin: 10px;"></div>
-        </form>
-    </div>
-</div>
+                <label for="edit_text"></label>
+                <input type="text" class="form-control input-lg dynamic-textbox"
+                       placeholder="Select a bar to begin editing!" id="edit_text"/>
 
-{# Right Column #}
-{# -- space for chatbox -- #}
-<div class="col-sm-2">
-</div>
-
-{# -- Comments -- #}
-<div class="container">
-    <div class="row dropdown col-sm-12">
-        <button style="margin-bottom: 1%"
-                class="btn btn-dark dropdown-toggle"
-                type="button" data-toggle="collapse"
-                data-target="#comments-div">
-            Comments <span id="total-comments" class="badge">Select a bar to show comments</span>
-            <span class="caret"></span>
-        </button>
-        <div class="collapse" id="comments-div">
-            <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
-                class="form-inline" data-composition-id="{{ composition.id }}"
-                autocomplete="off">
-                {% csrf_token %}
-                <input type="text" id="comment_text" class="form-control" placeholder="Write a comment" required/>
-                {% buttons %}
-                <button type="submit" class="btn btn-dark">Add Comment</button>
-                {% endbuttons %}
+                <div class="btn-group top-padded" role="group" aria-label="bar modifications">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" id="new_bar">New Bar</button>
+                    <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
+                </div>
+                {# Error Messages to User #}
+                <div id="edit_error" class="alert-danger" style="margin: 10px;"></div>
+                <div id="save_error" class="alert-warning" style="margin: 10px;"></div>
             </form>
-            <div id="comments"
-                 data-room-id="{{ composition.id }}"
-                 data-username="{{ user.username }}"
-                 data-ajax-target="{% url 'intune:comments' %}"
-                 data-user-id="{{ user.id }}">
-            </div>
         </div>
     </div>
-</div>
 
+    {# Right Column #}
+    <div class="col-sm-3"></div>
 </div>
 
 {% endblock content %}
 
 {# --- Footer Navigation --- #}
 {% block footer %}
-    <footer class="footer">
-        <div class="container footer-text">
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#syntax_guide">
-                Notation Guide
-            </button>
-        </div>
-        <div class="container footer-text">
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#symbol_table">
-                Symbol Table
-            </button>
-        </div>
-    </footer>
+<footer class="footer">
+    <div class="container footer-text">
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#syntax_guide">
+            Notation Guide
+        </button>
+    </div>
+    <div class="container footer-text">
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#symbol_table">
+            Symbol Table
+        </button>
+    </div>
+</footer>
 
 <!-- Modal -->
 <div id="syntax_guide" class="modal fade" role="dialog">
