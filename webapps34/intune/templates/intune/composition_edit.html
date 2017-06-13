@@ -44,7 +44,7 @@
                 {% endif %}
 
                 <div class="dropdown-menu" aria-labelledby="share_actions">
-                    <form method="post" action="">
+                    <form method="post" action="" id="shared-users-add">
                         {% csrf_token %}
                         <div class="edit_users">
                             <h6 class="container">Add/Remove shared users:</h6>
@@ -67,6 +67,7 @@
                 <button class="btn btn-default" id="chat-dropdown-toggle"
                         type="button">
                     <span class="glyphicon glyphicon-comment"></span>
+                    <span id="unread_chats" class="badge"></span>
                     <span class="caret"></span>
                 </button>
                 <div id="chat-dropdown" class="container dropdown">

@@ -27,9 +27,16 @@ comment_routing = [
     route("websocket.disconnect", consumers.ws_comment_disconnect),
 ]
 
+notif_routing = [
+    route("websocket.connect", consumers.ws_notif_add, path=r"^/(?P<user>\d+)/$"),
+    route("websocket.receive", consumers.ws_notif_message),
+    route("websocket.disconnect", consumers.ws_notif_disconnect, path=r"^/(?P<user>\d+)/$"),
+]
+
 channel_routing = [
     include(chat_routing, path=r"^/chat"),
     include(bar_routing, path=r"^/ws_comp"),
     include(comment_routing, path=r"^/comment"),
+    include(notif_routing, path=r"^/notif"),
     include(http_routing),
 ]

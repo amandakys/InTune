@@ -2,8 +2,9 @@ from channels import Group
 from channels.auth import channel_session_user, channel_session_user_from_http
 import json
 
-from channels import Group
-from .models import ChatMessage, Composition, Profile, Comment
+from django.contrib.auth.models import User
+
+from .models import ChatMessage, Composition, Profile, Comment, Notification
 
 # TODO: Check user permissions
 
@@ -42,14 +43,10 @@ def ws_chat_message(message):
 
 # Connected to websocket.disconnect
 def ws_chat_disconnect(message):
-    # check that disconnect is called by chatbox
-    if 'text' in message.content.keys():
-        text = json.loads(message.content['text'])
-        group_postfix = text["room"]
-        print("disconnecting from ", group_postfix)
-        Group("chat-%s" % group_postfix).discard(message.reply_channel)
-    else:
-        print("Unexpected disconnect, message: ", message)
+    text = json.loads(message.content['text'])
+    group_postfix = text["room"]
+    print("disconnecting from ", group_postfix)
+    Group("chat-%s" % group_postfix).discard(message.reply_channel)
 
 
 def ws_comment_add(message, comp):
@@ -84,13 +81,11 @@ def ws_comment_message(message):
 
 
 def ws_comment_disconnect(message):
-    if 'text' in message.content.keys():
-        text = json.loads(message.content['text'])
-        group_postfix = text["room"]
-        print("disconnecting from ", group_postfix)
-        Group("comment-%s" % group_postfix).discard(message.reply_channel)
-    else:
-        print("Unexpected disconnect, message: ", message)
+    text = json.loads(message.content['text'])
+    group_postfix = text["room"]
+    print("disconnecting from ", group_postfix)
+    Group("comment-%s" % group_postfix).discard(message.reply_channel)
+
 
 
 class Selection:
@@ -225,3 +220,20 @@ def ws_bar_receive(message, comp):
 def ws_bar_disconnect(message, comp):
     Group("comp-%s" % comp).discard(message.reply_channel)
     Selection.deselect(comp, message.user)
+
+
+def ws_notif_add(message, user):
+    message.reply_channel.send({"accept": True})
+    Group("notif-%s" % user).add(message.reply_channel)
+
+
+def ws_notif_message(message):
+    text = json.loads(message.content['text'])
+    user_id = text["user_id"]
+    Group("notif-%s" % user_id).send({
+        "text": text
+    })
+
+
+def ws_notif_disconnect(message, user):
+    Group("notif-%s" % user).discard(message.reply_channel);

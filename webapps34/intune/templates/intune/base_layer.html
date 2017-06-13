@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'intune/custom.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{% static 'scripts/notify.js' %}"></script>
 
     {% block imports %}
@@ -29,11 +30,10 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'intune:notifications'%}">
-                        NOTIFICATIONS
+                    <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS
                         <span id="notification_count" class="badge"
-                              data-ajax-target = "{% url 'intune:notification_count' %}">
-                        </span></a></li>
+                              data-user-id = "{{ request.user.id }}"></span>
+                    </a></li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>
                     <li><a href="{% url 'logout' %}">LOGOUT</a></li>
                 {% endif %}
