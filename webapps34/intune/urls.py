@@ -45,7 +45,6 @@ urlpatterns = [
         name="comment_create"),
 
     # (auxillary url used for django-autocomplete)
-    # TODO: make this url not visible?
     url(
         r'^profile-autocomplete/$',
         login_required(views.ProfileAutocomplete.as_view()),

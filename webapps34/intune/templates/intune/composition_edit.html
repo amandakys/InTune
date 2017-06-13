@@ -166,10 +166,11 @@
 
     {# Center Column #}
     <div class="col-md-8 text-center">
-        <div class="canvas-block" id="render_block" data-composition-id="{{ composition.id }}"
+        <div class="canvas-block" id="render_block"
+             data-placeholder="Add a new bar by clicking the button below"
+             data-composition-id="{{ composition.id }}"
              data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
-             data-user-id="{{ request.user.id }}">
-        </div>
+             data-user-id="{{ request.user.id }}"></div>
     </div>
 
     {# Right Column #}
