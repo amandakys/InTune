@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="col-md-3">
+        <div class="container footer-text">
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#syntax_guide">
+                Notation Guide
+            </button>
+        </div>
+        <div class="container footer-text">
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#symbol_table">
+                Symbol Table
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row text-center">
+            <div class="btn-group" role="group" aria-label="Notation Selection">
+                {# Semibreve #}
+                <button type="button" class="notation-select btn btn-default" data-text=":w">
+                    <span class="bravura">&#xE1D2;</span><span class="hint-text">(:w)</span>
+                </button>
+                {# Minim #}
+                <button type="button" class="notation-select btn btn-default" data-text=":h">
+                    <span class="bravura">&#xE1D3;</span><span class="hint-text">(:h)</span>
+                </button>
+                {# Crotchet #}
+                <button type="button" class="notation-select btn btn-default" data-text=":q">
+                    <span class="bravura">&#xE1D5;</span><span class="hint-text">(:q)</span>
+                </button>
+                {# Quaver #}
+                <button type="button" class="notation-select btn btn-default" data-text=":8">
+                    <span class="bravura">&#xE1D7;</span><span class="hint-text">(:8)</span>
+                </button>
+                {# Semiquaver #}
+                <button type="button" class="notation-select btn btn-default" data-text=":16">
+                    <span class="bravura">&#xE1D9;</span><span class="hint-text">(:16)</span>
+                </button>
+                {# Dotted Note #}
+                <button type="button" class="notation-select btn btn-default" data-text="d">
+                    <span class="bravura">&#xE1E7;</span><span class="hint-text">(d)</span>
+                </button>
+                {# Rest #}
+                <button type="button" class="notation-select btn btn-default" data-text="##">
+                    <span class="bravura">&#xE4E5;</span><span class="hint-text">(##)</span>
+                </button>
+                {# Flat #}
+                <button type="button" class="notation-select btn btn-default" data-text="@">
+                    <span class="bravura">&#xE260;</span><span class="hint-text">(@)</span>
+                </button>
+                {# Double Flat #}
+                <button type="button" class="notation-select btn btn-default" data-text="@@">
+                    <span class="bravura">&#xE264;</span><span class="hint-text">(@@)</span>
+                </button>
+                {# Natural #}
+                <button type="button" class="notation-select btn btn-default" data-text="n">
+                    <span class="bravura">&#xE261;</span><span class="hint-text">(n)</span>
+                </button>
+                {# Sharp #}
+                <button type="button" class="notation-select btn btn-default" data-text="#">
+                    <span class="bravura">&#xE262;</span><span class="hint-text">(#)</span>
+                </button>
+                {# Double Sharp #}
+                <button type="button" class="notation-select btn btn-default" data-text="##">
+                    <span class="bravura">&#xE263;</span><span class="hint-text">(##)</span>
+                </button>
+            </div>
+        </div>
+        <div class="row text-center">
+            <form method="post" action="{% url 'intune:bar_edit' %}" id="edit_form"
+                  data-composition-id="{{ composition.id }}">
+
+                <label for="edit_text"></label>
+                <input type="text" class="form-control input-lg dynamic-textbox"
+                       placeholder="Select a bar to begin editing!" id="edit_text" />
+
+                <div class="btn-group top-padded" role = "group" aria-label="bar modifications">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" id="new_bar">New Bar</button>
+                    <button type="button" class="btn btn-default" id="remove_bar">Remove Bar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3">
+        {# Error Messages to User #}
+        <div id="edit_error"></div>
+        <div id="save_error"></div>
+    </div>
+</div>

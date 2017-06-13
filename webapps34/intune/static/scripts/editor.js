@@ -16,7 +16,7 @@ $(document).ready(function () {
     window.Editor = (function () {
         "use strict";
         // Module specific constants
-        var MAX_BARS = 5;
+        var MAX_BARS = 1000;
         var DEFAULT_TABSTAVE = "tabstave notation=true tablature=false";
         var DEFAULT_NOTES = ":w ##";
         var VT_DATA_NAME = "vt_data";
