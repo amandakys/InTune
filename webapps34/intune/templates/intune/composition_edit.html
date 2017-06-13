@@ -111,26 +111,15 @@
     </div>
 </div>
 
-{# --- Canvas/Render Block --- #}
-<div class="container text-center">
-    <div class="row">
-        <div class="canvas-block" id="render_block" data-composition-id="{{ composition.id }}"
-             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
-             data-user-id="{{ request.user.id }}">
-        </div>
-    </div>
-</div>
-
-
-{# --- Main Editor interface --- #}
+{# --- Main Block --- #}
 <div class="row">
     {# Left Column #}
-    <div class="col-md-3">
+    <div class="col-md-2">
         {# -- Comments -- #}
         <div class="dropdown">
             <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle"
                     type="button" data-toggle="collapse" data-target="#comments-div">
-                Comments <span id="total-comments" class="badge">Select a bar to show comments</span>
+                Comments <span id="total-comments" class="badge">Select Bar</span>
                 <span class="caret"></span>
             </button>
 
@@ -176,11 +165,15 @@
     </div>
 
     {# Center Column #}
-    <div class="col-md-6">
+    <div class="col-md-8 text-center">
+        <div class="canvas-block" id="render_block" data-composition-id="{{ composition.id }}"
+             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
+             data-user-id="{{ request.user.id }}">
+        </div>
     </div>
 
     {# Right Column #}
-    <div class="col-sm-3"></div>
+    <div class="col-md-2"></div>
 </div>
 
 {% endblock content %}
