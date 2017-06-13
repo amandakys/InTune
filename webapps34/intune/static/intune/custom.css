@@ -279,6 +279,11 @@ form label {
     }
 }
 
+.notification-element {
+    min-height: 50px;
+    padding-top:14px
+}
+
 @media print {
     input, textarea, .edit_users, .btn, #edit_text {
         display: none;
