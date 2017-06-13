@@ -2,7 +2,7 @@ $( document ).ready(function() {
     var room_id = roomId = $("div.roomdiv").attr("data-room-id");
     var username = $("div.roomdiv").attr("data-username");
     var user_id = $("div.roomdiv").attr("data-user-id");
-    var socket = new WebSocket("ws://" + window.location.host + "/chat-" + room_id + "/");
+    var socket = new WebSocket("ws://" + window.location.host + "/chat/" + room_id + "/");
 
     socket.onmessage = function (e) {
         var data = JSON.parse(e.data);

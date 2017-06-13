@@ -9,12 +9,11 @@ from .models import ChatMessage, Composition, Profile, Comment
 
 
 # Connected to websocket.connect
-def ws_chat_add(message):
+def ws_chat_add(message, comp):
     # Accept the connection
     message.reply_channel.send({"accept": True})
-    path = message.content['path'].strip("/")
-    print("connected to ", path)
-    Group("%s" % path).add(message.reply_channel)
+    print("connected to ", "chat-%s" %comp)
+    Group("chat-%s" % comp).add(message.reply_channel)
 
 
 # Connected to websocket.receive
@@ -53,12 +52,10 @@ def ws_chat_disconnect(message):
         print("Unexpected disconnect, message: ", message)
 
 
-def ws_comment_add(message):
+def ws_comment_add(message, comp):
     # Accept the connection
     message.reply_channel.send({"accept": True})
-    path = message.content['path'].strip("/")
-    print("connected to ", path)
-    Group("%s" % path).add(message.reply_channel)
+    Group("comment-%s" % comp).add(message.reply_channel)
 
 
 def ws_comment_message(message):

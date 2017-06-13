@@ -204,7 +204,8 @@
         </button>
         <div class="collapse" id="comments-div">
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
-                class="form-inline" data-composition-id="{{ composition.id }}">
+                class="form-inline" data-composition-id="{{ composition.id }}"
+                autocomplete="off">
                 {% csrf_token %}
                 <input type="text" id="comment_text" class="form-control" placeholder="Write a comment" required/>
                 {% buttons %}

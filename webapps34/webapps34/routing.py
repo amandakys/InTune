@@ -9,7 +9,7 @@ http_routing = [
 ]
 
 chat_routing = [
-    route("websocket.connect", consumers.ws_chat_add),
+    route("websocket.connect", consumers.ws_chat_add, path=r"^/(?P<comp>\d+)/$"),
     route("websocket.receive", consumers.ws_chat_message),
     route("websocket.disconnect", consumers.ws_chat_disconnect),
 ]
@@ -22,7 +22,7 @@ bar_routing = [
 
 
 comment_routing = [
-    route("websocket.connect", consumers.ws_comment_add),
+    route("websocket.connect", consumers.ws_comment_add, path=r"^/(?P<comp>\d+)/$"),
     route("websocket.receive", consumers.ws_comment_message),
     route("websocket.disconnect", consumers.ws_comment_disconnect),
 ]
