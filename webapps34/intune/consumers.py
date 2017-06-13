@@ -214,12 +214,12 @@ def ws_bar_receive(message, comp):
         elif contents['action'] == "deselect":
             Selection.select(comp, message.user)
         elif contents['action'] == "delete_last":
-            composition.delete_last_bar()
-            Group("comp-%s" % comp).send({
-                "text": json.dumps({
-                    "bar_mod": "delete_last",
-                }),
-            })
+            if composition.delete_last_bar() >=0:
+                Group("comp-%s" % comp).send({
+                    "text": json.dumps({
+                        "bar_mod": "delete_last",
+                    }),
+                })
         else:
             print("Invalid WebSocket composition request")
 

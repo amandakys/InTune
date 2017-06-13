@@ -162,6 +162,7 @@ $(document).ready(function () {
                         // Last bar removed, go to previous
                         current_bar = bar_count - 1;
                     }
+                    bar_count--;
 
                     $("#bar_outer_" + to_remove).remove();
                 } else {
