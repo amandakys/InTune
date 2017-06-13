@@ -17,11 +17,12 @@ $(document).ready(function () {
         var bar_id = Editor.get_current_bar();
 
         // connect to socket at chat-<room_id>-<bar-id>
-        var socket = new WebSocket("ws://" + window.location.host + "/comment-" + room_id + "/");
+        var socket = new WebSocket("ws://" + window.location.host + "/comment/" + room_id + "/");
 
         // refresh comments page onmessage
         socket.onmessage = function (e) {
             var data = JSON.parse(e.data);
+            console.log("received comment ", data);
 
             // only show comment if its for current bar
             if (data.bar == bar_id) {
@@ -53,6 +54,7 @@ $(document).ready(function () {
                 socket.send(JSON.stringify(msg));
                 event.preventDefault();
                 $("#comment_text").val("");
+                console.log("sending comment ", socket, msg);
             });
         };
 
