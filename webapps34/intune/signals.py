@@ -1,4 +1,5 @@
 import json
+import sys
 from django.db.models.signals import m2m_changed
 
 from intune.models import Composition, Notification
@@ -28,4 +29,6 @@ def user_added(sender, **kwargs):
                     "msg": str(msg) + str(profile.id),
                 })
             })
-m2m_changed.connect(user_added, sender=Composition.users.through)
+
+if not 'test' in sys.argv:
+    m2m_changed.connect(user_added, sender=Composition.users.through)
