@@ -89,13 +89,10 @@ class Editor:
         SELECT = "select"
         DESELECT = "deselect"
 
-    def __init__(self, composition: Composition, user: User):
-        if composition.has_access(user):
-            self.composition = composition
-            self.user = user
-        else:
-            print("Attempted unauthorised access of composition `%s` by `%s`" %
-                  (composition, user))
+    def __init__(self, composition_id: int, user: User):
+        comp = Composition.objects.get(id=composition_id)
+        self.user = user
+        self.composition = comp if comp.has_access(user) else None
 
     def send(self, bar, action, contents=None):
         if bar >= 0:
@@ -141,14 +138,12 @@ class Editor:
 
 @channel_session_user_from_http
 def ws_bar_connect(message, comp):
-    composition = Composition.objects.get(id=comp)
-
     message.reply_channel.send({"accept": True})
     Group("comp-%s" % comp).add(message.reply_channel)
     message.reply_channel.send({
         "text": json.dumps({
             "bar_mod": "fresh_selects",
-            "selection": Editor(composition, message.user).get_selection(),
+            "selection": Editor(comp, message.user).get_selection(),
         }),
     })
 
@@ -156,7 +151,7 @@ def ws_bar_connect(message, comp):
 @channel_session_user
 def ws_bar_receive(message, comp):
     contents = json.loads(message.content['text'])
-    comp_editor = Editor(Composition.objects.get(pk=comp), message.user)
+    comp_editor = Editor(comp, message.user)
 
     action: str = contents.get('action', None)
     bar_id: int = contents.get('bar_id', -1)
@@ -173,10 +168,8 @@ def ws_bar_receive(message, comp):
 
 @channel_session_user
 def ws_bar_disconnect(message, comp):
-    composition = Composition.objects.get(id=comp)
-
     Group("comp-%s" % comp).discard(message.reply_channel)
-    Editor(composition, message.user).deselect()
+    Editor(comp, message.user).deselect()
 
 
 def ws_notif_add(message, user):
