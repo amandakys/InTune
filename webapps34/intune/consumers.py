@@ -76,39 +76,44 @@ def ws_comment_disconnect(message, comp):
     Group("comment-%s" % comp).discard(message.reply_channel)
 
 
-class Selection:
+class Editor:
     compositions = {}
     # Each { comp_id: { user: bar } }
 
+    class Actions:
+        SELECT = "select"
+        DESELECT = "deselect"
+
+    @classmethod
+    def send(cls, composition, bar, user, action, contents=None):
+        if bar >= 0:
+            Group("comp-%s" % composition).send({
+                "text": json.dumps({
+                    "bar_mod": action,
+                    "bar_id": bar,
+                    "user": user.id,
+                    "bar_contents": contents,
+                }),
+            })
+
     @classmethod
     def select(cls, composition, bar, user):
-        Selection.deselect(composition, user)
+        Editor.deselect(composition, user)
         cls.compositions[composition][user.id] = bar
-        Group("comp-%s" % composition).send({
-            "text": json.dumps({
-                "bar_mod": "select",
-                "bar_id": bar,
-                "user": user.id,
-            }),
-        })
+        cls.send(composition, bar, user, Editor.Actions.SELECT)
 
     @classmethod
     def deselect(cls, composition, user):
         if composition in cls.compositions:
-            bar = cls.compositions[composition].pop(user.id, None)
-            Group("comp-%s" % composition).send({
-                "text": json.dumps({
-                    "bar_mod": "deselect",
-                    "bar_id": bar,
-                    "user": user.id,
-                }),
-            })
+            bar = cls.compositions[composition].pop(user.id, -1)
+            cls.send(composition, bar, user, Editor.Actions.DESELECT)
         else:
             cls.compositions[composition] = {}
 
     @classmethod
     def get_selection(cls, composition, user):
-        Selection.deselect(composition, user)
+        # For newly connected users
+        Editor.deselect(composition, user)
         return cls.compositions[composition]
 
 
@@ -119,7 +124,7 @@ def ws_bar_connect(message, comp):
     message.reply_channel.send({
         "text": json.dumps({
             "bar_mod": "fresh_selects",
-            "selection": Selection.get_selection(comp, message.user),
+            "selection": Editor.get_selection(comp, message.user),
         }),
     })
 
@@ -153,9 +158,9 @@ def ws_bar_receive(message, comp):
                 }),
             })
         elif contents['action'] == "select":
-            Selection.select(comp, contents['bar_id'], message.user)
+            Editor.select(comp, contents['bar_id'], message.user)
         elif contents['action'] == "deselect":
-            Selection.select(comp, message.user)
+            Editor.select(comp, message.user)
         elif contents['action'] == "delete_last":
             if composition.delete_last_bar() >= 0:
                 Group("comp-%s" % comp).send({
@@ -170,7 +175,7 @@ def ws_bar_receive(message, comp):
 @channel_session_user
 def ws_bar_disconnect(message, comp):
     Group("comp-%s" % comp).discard(message.reply_channel)
-    Selection.deselect(comp, message.user)
+    Editor.deselect(comp, message.user)
 
 
 def ws_notif_add(message, user):
