@@ -51,11 +51,13 @@ class Composition(models.Model):
     def has_access(self, user):
         return self.owner.user == user or user.profile in self.users.all()
 
-    def append_bar(self, contents):
+    def append_bar(self, contents : str) -> int:
         data = self.get_data()
+        bar_id = len(data['bars'])
         data['bars'].append(contents)
         self.data = dumps(data)
         self.save()
+        return bar_id
 
     def set_bar(self, bar_id, contents):
         data = self.get_data()

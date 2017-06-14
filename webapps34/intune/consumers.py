@@ -79,7 +79,7 @@ def ws_comment_disconnect(message, comp):
 
 
 class Editor:
-    # Each { Composition: { User: bar_id } }
+    # Each { Composition: { user_id: bar_id } }
     compositions = {}   # Static, access with Editor.compositions
 
     class Action:
@@ -108,14 +108,27 @@ class Editor:
                 }),
             })
 
+    def delete_last(self):
+        bar : int = self.composition.delete_last_bar()
+        if bar >= 0:
+            self.send(bar, Editor.Action.DELETE)
+
+    def update(self, bar : int, contents : str):
+        self.composition.set_bar(bar, contents)
+        self.send(bar, Editor.Action.UPDATE, contents)
+
+    def append(self, contents : str):
+        bar : int= self.composition.append_bar(contents)
+        self.send(bar, Editor.Action.APPEND, contents)
+
     def select(self, bar : int):
         self.deselect()
-        Editor.compositions[self.composition][self.user] = bar
+        Editor.compositions[self.composition][self.user.id] = bar
         self.send(bar, Editor.Action.SELECT)
 
     def deselect(self):
         if self.composition in Editor.compositions:
-            bar = Editor.compositions[self.composition].pop(self.user, -1)
+            bar = Editor.compositions[self.composition].pop(self.user.id, -1)
             self.send(bar, Editor.Action.DESELECT)
         else:
             Editor.compositions[self.composition] = {}
@@ -144,41 +157,24 @@ def ws_bar_connect(message, comp):
 def ws_bar_receive(message, comp):
     contents = json.loads(message.content['text'])
     composition = Composition.objects.get(pk=comp)
+    comp_editor = Editor(composition, message.user)
 
     if composition.has_access(message.user):
         if contents['action'] == "update":
             bar_contents = contents['bar_contents']
             bar_id = int(contents['bar_id'])
 
-            composition.set_bar(bar_id, bar_contents)
-            Group("comp-%s" % comp).send({
-                "text": json.dumps({
-                    "bar_mod": "update",
-                    "bar_id": bar_id,
-                    "bar_contents": bar_contents,
-                }),
-            })
+            comp_editor.update(bar_id, bar_contents)
         elif contents['action'] == "append":
             bar_contents = contents['bar_contents']
 
-            composition.append_bar(bar_contents)
-            Group("comp-%s" % comp).send({
-                "text": json.dumps({
-                    "bar_mod": "append",
-                    "bar_contents": bar_contents,
-                }),
-            })
+            comp_editor.append(bar_contents)
         elif contents['action'] == "select":
-            Editor(composition, message.user).select(contents['bar_id'])
+            comp_editor.select(contents['bar_id'])
         elif contents['action'] == "deselect":
-            Editor(composition, message.user).deselect()
+            comp_editor.deselect()
         elif contents['action'] == "delete_last":
-            if composition.delete_last_bar() >= 0:
-                Group("comp-%s" % comp).send({
-                    "text": json.dumps({
-                        "bar_mod": "delete_last",
-                    }),
-                })
+            comp_editor.delete_last()
         else:
             print("Invalid WebSocket composition request")
 
