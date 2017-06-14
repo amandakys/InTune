@@ -44,16 +44,18 @@ def ws_chat_disconnect(message, comp):
     Group("chat-%s" % comp).discard(message.reply_channel)
 
 
+@channel_session_user_from_http
 def ws_comment_add(message, comp):
     # Accept the connection
     message.reply_channel.send({"accept": True})
     Group("comment-%s" % comp).add(message.reply_channel)
 
 
+@channel_session_user
 def ws_comment_message(message, comp):
     text = json.loads(message.content['text'])
     room_id = comp
-    user_id = text['user']
+    user_id = message.user.id
     msg = text['msg']
     sender_name = Profile.objects.get(id=user_id).user.username
     bar_id = text['bar']
@@ -74,6 +76,7 @@ def ws_comment_message(message, comp):
     })
 
 
+@channel_session_user
 def ws_comment_disconnect(message, comp):
     Group("comment-%s" % comp).discard(message.reply_channel)
 
