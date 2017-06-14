@@ -25,14 +25,14 @@ class ViewTests(TestCase):
                                                             title="song1")
 
     def test_can_view_owned_compositions(self):
-        login = self.client.force_login(self.users[0])
+        self.client.force_login(self.users[0])
         pk = self.composition.id
         response = self.client.get(reverse('intune:song', args=[pk]))
         self.assertEqual(response.context['composition'], self.composition)
         self.client.logout()
 
     def test_cannot_view_compositions_not_owned_or_shared(self):
-        login = self.client.force_login(self.users[1])
+        self.client.force_login(self.users[1])
         pk = self.user0_composition.id
         response = self.client.get(reverse('intune:song', args=[pk]))
         if response.context and 'composition' in response.context:
@@ -42,21 +42,21 @@ class ViewTests(TestCase):
         self.client.logout()
 
     def test_composition_list_no_duplicates(self):
-        login = self.client.force_login(self.users[1])
+        self.client.force_login(self.users[1])
         response = self.client.get(reverse('intune:index'))
         cl = response.context['composition_list']
         self.assertEqual(len(cl), len(cl.distinct()))
         self.client.logout()
 
     def test_composition_list_ordered(self):
-        login = self.client.force_login(self.users[1])
+        self.client.force_login(self.users[1])
         response = self.client.get(reverse('intune:index'))
         cl = response.context['composition_list']
         self.assertEqual(len(cl), len(cl.order_by("-lastEdit")))
         self.client.logout()
 
     def test_composition_last_edit_no_future(self):
-        login = self.client.force_login(self.users[1])
+        self.client.force_login(self.users[1])
         response = self.client.get(reverse('intune:index'))
         composition = response.context['composition_list'][0]
         self.assertTrue(composition.lastEdit <=
@@ -64,7 +64,7 @@ class ViewTests(TestCase):
         self.client.logout()
 
     def test_composition_edit_permission(self):
-        login = self.client.force_login(self.users[0])
+        self.client.force_login(self.users[0])
         pk = self.composition.id
         response = self.client.get(reverse('intune:song_edit', args=[pk]))
         self.assertEqual(response.context['composition'], self.composition)
@@ -73,7 +73,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.context['composition'], self.user0_composition)
         self.client.logout()
 
-        login = self.client.force_login(self.users[2])
+        self.client.force_login(self.users[2])
         response = self.client.get(reverse('intune:song_edit', args=[pk]))
         if response.context and 'composition' in response.context:
             self.assertIsNone(response.context['composition'])

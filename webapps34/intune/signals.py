@@ -21,7 +21,6 @@ def user_added(sender, **kwargs):
         if not notification.recipients.filter(id=id):
             profile = model.objects.get(id=id)
             notification.recipients.add(profile)
-            username = profile.user.username
             Group("notif-%s" % profile.id).send({
                 "text": json.dumps({
                     "msg": str(msg) + str(profile.id),
