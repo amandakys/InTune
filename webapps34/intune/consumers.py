@@ -1,6 +1,8 @@
 from channels import Group
 from channels.auth import channel_session_user, channel_session_user_from_http
+from django.contrib.auth.models import User
 import json
+
 
 from .models import ChatMessage, Composition, Profile, Comment
 
@@ -77,54 +79,63 @@ def ws_comment_disconnect(message, comp):
 
 
 class Editor:
-    compositions = {}
-    # Each { comp_id: { user: bar } }
+    # Each { Composition: { User: bar_id } }
+    compositions = {}   # Static, access with Editor.compositions
 
-    class Actions:
+    class Action:
+        UPDATE = "update"
+        APPEND = "append"
+        DELETE = "delete_last"
         SELECT = "select"
         DESELECT = "deselect"
 
-    @classmethod
-    def send(cls, composition, bar, user, action, contents=None):
+    def __init__(self, composition : Composition, user : User):
+        if composition.has_access(user):
+            self.composition = composition
+            self.user = user
+        else:
+            print("Attempted unauthorised access of composition `%s` by `%s`" %
+                  (composition, user))
+
+    def send(self, bar, action, contents=None):
         if bar >= 0:
-            Group("comp-%s" % composition).send({
+            Group("comp-%s" % self.composition.id).send({
                 "text": json.dumps({
                     "bar_mod": action,
                     "bar_id": bar,
-                    "user": user.id,
+                    "user": self.user.id,   # TODO: change to username
                     "bar_contents": contents,
                 }),
             })
 
-    @classmethod
-    def select(cls, composition, bar, user):
-        Editor.deselect(composition, user)
-        cls.compositions[composition][user.id] = bar
-        cls.send(composition, bar, user, Editor.Actions.SELECT)
+    def select(self, bar : int):
+        self.deselect()
+        Editor.compositions[self.composition][self.user] = bar
+        self.send(bar, Editor.Action.SELECT)
 
-    @classmethod
-    def deselect(cls, composition, user):
-        if composition in cls.compositions:
-            bar = cls.compositions[composition].pop(user.id, -1)
-            cls.send(composition, bar, user, Editor.Actions.DESELECT)
+    def deselect(self):
+        if self.composition in Editor.compositions:
+            bar = Editor.compositions[self.composition].pop(self.user, -1)
+            self.send(bar, Editor.Action.DESELECT)
         else:
-            cls.compositions[composition] = {}
+            Editor.compositions[self.composition] = {}
 
-    @classmethod
-    def get_selection(cls, composition, user):
+    def get_selection(self):
         # For newly connected users
-        Editor.deselect(composition, user)
-        return cls.compositions[composition]
+        self.deselect()
+        return Editor.compositions[self.composition]
 
 
 @channel_session_user_from_http
 def ws_bar_connect(message, comp):
+    composition = Composition.objects.get(id=comp)
+
     message.reply_channel.send({"accept": True})
     Group("comp-%s" % comp).add(message.reply_channel)
     message.reply_channel.send({
         "text": json.dumps({
             "bar_mod": "fresh_selects",
-            "selection": Editor.get_selection(comp, message.user),
+            "selection": Editor(composition, message.user).get_selection(),
         }),
     })
 
@@ -158,9 +169,9 @@ def ws_bar_receive(message, comp):
                 }),
             })
         elif contents['action'] == "select":
-            Editor.select(comp, contents['bar_id'], message.user)
+            Editor(composition, message.user).select(contents['bar_id'])
         elif contents['action'] == "deselect":
-            Editor.select(comp, message.user)
+            Editor(composition, message.user).deselect()
         elif contents['action'] == "delete_last":
             if composition.delete_last_bar() >= 0:
                 Group("comp-%s" % comp).send({
@@ -174,8 +185,10 @@ def ws_bar_receive(message, comp):
 
 @channel_session_user
 def ws_bar_disconnect(message, comp):
+    composition = Composition.objects.get(id=comp)
+
     Group("comp-%s" % comp).discard(message.reply_channel)
-    Editor.deselect(comp, message.user)
+    Editor(composition, message.user).deselect()
 
 
 def ws_notif_add(message, user):
