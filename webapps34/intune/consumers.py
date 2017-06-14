@@ -108,25 +108,25 @@ class Editor:
                 }),
             })
 
-    def delete_last(self):
+    def delete_last(self, **kwargs):
         bar : int = self.composition.delete_last_bar()
         if bar >= 0:
             self.send(bar, Editor.Action.DELETE)
 
-    def update(self, bar : int, contents : str):
+    def update(self, bar : int, contents : str, **kwargs):
         self.composition.set_bar(bar, contents)
         self.send(bar, Editor.Action.UPDATE, contents)
 
-    def append(self, contents : str):
+    def append(self, contents : str, **kwargs):
         bar : int= self.composition.append_bar(contents)
         self.send(bar, Editor.Action.APPEND, contents)
 
-    def select(self, bar : int):
+    def select(self, bar : int, **kwargs):
         self.deselect()
         Editor.compositions[self.composition][self.user.id] = bar
         self.send(bar, Editor.Action.SELECT)
 
-    def deselect(self):
+    def deselect(self, **kwargs):
         if self.composition in Editor.compositions:
             bar = Editor.compositions[self.composition].pop(self.user.id, -1)
             self.send(bar, Editor.Action.DESELECT)
@@ -156,27 +156,19 @@ def ws_bar_connect(message, comp):
 @channel_session_user
 def ws_bar_receive(message, comp):
     contents = json.loads(message.content['text'])
-    composition = Composition.objects.get(pk=comp)
-    comp_editor = Editor(composition, message.user)
+    comp_editor = Editor(Composition.objects.get(pk=comp), message.user)
 
-    if composition.has_access(message.user):
-        if contents['action'] == "update":
-            bar_contents = contents['bar_contents']
-            bar_id = int(contents['bar_id'])
+    action : str = contents.get('action', None)
+    bar_id : int = contents.get('bar_id', -1)
+    bar_contents : str = contents.get('bar_contents', "")
 
-            comp_editor.update(bar_id, bar_contents)
-        elif contents['action'] == "append":
-            bar_contents = contents['bar_contents']
-
-            comp_editor.append(bar_contents)
-        elif contents['action'] == "select":
-            comp_editor.select(contents['bar_id'])
-        elif contents['action'] == "deselect":
-            comp_editor.deselect()
-        elif contents['action'] == "delete_last":
-            comp_editor.delete_last()
-        else:
-            print("Invalid WebSocket composition request")
+    {
+        Editor.Action.UPDATE: comp_editor.update,
+        Editor.Action.APPEND: comp_editor.append,
+        Editor.Action.DELETE: comp_editor.delete_last,
+        Editor.Action.SELECT: comp_editor.select,
+        Editor.Action.DESELECT: comp_editor.deselect,
+    }[action](bar=bar_id, contents=bar_contents)
 
 
 @channel_session_user
