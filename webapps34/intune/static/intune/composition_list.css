@@ -1,0 +1,43 @@
+h2.title {
+    margin-bottom: 1em;
+}
+
+.composition-list {
+    padding: 1em 0 1em 0;
+}
+
+.btn-new-composition {
+    text-align: center;
+    vertical-align: middle;
+    margin: 1em 0 1em 0;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.composition-element {
+    background-color: var(--element_color);
+    margin: 1em 0 1em 0;
+    padding: 1em 1em 1em 1em;
+    border-radius: 10px;
+    vertical-align: middle;
+    color: var(--background_color);
+}
+
+.icon {
+    min-height: 80px;
+    line-height: 80px;
+    font-size: 35px;
+}
+
+.composition-title {
+    color: var(--background_color);
+    font-weight: 800;
+    font-size: 20px;
+}
+
+.actions {
+    text-align: right;
+}
