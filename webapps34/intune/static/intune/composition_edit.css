@@ -192,3 +192,17 @@ canvas.selected {
 .edit_users {
     margin: 10px;
 }
+
+
+/* Alignment CSS */
+.outer-vertical {
+    display: table;
+    position: inherit;
+    height: 100%;
+    width: 100%;
+}
+
+.middle-vertical {
+    display: table-cell;
+    vertical-align: middle;
+}
