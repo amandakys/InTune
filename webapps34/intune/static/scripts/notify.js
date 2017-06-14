@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var notification_count = $("#notification_count");
-    var user_id = notification_count.attr("data-user-id");
-    var socket = new WebSocket("ws://" + window.location.host + "/notif/" + user_id + "/");
+    var socket = new WebSocket("ws://" + window.location.host + "/notif/");
 
     socket.onmessage = function (e) {
         var data = JSON.parse(e.data);

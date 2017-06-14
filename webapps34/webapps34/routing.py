@@ -53,15 +53,10 @@ comment_routing = [
 
 notif_routing = [
     route("websocket.connect",
-          consumers.ws_notif_add,
-          path=r"^/(?P<user>\d+)/$"),
-
-    route("websocket.receive",
-          consumers.ws_notif_message),
+          consumers.ws_notif_add),
 
     route("websocket.disconnect",
-          consumers.ws_notif_disconnect,
-          path=r"^/(?P<user>\d+)/$"),
+          consumers.ws_notif_disconnect),
 ]
 
 channel_routing = [

@@ -172,18 +172,12 @@ def ws_bar_disconnect(message, comp):
     Editor(comp, message.user).deselect()
 
 
-def ws_notif_add(message, user):
+@channel_session_user_from_http
+def ws_notif_add(message):
     message.reply_channel.send({"accept": True})
-    Group("notif-%s" % user).add(message.reply_channel)
+    Group("notif-%s" % message.user.id).add(message.reply_channel)
 
 
-def ws_notif_message(message):
-    text = json.loads(message.content['text'])
-    user_id = text["user_id"]
-    Group("notif-%s" % user_id).send({
-        "text": text
-    })
-
-
-def ws_notif_disconnect(message, user):
-    Group("notif-%s" % user).discard(message.reply_channel)
+@channel_session_user
+def ws_notif_disconnect(message):
+    Group("notif-%s" % message.user.id).discard(message.reply_channel)
