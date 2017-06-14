@@ -10,7 +10,7 @@ $(document).ready(function () {
     window.BarComment = (function () {
         "use strict";
 
-        var comment_div = $("#comment-table");
+        var comment_div = $("#comment-block");
         var room_id = comment_div.attr("data-room-id");
         var username = comment_div.attr("data-username");
         var user_id = comment_div.attr("data-user-id");
@@ -70,8 +70,8 @@ $(document).ready(function () {
             var comment_form = $("#comment_form");
 
             // Reset comment display
-            $("#comment-list").empty();
-            var comments = $.getJSON($("#comment-table").attr("data-ajax-target"),
+            $("#comment-block").empty();
+            var comments = $.getJSON($("#comment-block").attr("data-ajax-target"),
                 {
                     composition: comment_form.attr("data-composition-id"),
                     bar: current_bar
@@ -100,22 +100,32 @@ $(document).ready(function () {
          */
         function _display_new_comment(comment_json) {
             // Create new row in table
-            var commenter = document.createElement("td");
-            commenter.innerHTML = comment_json["commenter"];
-            var comment = document.createElement("td");
-            comment.innerHTML = comment_json["comment"];
+            var comment = document.createElement("p");
 
-            var date = document.createElement("td");
+            // Commenter
+            var commenter = document.createElement("span");
+            commenter.setAttribute("class", "comment-user");
+            commenter.innerHTML = comment_json["commenter"] + ": ";
+            // Text
+            var text = document.createElement("span");
+            text.setAttribute("class", "comment-text");
+            text.innerHTML = comment_json["comment"];
+
+            comment.appendChild(commenter);
+            comment.appendChild(text);
+
+            var date = document.createElement("p");
+            date.setAttribute("class", "comment-date");
             var time = new Date(comment_json.time);
             var hours = ('0' + time.getHours()).slice(-2);
             var min = ('0' + time.getMinutes()).slice(-2);
             date.innerHTML = hours + ":" + min + " " + time.toDateString();
 
-            var comment_row = document.createElement("tr");
-            comment_row.appendChild(commenter);
+            var comment_row = document.createElement("div");
+            comment_row.setAttribute("class", "comment-element");
             comment_row.appendChild(comment);
             comment_row.appendChild(date);
-            $("#comment-list").prepend(comment_row);
+            $("#comment-block").prepend(comment_row);
         }
 
         return {

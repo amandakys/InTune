@@ -128,32 +128,16 @@
                       class="form-inline" data-composition-id="{{ composition.id }}"
                       autocomplete="off">
                     {% csrf_token %}
-                    <input type="text" id="comment_text" class="form-control" placeholder="Write a comment"
-                           required/>
+                    <input type="text" id="comment_text" class="form-control"
+                           placeholder="Write a comment" required/>
                     {% buttons %}
-                        <button type="submit" class="btn btn-dark">Add Comment</button>
+                        <button type="submit" class="btn btn-light btn-xs">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
                     {% endbuttons %}
                 </form>
 
-                <div class="table-responsive" id="comment-table"
-                     data-room-id="{{ composition.id }}"
-                     data-username="{{ user.username }}"
-                     data-ajax-target="{% url 'intune:comments' %}"
-                     data-user-id="{{ user.id }}">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Comment</th>
-                            <th>Date</th>
-                        </tr>
-                        </thead>
-                        <tbody id="comment-list">
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="comments"
+                <div id="comment-block" class="comment-block"
                      data-room-id="{{ composition.id }}"
                      data-username="{{ user.username }}"
                      data-ajax-target="{% url 'intune:comments' %}"

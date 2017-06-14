@@ -143,29 +143,36 @@ canvas.selected {
     justify-content: space-between;
 }
 
-.comment-element {
-    background: transparent;
-    padding-top: 10px;
-    padding-bottom: 30px;
-    padding-right: 20px;
-    margin-bottom: 1%;
-    line-height: 20px;
-    min-height:20px;
-    color: grey;
-    border-bottom: #e0e0e0 dotted;
+/* Comment Styles */
+.comment-block {
+    background: #faffff;
+    word-wrap: break-word;
+    padding: 1em 1em 1em 1em;
 }
 
-.comment.col-sm-4 {
-    text-align: right;
+.comment-element {
+    background: transparent;
+    border-bottom: 1px solid #515151;
 }
+
+.comment-user {
+    font-weight: bold;
+}
+
+.comment-text {
+    color: #00bebe;
+}
+
+.comment-date {
+    color: grey;
+    font-size: x-small;
+    line-height: 0;
+}
+
 
 /* Button */
 .btn-group.top-padded {
     padding-top: 15px;
-}
-
-button.guide {
-
 }
 
 #chatbox-dropdown {
