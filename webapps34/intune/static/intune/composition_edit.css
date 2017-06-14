@@ -74,7 +74,7 @@ span.canvas-outer {
 }
 
 span.selected {
-    box-shadow: 0 0 10px #ffd250;
+    box-shadow: 0 0 10px #34C1C8;
     border-radius: 5px;
 }
 
@@ -84,7 +84,7 @@ span.render-error {
 }
 
 span.oth-user {
-    box-shadow: 0 0 10px #78b3be;
+    box-shadow: 0 0 10px #FFA768;
     border-radius: 5px;
 }
 
@@ -122,7 +122,7 @@ canvas.selected {
     min-height: 200px;
     border-top: 2px solid #656565;
     /* Standard syntax */
-    background: #FFF5EF linear-gradient(#e5ff8b 1%, #fafff3 5%);
+    background: #FFF5EF linear-gradient(#c8ffe2 1%, #fbfffa 3%);
     display: flex;
     align-items: center;
 }
