@@ -15,9 +15,9 @@ def ws_chat_add(message, comp):
 
 
 # Connected to websocket.receive
-def ws_chat_message(message):
+def ws_chat_message(message, comp):
     text = json.loads(message.content['text'])
-    room_id = text['room']
+    room_id = comp
     user_id = text['user']
     msg = text['msg']
     sender_name = Profile.objects.get(id=user_id).user.username
@@ -38,10 +38,8 @@ def ws_chat_message(message):
 
 
 # Connected to websocket.disconnect
-def ws_chat_disconnect(message):
-    text = json.loads(message.content['text'])
-    group_postfix = text["room"]
-    Group("chat-%s" % group_postfix).discard(message.reply_channel)
+def ws_chat_disconnect(message, comp):
+    Group("chat-%s" % comp).discard(message.reply_channel)
 
 
 def ws_comment_add(message, comp):
@@ -50,9 +48,9 @@ def ws_comment_add(message, comp):
     Group("comment-%s" % comp).add(message.reply_channel)
 
 
-def ws_comment_message(message):
+def ws_comment_message(message, comp):
     text = json.loads(message.content['text'])
-    room_id = text['room']
+    room_id = comp
     user_id = text['user']
     msg = text['msg']
     sender_name = Profile.objects.get(id=user_id).user.username
@@ -74,10 +72,8 @@ def ws_comment_message(message):
     })
 
 
-def ws_comment_disconnect(message):
-    text = json.loads(message.content['text'])
-    group_postfix = text["room"]
-    Group("comment-%s" % group_postfix).discard(message.reply_channel)
+def ws_comment_disconnect(message, comp):
+    Group("comment-%s" % comp).discard(message.reply_channel)
 
 
 class Selection:

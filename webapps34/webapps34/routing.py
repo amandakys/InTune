@@ -14,10 +14,12 @@ chat_routing = [
           path=r"^/(?P<comp>\d+)/$"),
 
     route("websocket.receive",
-          consumers.ws_chat_message),
+          consumers.ws_chat_message,
+          path=r"^/(?P<comp>\d+)/$"),
 
     route("websocket.disconnect",
-          consumers.ws_chat_disconnect),
+          consumers.ws_chat_disconnect,
+          path=r"^/(?P<comp>\d+)/$"),
 ]
 
 bar_routing = [
@@ -41,10 +43,12 @@ comment_routing = [
           path=r"^/(?P<comp>\d+)/$"),
 
     route("websocket.receive",
-          consumers.ws_comment_message),
+          consumers.ws_comment_message,
+          path=r"^/(?P<comp>\d+)/$"),
 
     route("websocket.disconnect",
-          consumers.ws_comment_disconnect),
+          consumers.ws_comment_disconnect,
+          path=r"^/(?P<comp>\d+)/$"),
 ]
 
 notif_routing = [
