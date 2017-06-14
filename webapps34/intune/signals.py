@@ -1,32 +1,33 @@
+from channels import Group
+from django.db.models.signals import m2m_changed
 import json
 import sys
-from django.db.models.signals import m2m_changed
 
 from .models import Composition, Notification
-from channels import Group
 
+def user_added(**kwargs):
+    action = kwargs['action']
+    if (action == "pre_add") or (action == "pre_remove"):
+        return
 
-def user_added(sender, **kwargs):
     composition = kwargs['instance']
     model = kwargs['model']
     profile_ids = kwargs['pk_set']
-    msg = "%s shared composition '%s' with you!" %\
-          (composition.owner.user.username, composition.title)
 
-    try:
-        notification = Notification.objects.get(composition=composition)
-    except Notification.DoesNotExist:
-        notification = Notification.objects.create(composition=composition, msg=msg)
+    msg = "%s %s %s" % (str(composition.owner.user),
+                        "shared" if action == "post_add" else "removed",
+                        str(composition))
 
-    for id in profile_ids:
-        if not notification.recipients.filter(id=id):
-            profile = model.objects.get(id=id)
-            notification.recipients.add(profile)
-            Group("notif-%s" % profile.id).send({
-                "text": json.dumps({
-                    "msg": str(msg) + str(profile.id),
-                })
-            })
+    notification = Notification.objects.create(composition=composition, msg=msg)
+
+    for pid in profile_ids:
+        profile = model.objects.get(id=pid)
+        notification.recipients.add(profile)
+
+        Group("notif-%s" % profile.id).send({
+            "text": json.dumps({
+                "msg": str(msg),})
+        })
 
 if 'test' not in sys.argv:
     m2m_changed.connect(user_added, sender=Composition.users.through)
