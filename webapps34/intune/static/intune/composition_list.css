@@ -38,6 +38,11 @@ h2.title {
     font-size: 20px;
 }
 
+.composition-title:hover {
+    color: var(--darker_color);
+    text-decoration: none;
+}
+
 .actions {
     text-align: right;
 }

@@ -1,36 +1,38 @@
 /* Base Colours */
 :root {
     --background_color: #FFFFFF;
-    --nav_back_color: #FFFFFF;
     --element_color: #34CABF;
-    --light_color: #FFBD83;
+    --light_color: #3ff4e8;
     --dark_color: #13BBAF;
     --darker_color: #005C55;
 }
 
 /* Overriding navbar defaults for consistent navbar behaviour */
 .navbar-default {
-    background-color: var(--nav_back_color);
+    /* Compatibility */
+    background: #005C55;
+    /* Standard syntax */
+    background: linear-gradient(to bottom right, var(--darker_color), var(--dark_color));
     border-radius: 0;
     border-bottom: 2px solid #252525;
 }
 
 .navbar-default .navbar-brand {
     font-weight: 900;
-    color: var(--element_color);
+    color: var(--background_color);
 }
 
 .navbar-default .navbar-brand:hover {
-    color: var(--dark_color);
+    color: var(--light_color);
 }
 
 .navbar-default .navbar-nav > li > a {
-    color: var(--element_color);
+    color: var(--background_color);
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    color: var(--dark_color);
+    color: var(--light_color);
 }
 
 body {
