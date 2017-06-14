@@ -68,7 +68,7 @@ $(document).ready(function () {
 
             // Reset comment display
             $("#comment-block").empty();
-            var comments = $.getJSON($("#comment-block").attr("data-ajax-target"),
+            $.getJSON($("#comment-block").attr("data-ajax-target"),
                 {
                     composition: comment_form.attr("data-composition-id"),
                     bar: current_bar

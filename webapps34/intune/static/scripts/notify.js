@@ -4,7 +4,6 @@ $(document).ready(function () {
     var socket = new WebSocket("ws://" + window.location.host + "/notif/" + user_id + "/");
 
     socket.onmessage = function (e) {
-        var data = e.data
         var current_unread = notification_count.html();
         if (current_unread) {
                 current_unread = parseInt(current_unread);

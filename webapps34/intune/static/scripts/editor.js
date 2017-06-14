@@ -370,12 +370,12 @@ $(document).ready(function () {
         var v = input_field.val();
         var textBefore = v.substring(0, cursorPos);
         var textAfter  = v.substring(cursorPos, v.length);
-        var hint_text = $(this).attr("data-text")
+        var hint_text = $(this).attr("data-text");
         input_field.val(textBefore + hint_text + textAfter);
 
         // refocus on text input and make cursor point to where we left off
         input_field.focus();
-        var new_pos = cursorPos + hint_text.length
+        var new_pos = cursorPos + hint_text.length;
         input_field[0].selectionStart = new_pos;
         input_field[0].selectionEnd = new_pos;
     });
