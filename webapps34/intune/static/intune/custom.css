@@ -13,10 +13,6 @@
     background-color: var(--nav_back_color);
     border-radius: 0;
     border-bottom: 2px solid #252525;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 2;
 }
 
 .navbar-default .navbar-brand {
@@ -37,34 +33,9 @@
     color: var(--dark_color);
 }
 
-.composition-element {
-    background-color: var(--element_color);
-    padding-top: 20px;
-    padding-bottom: 10px;
-    padding-right: 20px;
-    margin-bottom: 1%;
-    border-radius: 10px;
-    line-height: 20px;
-    color: var(--background_color);
-    /*min-height: 100px;*/
-
-}
-
-.row {
-    padding-left: 2.5%;
-}
-
-.container {
-    padding-right: 5%;
-    padding-left: 5%;
-    width: 100%;
-}
-
 body {
-    padding-top: 60px;
     background-color: var(--background_color);
-    width: 100%;
-    height: 100%;
+    margin-top: 60px;
 }
 
 ul {
@@ -117,38 +88,6 @@ form label {
 .form-control:focus {
     border-color: var(--element_color);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element_color);
-}
-
-.glyphicon-music {
-    min-height: 100px;
-    line-height: 100px;
-    font-size: 35px;
-    width: 1em;
-    display: block;
-    top: 50%;
-    bottom: 50%;
-    margin: -0.5em auto 0;
-}
-
-.info.col-sm-8 {
-    margin-top: 12px;
-    text-align: left;
-}
-
-.info.col-sm-8 li a {
-    color: var(--background_color);
-    font-weight: 800;
-    font-size: 20px;
-
-}
-
-.icon.col-sm-2 {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.edit.col-sm-2 {
-    margin-top: -5px;
 }
 
 .render.col-sm-12 {
@@ -209,11 +148,6 @@ form label {
     background-color: #2fb1b1;
 }
 
-.btn-new-composition {
-    text-align: center;
-    margin-bottom: 3%;
-}
-
 .btn.btn-fill {
     color: var(--background_color);
     background-color: #888888;
@@ -256,18 +190,6 @@ form label {
     [class*="col-sm-"] {
         width: 100%;
         text-align: center;
-    }
-
-    .info.col-sm-8 {
-        text-align: center;
-    }
-
-    .composition-element {
-        padding-bottom: 20px;
-    }
-
-    .glyphicon-music {
-        min-height: inherit;
     }
 }
 
