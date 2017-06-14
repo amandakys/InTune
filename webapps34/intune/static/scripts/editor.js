@@ -140,7 +140,6 @@ $(document).ready(function () {
                     _update_bar_div(data.bar_id, data.bar_contents)
                 } else if (data.bar_mod === "append") {
                     _receive_append_bar(data.bar_contents)
-
                 } else if (data.bar_mod === "select") {
                     if (data.user !== user_id)
                         _oth_user_select(data.bar_id);
@@ -157,7 +156,7 @@ $(document).ready(function () {
                 } else if (data.bar_mod === "delete_last") {
                     var to_remove = bar_count - 1;
 
-                    _deselect(to_remove);
+                    $("#bar_outer_" + to_remove).removeClass("selected");
                     if (current_bar === bar_count) {
                         // Last bar removed, go to previous
                         current_bar = bar_count - 1;
@@ -209,7 +208,7 @@ $(document).ready(function () {
 
         function _deselect(bar_id) {
             if (bar_id >= 0) {
-                $("#bar_outer_" + current_bar).removeClass("selected");
+                $("#bar_outer_" + bar_id).removeClass("selected");
                 _save_bar(bar_id);
             }
         }
@@ -327,7 +326,7 @@ $(document).ready(function () {
                     // Submit
                     socket.send(JSON.stringify({
                         'action': "update",
-                        'bar_id': current_bar,
+                        'bar_id': bar_id,
                         'bar_contents': vt_json["notes"]
                     }));
                 } else {
