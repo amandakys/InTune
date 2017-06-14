@@ -33,7 +33,6 @@ var Render = (function () {
             if (vex_string === "") {
                 vex_string = DEFAULT_OPTIONS + DEFAULT_STAVE;
             }
-            // console.log("Parsing:\n" + vex_string);
             vextab.parse(vex_string);
             artist.render(renderer);
             $("#edit_error").text("");

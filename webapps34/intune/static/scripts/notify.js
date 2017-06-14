@@ -5,15 +5,10 @@ $(document).ready(function () {
 
     socket.onmessage = function (e) {
         var data = e.data
-        console.log("recevied notif ", data);
         var current_unread = notification_count.html();
         if (current_unread) {
                 current_unread = parseInt(current_unread);
             }
         notification_count.html(current_unread + 1);
     };
-
-    socket.onopen = function() {
-        console.log("connected!!", socket);
-    }
 });

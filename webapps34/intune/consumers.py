@@ -13,7 +13,6 @@ from .models import ChatMessage, Composition, Profile, Comment, Notification
 def ws_chat_add(message, comp):
     # Accept the connection
     message.reply_channel.send({"accept": True})
-    print("connected to ", "chat-%s" %comp)
     Group("chat-%s" % comp).add(message.reply_channel)
 
 
@@ -32,7 +31,6 @@ def ws_chat_message(message):
     )
 
     group_postfix = room_id
-    print("sending msg to ", group_postfix)
     Group("chat-%s" % group_postfix).send({
         "text": json.dumps({
             "user": str(sender_name),
@@ -45,7 +43,6 @@ def ws_chat_message(message):
 def ws_chat_disconnect(message):
     text = json.loads(message.content['text'])
     group_postfix = text["room"]
-    print("disconnecting from ", group_postfix)
     Group("chat-%s" % group_postfix).discard(message.reply_channel)
 
 
@@ -70,7 +67,6 @@ def ws_comment_message(message):
     )
 
     group_postfix = room_id
-    print("sending msg to  comment ", group_postfix)
     Group("comment-%s" % group_postfix).send({
         "text": json.dumps({
             "user": str(sender_name),
@@ -83,7 +79,6 @@ def ws_comment_message(message):
 def ws_comment_disconnect(message):
     text = json.loads(message.content['text'])
     group_postfix = text["room"]
-    print("disconnecting from ", group_postfix)
     Group("comment-%s" % group_postfix).discard(message.reply_channel)
 
 

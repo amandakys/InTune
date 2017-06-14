@@ -45,7 +45,6 @@ $( document ).ready(function() {
     $("#chat-dropdown-toggle").click(function() {
         // set unread chat count to zero when chat is opened
         if ($("#chat-dropdown").hasClass("open")) {
-            console.log("chat is opened");
             unread_chat.html("");
         }
     });

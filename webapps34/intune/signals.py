@@ -10,7 +10,6 @@ def user_added(sender, **kwargs):
     composition = kwargs['instance']
     model = kwargs['model']
     profile_ids = kwargs['pk_set']
-    print("profile ids", profile_ids)
     msg = composition.owner.user.username + ' shared composition "' + composition.title + '" with you!'
 
     try:
@@ -23,7 +22,6 @@ def user_added(sender, **kwargs):
             profile = model.objects.get(id=id)
             notification.recipients.add(profile)
             username = profile.user.username
-            print("send notif to ", username)
             Group("notif-%s" % profile.id).send({
                 "text": json.dumps({
                     "msg": str(msg) + str(profile.id),

@@ -21,7 +21,6 @@ $(document).ready(function () {
         // refresh comments page
         socket.onmessage = function (e) {
             var data = JSON.parse(e.data);
-            console.log("received comment ", data);
 
             // only show comment if its for current bar
             if (parseInt(data.bar) === Editor.get_current_bar()) {
@@ -56,7 +55,6 @@ $(document).ready(function () {
                 socket.send(JSON.stringify(msg));
                 event.preventDefault();
                 comment_text.val("");
-                // console.log("sending comment ", socket, msg);
             });
         };
 
@@ -66,7 +64,6 @@ $(document).ready(function () {
          * @private
          */
         function _retrieve_comments(current_bar) {
-            console.log("retrieving comments...");
             var comment_form = $("#comment_form");
 
             // Reset comment display
