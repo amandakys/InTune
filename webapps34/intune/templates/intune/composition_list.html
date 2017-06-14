@@ -18,6 +18,7 @@
 
 {% block content %}
 
+<div class="container">
 <h2 class="title">Your Compositions</h2>
 <div class="btn-new-composition">
     <a href="{% url 'intune:song_create' %}">
@@ -56,7 +57,8 @@
 {% endfor %}
 </div>
 {% else %}
-    <h3 style="text-align: center">You have no compositions :(</h3>
+<h3 style="text-align: center">You have no compositions :(</h3>
 {% endif %}
+</div>
 
 {% endblock content %}

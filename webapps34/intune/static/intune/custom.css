@@ -9,10 +9,7 @@
 
 /* Overriding navbar defaults for consistent navbar behaviour */
 .navbar-default {
-    /* Compatibility */
     background: #005C55;
-    /* Standard syntax */
-    background: linear-gradient(to bottom right, var(--darker_color), var(--dark_color));
     border-radius: 0;
     border-bottom: 2px solid #252525;
 }
@@ -186,13 +183,6 @@ form label {
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: 0 !important;
-}
-
-@media (max-width: 768px) {
-    [class*="col-sm-"] {
-        width: 100%;
-        text-align: center;
-    }
 }
 
 @media print {
