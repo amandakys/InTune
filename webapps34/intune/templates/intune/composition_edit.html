@@ -30,48 +30,62 @@
             <a href="{% url 'intune:song' composition.id %}" class="btn btn-default">View Composition</a>
         </div>
         <div class="col-sm-6 text-right">
-            <div class="dropdown">
-                {# Sharing Composition #}
+            {# Sharing Composition #}
+            <div class="btn-group">
                 {% if composition.owner.user == request.user %}
-                    <button type="button" class="btn btn-default dropdown-toggle"
-                            id="share_button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Share
-                        <span class="caret"></span>
-                    </button>
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        id="share_button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    Share
+                    <span class="caret"></span>
+                </button>
                 {% endif %}
 
                 <div class="dropdown-menu" aria-labelledby="share_actions">
                     <form method="post" action="" id="shared-users-add">
                         {% csrf_token %}
                         <div class="edit_users">
-                            <h6 class="container">Add/Remove shared users:</h6>
+                            <h6>Add/Remove shared users:</h6>
                             {{ form.users }}
                         </div>
-                        <div class="container">
-                            <button type="submit" class="btn btn-default">
-                                Save
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-default">
+                            Save
+                        </button>
                     </form>
                 </div>
+            </div>
 
-                {# Print Composition #}
-                <button type="button" class="btn btn-default"
-                        onclick="window.print();return false;">
-                    Print sheets
-                </button>
+            {# Print Composition #}
+            <button type="button" class="btn btn-default" onclick="window.print();return false;">
+                Print sheets
+            </button>
 
-                <button class="btn btn-default" id="chat-dropdown-toggle"
-                        type="button">
-                    <span class="glyphicon glyphicon-comment"></span>
-                    <span id="unread_chats" class="badge"></span>
-                    <span class="caret"></span>
-                </button>
-                <div id="chat-dropdown" class="container dropdown">
-                    <div class="dropdown-menu" id="chatbox-dropdown">
-                        {% include "intune/chatroom.html" %}
-                    </div>
+            {# Chatbox #}
+{#            <div class="btn-group">#}
+{#                <button type="button" class="btn btn-default dropdown-toggle"#}
+{#                        id="chat-dropdown-toggle" data-toggle="dropdown"#}
+{#                        aria-haspopup="true" aria-expanded="false">#}
+{#                    <span class="glyphicon glyphicon-comment"></span>#}
+{#                    <span id="unread_chats" class="badge"></span>#}
+{#                    <span class="caret"></span>#}
+{#                </button>#}
+{##}
+{#                <div id="chat-dropdown" class="dropdown-menu" aria-labelledby="chatbox">#}
+{#                    <div class="dropdown-menu" id="chatbox-dropdown">#}
+{#                    {% include "intune/chatroom.html" %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+            <button class="btn btn-default" id="chat-dropdown-toggle"
+                    type="button">
+                <span class="glyphicon glyphicon-comment"></span>
+                <span id="unread_chats" class="badge"></span>
+                <span class="caret"></span>
+            </button>
+            <div id="chat-dropdown" class="dropdown">
+                <div class="dropdown-menu" id="chatbox-dropdown">
+                {% include "intune/chatroom.html" %}
                 </div>
             </div>
         </div>
