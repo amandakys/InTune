@@ -10,7 +10,8 @@ def user_added(sender, **kwargs):
     composition = kwargs['instance']
     model = kwargs['model']
     profile_ids = kwargs['pk_set']
-    msg = composition.owner.user.username + ' shared composition "' + composition.title + '" with you!'
+    msg = "%s shared composition '%s' with you!" %\
+          (composition.owner.user.username, composition.title)
 
     try:
         notification = Notification.objects.get(composition=composition)
@@ -27,5 +28,5 @@ def user_added(sender, **kwargs):
                 })
             })
 
-if not 'test' in sys.argv:
+if 'test' not in sys.argv:
     m2m_changed.connect(user_added, sender=Composition.users.through)

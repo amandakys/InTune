@@ -9,28 +9,55 @@ http_routing = [
 ]
 
 chat_routing = [
-    route("websocket.connect", consumers.ws_chat_add, path=r"^/(?P<comp>\d+)/$"),
-    route("websocket.receive", consumers.ws_chat_message),
-    route("websocket.disconnect", consumers.ws_chat_disconnect),
+    route("websocket.connect",
+          consumers.ws_chat_add,
+          path=r"^/(?P<comp>\d+)/$"),
+
+    route("websocket.receive",
+          consumers.ws_chat_message),
+
+    route("websocket.disconnect",
+          consumers.ws_chat_disconnect),
 ]
 
 bar_routing = [
-    route("websocket.connect", consumers.ws_bar_connect, path=r"^/(?P<comp>\d+)/$"),
-    route("websocket.receive", consumers.ws_bar_receive, path=r"^/(?P<comp>\d+)/$"),
-    route("websocket.disconnect", consumers.ws_bar_disconnect, path=r"^/(?P<comp>\d+)/$"),
+    route("websocket.connect",
+          consumers.ws_bar_connect,
+          path=r"^/(?P<comp>\d+)/$"),
+
+    route("websocket.receive",
+          consumers.ws_bar_receive,
+          path=r"^/(?P<comp>\d+)/$"),
+
+    route("websocket.disconnect",
+          consumers.ws_bar_disconnect,
+          path=r"^/(?P<comp>\d+)/$"),
 ]
 
 
 comment_routing = [
-    route("websocket.connect", consumers.ws_comment_add, path=r"^/(?P<comp>\d+)/$"),
-    route("websocket.receive", consumers.ws_comment_message),
-    route("websocket.disconnect", consumers.ws_comment_disconnect),
+    route("websocket.connect",
+          consumers.ws_comment_add,
+          path=r"^/(?P<comp>\d+)/$"),
+
+    route("websocket.receive",
+          consumers.ws_comment_message),
+
+    route("websocket.disconnect",
+          consumers.ws_comment_disconnect),
 ]
 
 notif_routing = [
-    route("websocket.connect", consumers.ws_notif_add, path=r"^/(?P<user>\d+)/$"),
-    route("websocket.receive", consumers.ws_notif_message),
-    route("websocket.disconnect", consumers.ws_notif_disconnect, path=r"^/(?P<user>\d+)/$"),
+    route("websocket.connect",
+          consumers.ws_notif_add,
+          path=r"^/(?P<user>\d+)/$"),
+
+    route("websocket.receive",
+          consumers.ws_notif_message),
+
+    route("websocket.disconnect",
+          consumers.ws_notif_disconnect,
+          path=r"^/(?P<user>\d+)/$"),
 ]
 
 channel_routing = [

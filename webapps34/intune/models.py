@@ -78,7 +78,8 @@ class Composition(models.Model):
 
 
 class ChatMessage(models.Model):
-    room = models.ForeignKey(Composition, related_name='room', on_delete=models.CASCADE)
+    room = models.ForeignKey(Composition, related_name='room',
+                             on_delete=models.CASCADE)
     msg = models.CharField(max_length=200)
     sender = models.ForeignKey(Profile, related_name='sender', default=1)
     time = models.DateTimeField(auto_now_add=True)

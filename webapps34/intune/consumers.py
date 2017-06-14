@@ -132,7 +132,6 @@ def ws_bar_connect(message, comp):
 def ws_bar_receive(message, comp):
     contents = json.loads(message.content['text'])
     composition = Composition.objects.get(pk=comp)
-    #message.reply_channel.send({"text": json.dumps({"msg": "hello"})})
 
     if composition.has_access(message.user):
         if contents['action'] == "update":
@@ -162,7 +161,7 @@ def ws_bar_receive(message, comp):
         elif contents['action'] == "deselect":
             Selection.select(comp, message.user)
         elif contents['action'] == "delete_last":
-            if composition.delete_last_bar() >=0:
+            if composition.delete_last_bar() >= 0:
                 Group("comp-%s" % comp).send({
                     "text": json.dumps({
                         "bar_mod": "delete_last",
@@ -192,4 +191,4 @@ def ws_notif_message(message):
 
 
 def ws_notif_disconnect(message, user):
-    Group("notif-%s" % user).discard(message.reply_channel);
+    Group("notif-%s" % user).discard(message.reply_channel)
