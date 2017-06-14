@@ -1,9 +1,8 @@
 import datetime
-from django.test import Client, TestCase, RequestFactory
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from intune import views
-from intune.models import Composition, User, Profile
+from .models import Composition, User, Profile
 
 
 class ViewTests(TestCase):

@@ -2,9 +2,7 @@ from channels import Group
 from channels.auth import channel_session_user, channel_session_user_from_http
 import json
 
-from django.contrib.auth.models import User
-
-from .models import ChatMessage, Composition, Profile, Comment, Notification
+from .models import ChatMessage, Composition, Profile, Comment
 
 # TODO: Check user permissions
 

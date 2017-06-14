@@ -2,7 +2,7 @@ import json
 import sys
 from django.db.models.signals import m2m_changed
 
-from intune.models import Composition, Notification
+from .models import Composition, Notification
 from channels import Group
 
 

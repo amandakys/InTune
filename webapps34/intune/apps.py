@@ -5,5 +5,5 @@ class IntuneConfig(AppConfig):
     name = 'intune'
 
     def ready(self):
-        import intune.signals
+        from . import signals
 

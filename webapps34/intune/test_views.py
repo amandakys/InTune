@@ -3,7 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from hamcrest import assert_that, has_entries
 
-from intune.models import Composition, Profile
+from .models import Composition, Profile
 
 
 class CompositionViewTests(TestCase):

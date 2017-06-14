@@ -6,7 +6,7 @@ from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views import generic
 
-from intune.models import Composition, Profile, ChatMessage, Comment, Notification
+from .models import Composition, Profile, ChatMessage, Comment, Notification
 
 
 class CompositionList(generic.ListView):
