@@ -44,9 +44,31 @@ def ws_chat_disconnect(message, comp):
     Group("chat-%s" % comp).discard(message.reply_channel)
 
 
+class CommentHandler:
+    def __init__(self, composition_id: int, user: User):
+        comp = Composition.objects.get(id=composition_id)
+        self.user = user
+        self.composition = comp if comp.has_access(user) else None
+
+    def receive(self, bar: int, message: str):
+        Comment.objects.create(
+            composition=self.composition,
+            comment=message,
+            bar=bar,
+            commenter=self.user.profile,
+        )
+        Group("comment-%s" % self.composition.id).send({
+            "text": json.dumps({
+                "user": str(self.user),
+                "msg": message,
+                "bar": bar,
+            })
+        })
+
+
 @channel_session_user_from_http
 def ws_comment_add(message, comp):
-    # Accept the connection
+    CommentHandler(comp, message.user)  # Check has_access
     message.reply_channel.send({"accept": True})
     Group("comment-%s" % comp).add(message.reply_channel)
 
@@ -54,26 +76,7 @@ def ws_comment_add(message, comp):
 @channel_session_user
 def ws_comment_message(message, comp):
     text = json.loads(message.content['text'])
-    room_id = comp
-    user_id = message.user.id
-    msg = text['msg']
-    sender_name = Profile.objects.get(id=user_id).user.username
-    bar_id = text['bar']
-    Comment.objects.create(
-        composition=Composition.objects.get(id=room_id),
-        comment=msg,
-        bar=bar_id,
-        commenter=Profile.objects.get(id=user_id)
-    )
-
-    group_postfix = room_id
-    Group("comment-%s" % group_postfix).send({
-        "text": json.dumps({
-            "user": str(sender_name),
-            "msg": str(msg),
-            "bar": bar_id
-        })
-    })
+    CommentHandler(comp, message.user).receive(text['bar'], text['msg'])
 
 
 @channel_session_user
@@ -141,12 +144,15 @@ class Editor:
 
 @channel_session_user_from_http
 def ws_bar_connect(message, comp):
+    # This enforces Composition.has_access
+    selection = Editor(comp, message.user).get_selection()
+
     message.reply_channel.send({"accept": True})
     Group("comp-%s" % comp).add(message.reply_channel)
     message.reply_channel.send({
         "text": json.dumps({
             "bar_mod": "fresh_selects",
-            "selection": Editor(comp, message.user).get_selection(),
+            "selection": selection,
         }),
     })
 
