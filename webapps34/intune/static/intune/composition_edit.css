@@ -145,14 +145,17 @@ canvas.selected {
 
 /* -- Comment Styles -- */
 .comment-block {
-    background: #faffff;
+    background: #f7f7f7;
     word-wrap: break-word;
     padding: 1em 1em 1em 1em;
+    margin-bottom: 30px;
+    border-radius: 10px;
 }
 
 .comment-element {
     background: transparent;
-    border-bottom: 1px solid #515151;
+    border-bottom: 1px solid #d2d2d2;
+    padding: 3px;
 }
 
 .comment-user {
