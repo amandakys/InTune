@@ -12,6 +12,6 @@ channel_routing = [
     route_class(consumers.ChatConsumer, path=r"^/chat/(?P<comp>\d+)/$"),
     route_class(consumers.EditorConsumer, path=r"^/ws_comp/(?P<comp>\d+)/$"),
     route_class(consumers.CommentConsumer, path=r"^/comment/(?P<comp>\d+)/$"),
-    route_class(consumers.NotificationConsumer, path=r"^/notif/$"),
+    route_class(consumers.NotificationConsumer, path=r"^/notifications/$"),
     include(http_routing),
 ]

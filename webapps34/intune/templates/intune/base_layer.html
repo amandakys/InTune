@@ -32,7 +32,7 @@
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'intune:index' %}">{{ request.user.username }}</a></li>
                     <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS
-                        <span id="notification_count" class="badge"
+                        <span id="notification_counter" class="badge"
                               data-user-id = "{{ request.user.id }}"></span>
                     </a></li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>

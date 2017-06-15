@@ -166,4 +166,13 @@ class NotificationConsumer(WebsocketConsumer):
     http_user = True
 
     def connection_groups(self, **kwargs):
-        return ["notif-%s" % self.message.user.id]
+        return ["notify-%s" % self.message.user.id]
+
+    def connect(self, message, **kwargs):
+        self.message.reply_channel.send({"accept": True})
+        self.message.reply_channel.send({
+            "text": json.dumps({
+                "action": "unread_count",
+                "unread": self.message.user.profile.unread_notifications,
+            }),
+        })
