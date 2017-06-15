@@ -153,12 +153,15 @@
 
 {# Right Column #}
 <div class="col-xl-2 col-md-2 col-sm-4"></div>
-
 </div>
 
 {% endblock content %}
 
 {# --- Editor Interface --- #}
 {% block aux %}
+<button id="toggle-editor" class="btn btn-default"
+        data-toggle="collapse" data-target="#editor-collapse"></button>
+<div id="editor-collapse" class="collapse in">
 {% include 'intune/editor.html' %}
+</div>
 {% endblock aux %}

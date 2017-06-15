@@ -207,3 +207,23 @@ div.canvas-block {
     position: -webkit-sticky;
     top: 60px;
 }
+
+#toggle-editor.collapsed {
+    position: fixed;
+    bottom: 5px;
+    right: 20px;
+}
+
+#toggle-editor.collapsed::before {
+    content: 'View Editor';
+}
+
+#toggle-editor {
+    position: fixed;
+    bottom: 200px;
+    right: 20px;
+}
+
+#toggle-editor::before {
+    content: 'Hide Editor';
+}
