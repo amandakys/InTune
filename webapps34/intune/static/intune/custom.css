@@ -57,34 +57,12 @@ li {
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--element-dark);
-}
-
-.login {
-    margin-left: 5%;
-}
-
-h1, h2 {
     text-align: center;
 }
 
 form label {
     color: var(--element);
 }
-
-.login.buttons {
-    overflow: hidden;
-}
-
-.login.buttons:first-child {
-    float: left;
-}
-
-.login.buttons:nth-child(2) {
-    float: left;
-}
-
-.create {
-    margin-left: 5%;
 }
 
 .create label {
@@ -97,16 +75,8 @@ form label {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element);
 }
 
-.render.col-sm-12 {
-    padding-top: 2%;
-}
-
 .user {
     text-align: center;
-}
-
-.avatar {
-    padding-top: 3%;
 }
 
 .avatar img {
@@ -118,14 +88,6 @@ form label {
     -moz-border-radius: 50%;
     border-radius: 50%;
     border: 5px solid rgba(255, 255, 255, 0.5);
-}
-
-.notifications {
-    text-align: left;
-}
-
-.notification.col-sm-4 {
-    text-align: right;
 }
 
 .btn.btn-lighter {
@@ -165,30 +127,6 @@ form label {
 
 .btn.btn-dark:hover {
     background-color: #2fb1b1;
-}
-
-.btn.btn-fill {
-    color: var(--background_color);
-    background-color: #888888;
-    opacity: 1;
-    filter: alpha(opacity=100);
-}
-
-.btn.btn-fill:hover,
-.btn.btn-fill:focus,
-.btn.btn-fill:active,
-.btn.btn-fill.active,
-.open > .btn.btn-fill.dropdown-toggle {
-    background-color: #777777;
-    color: var(--background_color);
-}
-
-.btn.btn-fill .caret {
-    border-top-color: var(--background_color);
-}
-
-.btn .caret {
-    border-top-color: #888888;
 }
 
 .btn:hover, .btn:focus {
