@@ -25,8 +25,7 @@ def user_added(**kwargs):
         notification.recipients.add(profile)
 
         Group("notify-%s" % profile.user.id).send({
-            "text": json.dumps({
-                "msg": str(msg),})
+            "text": json.dumps(notification.formatDict()),
         })
 
 if 'test' not in sys.argv:
