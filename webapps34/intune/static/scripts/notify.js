@@ -26,7 +26,7 @@ $(document).ready(function () {
                 ).append(
                     $('<span>', {
                         "class": "notification-time",
-                        "html": notification["time"]
+                        "html": moment(notification["time"]).fromNow()
                     })
                 )
             }))
