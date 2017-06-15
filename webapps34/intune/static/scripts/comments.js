@@ -12,8 +12,6 @@ $(document).ready(function () {
 
         var comment_div = $("#comment-block");
         var room_id = comment_div.attr("data-room-id");
-        var username = comment_div.attr("data-username");
-        var user_id = comment_div.attr("data-user-id");
 
         // connect to socket at chat-<room_id>-<bar-id>
         var socket = new WebSocket("ws://" + window.location.host + "/comment/" + room_id + "/");
@@ -46,9 +44,7 @@ $(document).ready(function () {
                 var text = comment_text.val();
 
                 var msg = {
-                    "room": room_id,
                     "msg": text,
-                    "user": user_id,
                     "bar": Editor.get_current_bar()
                 };
 
