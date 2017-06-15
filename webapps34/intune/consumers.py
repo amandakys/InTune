@@ -6,47 +6,11 @@ import json
 from .models import ChatMessage, Composition, Profile, Comment
 
 
-# Connected to websocket.connect
-def ws_chat_add(message, comp):
-    # Accept the connection
-    message.reply_channel.send({"accept": True})
-    Group("chat-%s" % comp).add(message.reply_channel)
-
-
-# Connected to websocket.receive
-def ws_chat_message(message, comp):
-    text = json.loads(message.content['text'])
-    room_id = comp
-    user_id = text['user']
-    msg = text['msg']
-    sender_name = Profile.objects.get(id=user_id).user.username
-
-    ChatMessage.objects.create(
-        room=Composition.objects.get(id=room_id),
-        msg=msg,
-        sender=Profile.objects.get(id=user_id),
-    )
-
-    group_postfix = room_id
-    Group("chat-%s" % group_postfix).send({
-        "text": json.dumps({
-            "user": str(sender_name),
-            "msg": str(msg),
-        })
-    })
-
-
-# Connected to websocket.disconnect
-def ws_chat_disconnect(message, comp):
-    Group("chat-%s" % comp).discard(message.reply_channel)
-
-
 class CompositionChannel:
     def __init__(self, composition_id: int, user: User):
         comp = Composition.objects.get(id=composition_id)
         self.user = user
         self.composition = comp if comp.has_access(user) else None
-
 
 class CommentHandler(CompositionChannel):
     def receive(self, bar: int, message: str):
@@ -61,6 +25,21 @@ class CommentHandler(CompositionChannel):
                 "user": str(self.user),
                 "msg": message,
                 "bar": bar,
+            })
+        })
+
+
+class ChatHandler(CompositionChannel):
+    def receive(self, message: str):
+        ChatMessage.objects.create(
+            room=self.composition,
+            msg=message,
+            sender=self.user.profile,
+        )
+        Group("chat-%s" % self.composition.id).send({
+            "text": json.dumps({
+                "user": str(self.user),
+                "msg": message,
             })
         })
 
@@ -128,8 +107,22 @@ class CommentConsumer(WebsocketConsumer):
 
     def receive(self, text=None, bytes=None, **kwargs):
         contents = json.loads(text)
-        CommentHandler(kwargs.get("comp"),self.message.user)\
+        CommentHandler(kwargs.get("comp"), self.message.user)\
             .receive(contents['bar'], contents['msg'])
+
+
+class ChatConsumer(WebsocketConsumer):
+    http_user = True
+
+    def connection_groups(self, **kwargs):
+        # Enforce permissions
+        ChatHandler(kwargs.get("comp"), self.message.user)
+        return ["chat-%s" % kwargs.get("comp")]
+
+    def receive(self, text=None, bytes=None, **kwargs):
+        contents = json.loads(text)
+        ChatHandler(kwargs.get("comp"), self.message.user)\
+            .receive(contents['msg'])
 
 
 class EditorConsumer(WebsocketConsumer):
