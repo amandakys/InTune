@@ -67,7 +67,7 @@ class Editor(CompositionChannel):
             })
 
     def delete_last(self, **kwargs):
-        bar: int = self.composition.delete_last_bar()
+        bar = self.composition.delete_last_bar()
         if bar >= 0:
             self.send(bar, Editor.Action.DELETE)
 
@@ -76,7 +76,7 @@ class Editor(CompositionChannel):
         self.send(bar, Editor.Action.UPDATE, contents)
 
     def append(self, contents: str, **kwargs):
-        bar: int = self.composition.append_bar(contents)
+        bar = self.composition.append_bar(contents)
         self.send(bar, Editor.Action.APPEND, contents)
 
     def select(self, bar: int, **kwargs):
@@ -146,9 +146,9 @@ class EditorConsumer(WebsocketConsumer):
         contents = json.loads(text)
         comp_editor = Editor(kwargs.get("comp"), self.message.user)
 
-        action: str = contents.get('action', None)
-        bar_id: int = contents.get('bar_id', -1)
-        bar_contents: str = contents.get('bar_contents', "")
+        action = contents.get('action', None)
+        bar_id = contents.get('bar_id', -1)
+        bar_contents = contents.get('bar_contents', "")
 
         {
             Editor.Action.UPDATE: comp_editor.update,
