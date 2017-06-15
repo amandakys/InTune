@@ -31,6 +31,13 @@
 .navbar-default .navbar-nav > li > a:focus {
     color: white;
 }
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover {
+    background-color: var(--darker_color);
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
+    color: white;
+}
 
 body {
     background-color: var(--background_color);
