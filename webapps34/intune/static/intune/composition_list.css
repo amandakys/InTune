@@ -18,7 +18,7 @@ h2.title {
 }
 
 .composition-element {
-    background-color: var(--dark_color);
+    background-color: var(--element-dark);
     margin: 1em 0 1em 0;
     padding: 1em 1em 1em 1em;
     border-radius: 10px;
@@ -39,7 +39,7 @@ h2.title {
 }
 
 .composition-title:hover {
-    color: var(--darker_color);
+    color: var(--element-darker);
     text-decoration: none;
 }
 
