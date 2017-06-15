@@ -166,4 +166,26 @@ class NotificationConsumer(WebsocketConsumer):
     http_user = True
 
     def connection_groups(self, **kwargs):
-        return ["notif-%s" % self.message.user.id]
+        return ["notify-%s" % self.message.user.id]
+
+    def connect(self, message, **kwargs):
+        self.message.reply_channel.send({"accept": True})
+        self.message.reply_channel.send({
+            "text": json.dumps({
+                "action": "unread_count",
+                "unread": self.message.user.profile.unread_notifications,
+                "notification_list": [notification.formatDict()
+                    for notification in self.message.user.profile.get_recent()]
+            }),
+        })
+
+    def receive(self, text=None, bytes=None, **kwargs):
+        # There is only one message
+        self.message.user.profile.mark_unread()
+        Group("notify-%d" % self.message.user.id).send({
+            "text": json.dumps({
+                "action": "unread_count",
+                "unread": 0,
+                "notification_list": [],
+            })
+        })

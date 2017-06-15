@@ -28,10 +28,14 @@
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-sm-6">
-            <a href="{% url 'intune:index' %}" class="btn btn-lighter">Back</a>
-            <a href="{% url 'intune:song' composition.id %}" class="btn btn-lighter">View Composition</a>
+            <a href="{% url 'intune:index' %}" class="btn btn-default">Back</a>
         </div>
         <div class="col-sm-6 text-right">
+            <button type="button" class="btn btn-lighter disabled"
+                    title="Playback not currently supported">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
+
             {# Sharing Composition #}
             <div class="btn-group">
                 <div class="dropdown">
@@ -117,7 +121,7 @@
             <span class="caret"></span>
         </button>
         <div class="collapse" id="comments-div">
-            <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
+            <form action="" method="post" id="comment_form"
                   class="form-inline hide" data-composition-id="{{ composition.id }}"
                   autocomplete="off">
                 {% csrf_token %}

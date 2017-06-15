@@ -1,17 +1,18 @@
 /* Base Colours */
 :root {
-    --background_color: #FFFFFF;
-    --element_color: #34CABF;
-    --light_color: #3ff4e8;
-    --dark_color: #21B9B9;
-    --darker_color: #005C55;
+    --background_color: white;
+
+    --element-faint: #9FC9C7;
+    --element-light: #00e3d8;
+    --element: #39b6b0;
+    --element-dark: #009f98;
+    --element-darker: #005C55;
 }
 
 /* Overriding navbar defaults for consistent navbar behaviour */
 .navbar-default {
-    background: #005F5F;
+    background: var(--element-darker);
     border-radius: 0;
-    /*border-bottom: 2px solid #252525;*/
 }
 
 .navbar-default .navbar-brand {
@@ -20,21 +21,29 @@
 }
 
 .navbar-default .navbar-brand:hover {
-    color: white;
+    color: var(--background_color);
 }
 
 .navbar-default .navbar-nav > li > a {
-    color: var(--background_color);
+    color: var(--element-faint);
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    color: white;
-    font-weight: 600;
+    color: var(--background_color);
+}
+
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover {
+    background-color: var(--element-darker);
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
+    color: var(--background_color);
 }
 
 body {
     background-color: var(--background_color);
+    color: var(--element-darker);
     margin-top: 60px;
 }
 
@@ -49,57 +58,21 @@ li {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--dark_color);
-}
-
-.login {
-    margin-left: 5%;
-}
-
-h1, h2 {
+    color: var(--element-dark);
     text-align: center;
 }
 
 form label {
-    color: var(--element_color);
-}
-
-.login.buttons {
-    overflow: hidden;
-}
-
-.login.buttons:first-child {
-    float: left;
-}
-
-.login.buttons:nth-child(2) {
-    float: left;
-}
-
-.create {
-    margin-left: 5%;
-}
-
-.create label {
-    color: var(--element_color);
-    vertical-align: top;
+    color: var(--element-dark);
 }
 
 .form-control:focus {
-    border-color: var(--element_color);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element_color);
-}
-
-.render.col-sm-12 {
-    padding-top: 2%;
+    border-color: var(--element);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--element);
 }
 
 .user {
     text-align: center;
-}
-
-.avatar {
-    padding-top: 3%;
 }
 
 .avatar img {
@@ -111,14 +84,6 @@ form label {
     -moz-border-radius: 50%;
     border-radius: 50%;
     border: 5px solid rgba(255, 255, 255, 0.5);
-}
-
-.notifications {
-    text-align: left;
-}
-
-.notification.col-sm-4 {
-    text-align: right;
 }
 
 .btn.btn-lighter {
@@ -133,60 +98,33 @@ form label {
     color: #ffffff;
 }
 
+/* For buttons on light (--background-colour) backgrounds */
 .btn.btn-light {
-    background-color: transparent;
-    filter: alpha(opacity=80);
-    border: 2px solid var(--element_color);
-    color: var(--element_color);
+    background-color: var(--background_color);
+    border-color: var(--element);
+    color: var(--element-dark);
 }
 
 .btn.btn-light:hover {
-    background-color: var(--element_color);
+    background-color: var(--element);
     color: var(--background_color);
-    border-color: var(--element_color);
+    border-color: var(--element);
 }
 
+/* For buttons on (--element) coloured backgrounds */
 .btn.btn-dark {
-    background-color: #21B9B9;
-    font-weight: 400;
+    background-color: var(--element);
     opacity: 0.8;
-    filter: alpha(opacity=80);
-    padding: 8px 16px;
-    border: 4px var(--background_color);
     color: var(--background_color);
 }
 
 .btn.btn-dark:hover {
-    background-color: #2fb1b1;
-}
-
-.btn.btn-fill {
-    color: var(--background_color);
-    background-color: #888888;
+    background-color: var(--element-dark);
     opacity: 1;
-    filter: alpha(opacity=100);
-}
-
-.btn.btn-fill:hover,
-.btn.btn-fill:focus,
-.btn.btn-fill:active,
-.btn.btn-fill.active,
-.open > .btn.btn-fill.dropdown-toggle {
-    background-color: #777777;
-    color: var(--background_color);
-}
-
-.btn.btn-fill .caret {
-    border-top-color: var(--background_color);
-}
-
-.btn .caret {
-    border-top-color: #888888;
 }
 
 .btn:hover, .btn:focus {
     opacity: 1;
-    filter: alpha(opacity=100);
     outline: 0 !important;
 }
 
@@ -199,7 +137,7 @@ form label {
 }
 
 @media print {
-    input, textarea, .edit_users, .btn, #edit_text {
+    form, .dropdown-toggle, .dropdown, div.modal, div.modal-dialog, textarea, .edit_users, .btn, #edit_text {
         display: none;
     }
 
@@ -207,4 +145,18 @@ form label {
         color: #000;
         background-color: #fff;
     }
+}
+
+.notification-element {
+    height: 2.5em;
+}
+
+.notification-text {
+    font-size: 1em;
+}
+
+.notification-time {
+    font-size: 0.8em;
+    vertical-align: bottom;
+    display: table-row;
 }

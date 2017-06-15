@@ -156,7 +156,6 @@ $(document).ready(function () {
                 } else if (data.bar_mod === "delete_last") {
                     var to_remove = bar_count - 1;
 
-                    $("#bar_outer_" + to_remove).removeClass("selected");
                     if (current_bar === bar_count) {
                         // Last bar removed, go to previous
                         current_bar = bar_count - 1;

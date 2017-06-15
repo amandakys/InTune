@@ -1,10 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from json import dumps, loads
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    unread_notifications = models.PositiveIntegerField(default=0)
+
+    def mark_unread(self):
+        self.unread_notifications = 0
+        self.save()
+
+    def get_recent(self):
+        return Notification.objects.filter(recipients=self)\
+                           .order_by("-sent_at")\
+                           [:max(self.unread_notifications, 5)]
 
     def __str__(self):
         return self.user.username
@@ -106,6 +117,13 @@ class Notification(models.Model):
     msg = models.CharField(max_length=10000)
     sent_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     composition = models.ForeignKey(Composition)
+
+    def formatDict(self):
+        return {
+            "msg": str(self.msg),
+            "time": self.sent_at.isoformat(),
+            "link": reverse("intune:song_edit", args=[self.composition.id])
+        }
 
     def __str__(self):
         return self.msg

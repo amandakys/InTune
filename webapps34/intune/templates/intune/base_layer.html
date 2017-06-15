@@ -10,6 +10,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'lib/moment.min.js' %}"></script>
+    <script>moment.locale("en-gb");</script>
     <script src="{% static 'scripts/notify.js' %}"></script>
 
     {% block imports %}
@@ -31,10 +33,19 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'intune:index' %}">{{ request.user.username }}</a></li>
-                    <li><a href="{% url 'intune:notifications'%}">NOTIFICATIONS
-                        <span id="notification_count" class="badge"
-                              data-user-id = "{{ request.user.id }}"></span>
-                    </a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           id="notification-dropdown"
+                           data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">NOTIFICATIONS
+                            <span id="notification_counter" class="badge"
+                                  data-user-id = "{{ request.user.id }}"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="notification-menu">
+                            <li><a href="#">No notifications!</a></li>
+                        </ul>
+                    </li>
                     <li><a href="{% url 'intune:profile' %}">PROFILE</a></li>
                     <li><a href="{% url 'logout' %}">LOGOUT</a></li>
                 {% endif %}

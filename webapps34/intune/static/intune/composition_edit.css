@@ -84,6 +84,11 @@ span.oth-user {
     border-radius: 5px;
 }
 
+span.selected.oth-user {
+    box-shadow: 0 0 10px red;
+    border-radius: 5px;
+}
+
 canvas {
     padding: 0;
 }

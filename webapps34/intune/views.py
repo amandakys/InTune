@@ -16,22 +16,6 @@ class CompositionList(generic.ListView):
                                           ).distinct().order_by("-lastEdit")
 
 
-class CompositionDetail(generic.DetailView):
-    def get(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Http404:
-            # TODO: add error message
-            return redirect("intune:index")
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
-    def get_queryset(self):
-        return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user)
-                                          ).distinct()
-
-
 class CompositionCreate(generic.edit.CreateView):
     model = Composition
     fields = ["title", "users"]
@@ -78,12 +62,6 @@ class CompositionEdit(generic.edit.UpdateView):
     template_name = "intune/composition_edit.html"
     model = Composition
     fields = ['users']
-
-    # added chatmessage_list variable so that included chatroom.html can access it
-    def get_context_data(self, **kwargs):
-        context = super(CompositionEdit, self).get_context_data(**kwargs)
-        context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
-        return context
 
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
@@ -144,35 +122,6 @@ def get_composition_attribute(request, pk):
     return JsonResponse(attributes)
 
 
-def composition_bar_edit_ajax(request):
-    if not request.is_ajax() or request.method != "POST":
-        return Http404()
-
-    composition = Composition.objects.get(id=request.POST['composition_id'])
-    if not composition or not composition.has_access(request.user):
-        return Http404()
-
-    bar_id = int(request.POST['bar_id'])
-    if bar_id < 0 or bar_id >= len(composition.get_bar_list()):
-        return Http404()
-
-    composition.set_bar(bar_id, request.POST['bar_contents'])
-    return JsonResponse({'success': True})
-
-
-class Chat(generic.ListView):
-    template_name = "intune/chatroom.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(Chat, self).get_context_data(**kwargs)
-        context["composition"] = Composition.objects.get(id=self.kwargs['pk'])
-        context["user"] = self.request.user
-        return context
-
-    def get_queryset(self):
-        return ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
-
-
 def comment_get(request):
     if not request.is_ajax() or request.method != "GET":
         return Http404()
@@ -188,33 +137,3 @@ def comment_get(request):
                     "comment": str(comment.comment),
                 } for comment in comments]
     return JsonResponse({'comments': comments})
-
-
-def comment_create_ajax(request):
-    if not request.is_ajax() or request.method != "POST":
-        return Http404()
-
-    composition = Composition.objects.get(pk=request.POST['composition_id'])
-    if not composition or not composition.has_access(request.user):
-        return Http404()
-
-    # TODO: refactor into method in Composition
-    if len(request.POST['comment']) < 1:
-        return Http404()
-    Comment.objects.create(commenter=request.user.profile,
-                           composition=composition,
-                           bar=int(request.POST['bar_id']),
-                           comment=request.POST['comment'])
-    return JsonResponse({'success': True})
-
-
-class NotificationList(generic.ListView):
-    template_name = "intune/notification_list.html"
-
-    def get_queryset(self):
-        return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
-
-
-def notification_count(request):
-    count = Notification.objects.filter(Q(recipients__user=request.user)).distinct().order_by("-sent_at").count()
-    return JsonResponse({'count': count})
