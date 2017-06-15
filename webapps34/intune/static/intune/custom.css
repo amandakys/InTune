@@ -187,7 +187,7 @@ form label {
 }
 
 @media print {
-    input, textarea, .edit_users, .btn, #edit_text {
+    form, .dropdown-toggle, .dropdown, div.modal, div.modal-dialog, textarea, .edit_users, .btn, #edit_text {
         display: none;
     }
 
