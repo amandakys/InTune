@@ -9,9 +9,9 @@
 
 /* Overriding navbar defaults for consistent navbar behaviour */
 .navbar-default {
-    background: #005C55;
+    background: #3da6b7;
     border-radius: 0;
-    border-bottom: 2px solid #252525;
+    /*border-bottom: 2px solid #252525;*/
 }
 
 .navbar-default .navbar-brand {
@@ -20,7 +20,7 @@
 }
 
 .navbar-default .navbar-brand:hover {
-    color: var(--light_color);
+    color: white;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -29,7 +29,8 @@
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    color: var(--light_color);
+    color: white;
+    font-weight: 600;
 }
 
 body {

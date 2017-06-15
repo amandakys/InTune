@@ -120,9 +120,8 @@ canvas.selected {
     bottom: 0;
     width: 100%;
     min-height: 200px;
-    border-top: 2px solid #656565;
     /* Standard syntax */
-    background: #FFF5EF linear-gradient(#c8ffe2 1%, white 3%);
+    background: #c8ffe2 linear-gradient(#ffffff 1%, #e5f9ef 5%);
     display: flex;
     align-items: center;
 }
