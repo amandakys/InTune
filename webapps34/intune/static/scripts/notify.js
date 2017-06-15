@@ -20,16 +20,17 @@ $(document).ready(function () {
                 received = true;
                 notification_menu.html("");
             }
-            var notif_msg = "<div class='notification col-sm-8'><p>" + notification["msg"] + "</p></div>";
-            var notif_time = "<div class='notification col-sm-4'><p> Just now </p></div>";
-            var notif_li =
-                "<li><div class='composition-element notification-element'>" + notif_msg + notif_time + "</div></li>";
-            notification_menu.prepend(notif_li);
+            notification_menu.prepend(
+                $('<li>').append($('<a>', {
+                    "href": notification["link"],
+                    "html": notification["msg"] + " at " + notification["time"]
+                }))
+            );
         }
 
         if (data["action"] == "unread_count") {
             update_notification_count(data["unread"]);
-            for (var i=0; i < data["notification_list"].length; i++) {
+            for (var i = data["notification_list"].length - 1; i >= 0; i--) {
                 prepend_notification(data["notification_list"][i]);
             }
         } else {
