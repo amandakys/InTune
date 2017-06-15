@@ -18,14 +18,23 @@ $(document).ready(function () {
         notification_menu.prepend(
             $('<li>').append($('<a>', {
                 "href": notification["link"],
-                "html": notification["msg"] + " at " + notification["time"]
+                "html": $('<div>', {"class": "notification-element"}).append(
+                    $('<span>', {
+                        "class": "notification-text",
+                        "html": notification["msg"]
+                    })
+                ).append(
+                    $('<span>', {
+                        "class": "notification-time",
+                        "html": notification["time"]
+                    })
+                )
             }))
         );
     }
 
     socket.onmessage = function (e) {
         var data = JSON.parse(e.data);
-        console.log(data);
 
         if (data["action"] == "unread_count") {
             update_notification_count(data["unread"]);

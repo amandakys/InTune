@@ -208,3 +208,17 @@ form label {
         background-color: #fff;
     }
 }
+
+.notification-element {
+    height: 2.5em;
+}
+
+.notification-text {
+    font-size: 1em;
+}
+
+.notification-time {
+    font-size: 0.8em;
+    vertical-align: bottom;
+    display: table-row;
+}
