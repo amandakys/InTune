@@ -63,6 +63,11 @@ class CompositionEdit(generic.edit.UpdateView):
     model = Composition
     fields = ['users']
 
+    def get_context_data(self, **kwargs):
+         context = super(CompositionEdit, self).get_context_data(**kwargs)
+         context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
+         return context
+
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
