@@ -190,15 +190,3 @@ def comment_create_ajax(request):
                            bar=int(request.POST['bar_id']),
                            comment=request.POST['comment'])
     return JsonResponse({'success': True})
-
-
-class NotificationList(generic.ListView):
-    template_name = "intune/notification_list.html"
-
-    def get_queryset(self):
-        return Notification.objects.filter(Q(recipients__user=self.request.user)).distinct().order_by("-sent_at")
-
-
-def notification_count(request):
-    count = Notification.objects.filter(Q(recipients__user=request.user)).distinct().order_by("-sent_at").count()
-    return JsonResponse({'count': count})
