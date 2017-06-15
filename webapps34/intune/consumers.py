@@ -177,12 +177,8 @@ class EditorConsumer(WebsocketConsumer):
         Editor(kwargs.get("comp"), message.user).deselect()
 
 
-@channel_session_user_from_http
-def ws_notif_add(message):
-    message.reply_channel.send({"accept": True})
-    Group("notif-%s" % message.user.id).add(message.reply_channel)
+class NotificationConsumer(WebsocketConsumer):
+    http_user = True
 
-
-@channel_session_user
-def ws_notif_disconnect(message):
-    Group("notif-%s" % message.user.id).discard(message.reply_channel)
+    def connection_groups(self, **kwargs):
+        return ["notif-%s" % self.message.user.id]

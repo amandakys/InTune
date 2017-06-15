@@ -37,18 +37,10 @@ comment_routing = [
           path=r"^/(?P<comp>\d+)/$"),
 ]
 
-notif_routing = [
-    route("websocket.connect",
-          consumers.ws_notif_add),
-
-    route("websocket.disconnect",
-          consumers.ws_notif_disconnect),
-]
-
 channel_routing = [
     include(chat_routing, path=r"^/chat"),
     route_class(consumers.EditorConsumer, path=r"^/ws_comp/(?P<comp>\d+)/$"),
     include(comment_routing, path=r"^/comment"),
-    include(notif_routing, path=r"^/notif"),
+    route_class(consumers.NotificationConsumer, path=r"^/notif/$"),
     include(http_routing),
 ]
