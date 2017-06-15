@@ -137,21 +137,3 @@ def comment_get(request):
                     "comment": str(comment.comment),
                 } for comment in comments]
     return JsonResponse({'comments': comments})
-
-
-def comment_create_ajax(request):
-    if not request.is_ajax() or request.method != "POST":
-        return Http404()
-
-    composition = Composition.objects.get(pk=request.POST['composition_id'])
-    if not composition or not composition.has_access(request.user):
-        return Http404()
-
-    # TODO: refactor into method in Composition
-    if len(request.POST['comment']) < 1:
-        return Http404()
-    Comment.objects.create(commenter=request.user.profile,
-                           composition=composition,
-                           bar=int(request.POST['bar_id']),
-                           comment=request.POST['comment'])
-    return JsonResponse({'success': True})
