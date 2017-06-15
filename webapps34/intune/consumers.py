@@ -1,5 +1,6 @@
 from channels import Group
 from channels.auth import channel_session_user, channel_session_user_from_http
+from channels.generic.websockets import WebsocketConsumer
 from django.contrib.auth.models import User
 import json
 
@@ -52,7 +53,6 @@ class CompositionChannel:
 
 
 class CommentHandler(CompositionChannel):
-
     def receive(self, bar: int, message: str):
         Comment.objects.create(
             composition=self.composition,
@@ -140,43 +140,41 @@ class Editor(CompositionChannel):
         return Editor.compositions[self.composition]
 
 
-@channel_session_user_from_http
-def ws_bar_connect(message, comp):
-    # This enforces Composition.has_access
-    selection = Editor(comp, message.user).get_selection()
+class EditorConsumer(WebsocketConsumer):
+    http_user = True
 
-    message.reply_channel.send({"accept": True})
-    Group("comp-%s" % comp).add(message.reply_channel)
-    message.reply_channel.send({
-        "text": json.dumps({
-            "bar_mod": "fresh_selects",
-            "selection": selection,
-        }),
-    })
+    def connection_groups(self, **kwargs):
+        return ["comp-%s" % kwargs.get("comp")]
 
+    def connect(self, message, **kwargs):
+        # This enforces Composition.has_access
+        selection = Editor(kwargs.get("comp"), message.user).get_selection()
+        self.message.reply_channel.send({"accept": True})
+        self.message.reply_channel.send({
+            "text": json.dumps({
+                "bar_mod": "fresh_selects",
+                "selection": selection,
+            }),
+        })
 
-@channel_session_user
-def ws_bar_receive(message, comp):
-    contents = json.loads(message.content['text'])
-    comp_editor = Editor(comp, message.user)
+    def receive(self, text=None, bytes=None, **kwargs):
+        contents = json.loads(text)
+        comp_editor = Editor(kwargs.get("comp"), self.message.user)
 
-    action: str = contents.get('action', None)
-    bar_id: int = contents.get('bar_id', -1)
-    bar_contents: str = contents.get('bar_contents', "")
+        action: str = contents.get('action', None)
+        bar_id: int = contents.get('bar_id', -1)
+        bar_contents: str = contents.get('bar_contents', "")
 
-    {
-        Editor.Action.UPDATE: comp_editor.update,
-        Editor.Action.APPEND: comp_editor.append,
-        Editor.Action.DELETE: comp_editor.delete_last,
-        Editor.Action.SELECT: comp_editor.select,
-        Editor.Action.DESELECT: comp_editor.deselect,
-    }[action](bar=bar_id, contents=bar_contents)
+        {
+            Editor.Action.UPDATE: comp_editor.update,
+            Editor.Action.APPEND: comp_editor.append,
+            Editor.Action.DELETE: comp_editor.delete_last,
+            Editor.Action.SELECT: comp_editor.select,
+            Editor.Action.DESELECT: comp_editor.deselect,
+        }[action](bar=bar_id, contents=bar_contents)
 
-
-@channel_session_user
-def ws_bar_disconnect(message, comp):
-    Group("comp-%s" % comp).discard(message.reply_channel)
-    Editor(comp, message.user).deselect()
+    def disconnect(self, message, **kwargs):
+        Editor(kwargs.get("comp"), message.user).deselect()
 
 
 @channel_session_user_from_http
