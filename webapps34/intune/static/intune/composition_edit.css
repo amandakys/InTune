@@ -101,6 +101,10 @@ canvas.selected {
     height: 110px;
 }
 
+div.canvas-block {
+    padding-top: 1em;
+}
+
 #render_block:empty:before {
     content: attr(data-placeholder);
     color: grey;
