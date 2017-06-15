@@ -24,7 +24,7 @@ $(document).ready(function () {
             if (parseInt(data.bar) === Editor.get_current_bar()) {
                 var comment = {
                     "commenter": data["user"],
-                    "time": new Date().toLocaleString(),
+                    "time": new Date(),
                     "comment": data["msg"]
                 };
 
