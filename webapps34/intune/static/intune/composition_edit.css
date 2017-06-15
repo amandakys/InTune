@@ -154,6 +154,7 @@ div.canvas-block {
     word-wrap: break-word;
     margin-bottom: 30px;
     border-radius: 10px;
+    max-height: 305px;
 }
 
 .comment-element {
@@ -186,7 +187,9 @@ div.canvas-block {
 /* -- Chat Box -- */
 .chat-box {
     padding: 0 10px 0 0;
-    margin: 0 10px 0 0;
+    margin: -45px 10px 0 0;
+    background: white;
+
 }
 
 .message-list {
@@ -212,7 +215,8 @@ div.canvas-block {
 }
 
 #help-dropdown {
-    margin-top: 30px;
+    margin-top: -40px;
+    margin-right: 120px;
 }
 
 #canvas-help-menu {
@@ -244,8 +248,9 @@ div.canvas-block {
 
 #toggle-editor {
     position: fixed;
-    bottom: 200px;
+    bottom: 150px;
     right: 20px;
+    z-index: 10;
 }
 
 #toggle-editor::before {

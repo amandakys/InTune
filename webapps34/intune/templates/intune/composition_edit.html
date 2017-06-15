@@ -83,11 +83,11 @@
         <div class="col-md-2"></div>
 
         <div class="col-md-8">
-            <div class="dropdown">
-                <span class="glyphicon glyphicon-question-sign dropdown-toggle pull-right"
+            <div class="dropdown pull-right" id="help-dropdown">
+                <span class="glyphicon glyphicon-question-sign dropdown-toggle"
                       data-toggle="dropdown"
                       style="cursor:help; font-size:20px"></span>
-                <div class="dropdown-menu pull-right" id="help-dropdown">
+                <div class="dropdown-menu">
                     <div class="text-center">
                         <strong>What do the colours mean?</strong>
                     </div>
@@ -118,13 +118,13 @@
         </button>
         <div class="collapse" id="comments-div">
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
-                  class="form-inline" data-composition-id="{{ composition.id }}"
+                  class="form-inline hide" data-composition-id="{{ composition.id }}"
                   autocomplete="off">
                 {% csrf_token %}
                 <input type="text" id="comment_text" class="form-control"
                        placeholder="Write a comment" required/>
                 {% buttons %}
-                    <button type="submit" class="btn btn-light btn-xs">
+                    <button type="submit" class="btn btn-lighter btn-xs">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </button>
                 {% endbuttons %}
@@ -167,7 +167,7 @@
                 <label for="msg-text"></label>
                 <input id="msg-text" type="text" class="form-control" aria-label="Chat message">
                 <span class="input-group-btn">
-            <button id="send-msg" class="btn btn-default" type="submit">Send</button>
+            <button id="send-msg" class="btn btn-lighter" type="submit">Send</button>
         </span>
             </form>
         </div>
