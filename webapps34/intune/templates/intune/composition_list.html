@@ -1,50 +1,64 @@
 {% extends "intune/base_layer.html" %}
+{% load staticfiles %}
 {% load humanize %}
 
 {% block title %}
-    <title>User Homepage</title>
+<title>User Homepage</title>
 {% endblock %}
 
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="{% static 'intune/composition_list.css' %}">
+{% endblock imports %}
+
 {% block notification %}
-    {% if notification_list %}
-    {{ notification_list.count }}
-    {% endif %}
+{% if notification_list %}
+{{ notification_list.count }}
+{% endif %}
 {% endblock notification %}
 
 {% block content %}
-    <h2>Your Compositions</h2>
-    <div class="btn-new-composition">
-        <a href="{% url 'intune:song_create' %}"><button type="button" class="btn btn-light">New Composition</button></a>
-    </div>
-    {% if composition_list %}
-        <ul>
-            {% for composition in composition_list %}
-                <div class="composition-element">
-                    <div class="row">
-                        <div class="icon col-sm-2">
-                            <span class="glyphicon glyphicon-music"></span>
-                        </div>
-                        <div class="info col-sm-8">
-                            <li style="color: #34383b"><a href="{% url 'intune:song' composition.id %}">{{ composition.title }}</a></li>
-                            <p>Last Edited: {{ composition.lastEdit|naturalday }}</p>
-                        </div>
-                        <div class="edit col-sm-2">
-                            <a href="{% url 'intune:song_edit' composition.id %}">
-                                <button style="margin-bottom: 5px" type="button" class="btn btn-dark pull-right">
-                                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                                </button>
-                            </a>
-                            <a href="{% url 'intune:song_delete' composition.id %}">
-                                <button type="button" class="btn btn-dark pull-right">
-                                    <span class="glyphicon glyphicon-remove"></span> Delete
-                                </button>
-                            </a>
-                        </div>
-                    </div>
+
+<div class="container">
+<h2 class="title">Your Compositions</h2>
+<div class="btn-new-composition">
+    <a href="{% url 'intune:song_create' %}">
+        <button type="button" class="btn btn-light">New Composition</button>
+    </a>
+</div>
+{% if composition_list %}
+<div class="composition-list">
+{% for composition in composition_list %}
+    <div class="composition-element">
+        <div class="row vertical-align">
+            <div class="col-md-2 col-sm-2">
+                <div class="text-center">
+                    <span class="glyphicon glyphicon-music icon"></span>
                 </div>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <h3 style="text-align: center">You have no compositions :(</h3>
-    {% endif %}
-{%  endblock %}
+            </div>
+            <div class="col-md-7 col-sm-7">
+                <a class="composition-title" href="{% url 'intune:song' composition.id %}">
+                    {{ composition.title }}
+                </a>
+                <p>Last Edited: {{ composition.lastEdit|naturalday }}</p>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <div class="actions">
+                    <a class="btn btn-dark" href="{% url 'intune:song_edit' composition.id %}"
+                       role="button"><span class="glyphicon glyphicon-pencil"></span> Edit
+                    </a>
+                    <a class="btn btn-dark" href="{% url 'intune:song_delete' composition.id %}"
+                       role="button">
+                        <span class="glyphicon glyphicon-remove"></span> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% else %}
+<h3 style="text-align: center">You have no compositions :(</h3>
+{% endif %}
+</div>
+
+{% endblock content %}

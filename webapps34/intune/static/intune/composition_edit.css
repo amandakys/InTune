@@ -50,10 +50,6 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 180px;
-}
-
 ol > li {
     list-style: decimal;
 }
@@ -105,6 +101,10 @@ canvas.selected {
     height: 110px;
 }
 
+div.canvas-block {
+    padding-top: 1em;
+}
+
 #render_block:empty:before {
     content: attr(data-placeholder);
     color: grey;
@@ -115,14 +115,19 @@ canvas.selected {
 }
 
 /* Editor Interface Configuration */
+.editor-top {
+    height: auto;
+    overflow: auto;
+    padding-bottom: 200px;
+}
+
 .editor-interface {
     position: fixed;
     bottom: 0;
     width: 100%;
     min-height: 200px;
-    border-top: 2px solid #656565;
     /* Standard syntax */
-    background: #FFF5EF linear-gradient(#c8ffe2 1%, white 3%);
+    background: #c8ffe2 linear-gradient(#ffffff 1%, #e5f9ef 5%);
     display: flex;
     align-items: center;
 }
@@ -145,14 +150,17 @@ canvas.selected {
 
 /* -- Comment Styles -- */
 .comment-block {
-    background: #faffff;
+    background: #f7f7f7;
     word-wrap: break-word;
     padding: 1em 1em 1em 1em;
+    margin-bottom: 30px;
+    border-radius: 10px;
 }
 
 .comment-element {
     background: transparent;
-    border-bottom: 1px solid #515151;
+    border-bottom: 1px solid #d2d2d2;
+    padding: 3px;
 }
 
 .comment-user {
