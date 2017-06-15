@@ -102,11 +102,11 @@ form label {
     color: #ffffff;
 }
 
+/* For buttons on light (--background-colour) backgrounds */
 .btn.btn-light {
-    background-color: transparent;
-    filter: alpha(opacity=80);
-    border: 2px solid var(--element);
-    color: var(--element);
+    background-color: var(--background_color);
+    border-color: var(--element);
+    color: var(--element-dark);
 }
 
 .btn.btn-light:hover {
