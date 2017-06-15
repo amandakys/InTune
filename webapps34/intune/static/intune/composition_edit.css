@@ -191,6 +191,10 @@ div.canvas-block {
     z-index: 1;
 }
 
+#help-dropdown {
+    margin-top: 30px;
+}
+
 #canvas-help-menu {
     line-height: 30px;
     padding: 10px;
