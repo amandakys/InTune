@@ -25,7 +25,7 @@ $(document).ready(function() {
         msg_list.scrollTop(msg_list[0].scrollHeight);
 
         // If chat is hidden, message can't be read, so update unread counter
-        if ($("#chat-box").hasClass("hidden")) {
+        if ($("#chat_box").hasClass("hidden")) {
             var current_unread = unread_chat.html();
             if (current_unread) {
                 current_unread = parseInt(current_unread);
