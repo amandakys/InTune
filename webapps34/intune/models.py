@@ -5,6 +5,7 @@ from json import dumps, loads
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    unread_notifications = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.user.username
