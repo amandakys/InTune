@@ -1,13 +1,9 @@
 from channels import Group
-from channels.auth import channel_session_user, channel_session_user_from_http
 from channels.generic.websockets import WebsocketConsumer
 from django.contrib.auth.models import User
 import json
 
-
 from .models import ChatMessage, Composition, Profile, Comment
-
-# TODO: Check user permissions
 
 
 # Connected to websocket.connect
@@ -69,24 +65,6 @@ class CommentHandler(CompositionChannel):
         })
 
 
-@channel_session_user_from_http
-def ws_comment_add(message, comp):
-    CommentHandler(comp, message.user)  # Check has_access
-    message.reply_channel.send({"accept": True})
-    Group("comment-%s" % comp).add(message.reply_channel)
-
-
-@channel_session_user
-def ws_comment_message(message, comp):
-    text = json.loads(message.content['text'])
-    CommentHandler(comp, message.user).receive(text['bar'], text['msg'])
-
-
-@channel_session_user
-def ws_comment_disconnect(message, comp):
-    Group("comment-%s" % comp).discard(message.reply_channel)
-
-
 class Editor(CompositionChannel):
     # Each { Composition: { user_id: bar_id } }
     compositions = {}   # Static, access with Editor.compositions
@@ -138,6 +116,20 @@ class Editor(CompositionChannel):
         # For newly connected users
         self.deselect()
         return Editor.compositions[self.composition]
+
+
+class CommentConsumer(WebsocketConsumer):
+    http_user = True
+
+    def connection_groups(self, **kwargs):
+        # Enforce permissions
+        CommentHandler(kwargs.get("comp"), self.message.user)
+        return ["comment-%s" % kwargs.get("comp")]
+
+    def receive(self, text=None, bytes=None, **kwargs):
+        contents = json.loads(text)
+        CommentHandler(kwargs.get("comp"),self.message.user)\
+            .receive(contents['bar'], contents['msg'])
 
 
 class EditorConsumer(WebsocketConsumer):

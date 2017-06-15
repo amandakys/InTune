@@ -22,25 +22,10 @@ chat_routing = [
           path=r"^/(?P<comp>\d+)/$"),
 ]
 
-
-comment_routing = [
-    route("websocket.connect",
-          consumers.ws_comment_add,
-          path=r"^/(?P<comp>\d+)/$"),
-
-    route("websocket.receive",
-          consumers.ws_comment_message,
-          path=r"^/(?P<comp>\d+)/$"),
-
-    route("websocket.disconnect",
-          consumers.ws_comment_disconnect,
-          path=r"^/(?P<comp>\d+)/$"),
-]
-
 channel_routing = [
     include(chat_routing, path=r"^/chat"),
     route_class(consumers.EditorConsumer, path=r"^/ws_comp/(?P<comp>\d+)/$"),
-    include(comment_routing, path=r"^/comment"),
+    route_class(consumers.CommentConsumer, path=r"^/comment/(?P<comp>\d+)/$"),
     route_class(consumers.NotificationConsumer, path=r"^/notif/$"),
     include(http_routing),
 ]
