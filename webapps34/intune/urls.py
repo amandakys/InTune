@@ -47,10 +47,6 @@ urlpatterns = [
         name='profile-autocomplete',
     ),
 
-    url(r'^composition/(?P<pk>[0-9]+)/chat/$',
-        login_required(views.Chat.as_view()),
-        name="chats"),
-
     # Retrieve Composition Attributes as JSON
     url(r'^composition/attribute/(?P<pk>[0-9]+)/$',
         login_required(views.get_composition_attribute),

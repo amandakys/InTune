@@ -63,12 +63,6 @@ class CompositionEdit(generic.edit.UpdateView):
     model = Composition
     fields = ['users']
 
-    # added chatmessage_list variable so that included chatroom.html can access it
-    def get_context_data(self, **kwargs):
-        context = super(CompositionEdit, self).get_context_data(**kwargs)
-        context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
-        return context
-
     def get_form(self):
         form = super(CompositionEdit, self).get_form()
         form.fields['users'].widget = autocomplete.ModelSelect2Multiple(
@@ -142,19 +136,6 @@ def composition_bar_edit_ajax(request):
 
     composition.set_bar(bar_id, request.POST['bar_contents'])
     return JsonResponse({'success': True})
-
-
-class Chat(generic.ListView):
-    template_name = "intune/chatroom.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(Chat, self).get_context_data(**kwargs)
-        context["composition"] = Composition.objects.get(id=self.kwargs['pk'])
-        context["user"] = self.request.user
-        return context
-
-    def get_queryset(self):
-        return ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
 
 
 def comment_get(request):
