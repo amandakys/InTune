@@ -44,11 +44,14 @@ def ws_chat_disconnect(message, comp):
     Group("chat-%s" % comp).discard(message.reply_channel)
 
 
-class CommentHandler:
+class CompositionChannel:
     def __init__(self, composition_id: int, user: User):
         comp = Composition.objects.get(id=composition_id)
         self.user = user
         self.composition = comp if comp.has_access(user) else None
+
+
+class CommentHandler(CompositionChannel):
 
     def receive(self, bar: int, message: str):
         Comment.objects.create(
@@ -84,7 +87,7 @@ def ws_comment_disconnect(message, comp):
     Group("comment-%s" % comp).discard(message.reply_channel)
 
 
-class Editor:
+class Editor(CompositionChannel):
     # Each { Composition: { user_id: bar_id } }
     compositions = {}   # Static, access with Editor.compositions
 
@@ -94,11 +97,6 @@ class Editor:
         DELETE = "delete_last"
         SELECT = "select"
         DESELECT = "deselect"
-
-    def __init__(self, composition_id: int, user: User):
-        comp = Composition.objects.get(id=composition_id)
-        self.user = user
-        self.composition = comp if comp.has_access(user) else None
 
     def send(self, bar, action, contents=None):
         if bar >= 0:
