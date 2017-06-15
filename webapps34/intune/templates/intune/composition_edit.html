@@ -32,26 +32,28 @@
         <div class="col-sm-6 text-right">
             {# Sharing Composition #}
             <div class="btn-group">
-                {% if composition.owner.user == request.user %}
-                <button type="button" class="btn btn-default dropdown-toggle"
-                        id="share_button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    Share
-                    <span class="caret"></span>
-                </button>
-                {% endif %}
+                <div class="dropdown">
+                    {% if composition.owner.user == request.user %}
+                    <button type="button" class="btn btn-default dropdown-toggle"
+                            id="share_button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Share
+                        <span class="caret"></span>
+                    </button>
+                    {% endif %}
 
-                <div class="dropdown-menu" aria-labelledby="share_actions">
-                    <form method="post" action="" id="shared-users-add">
-                        {% csrf_token %}
-                        <div class="edit_users">
-                            <h6>Add/Remove shared users:</h6>
-                            {{ form.users }}
-                            <button type="submit" class="btn btn-default">
-                                Save
-                            </button>
-                        </div>
-                    </form>
+                    <div class="dropdown-menu" aria-labelledby="share_actions">
+                        <form method="post" action="" id="shared-users-add">
+                            {% csrf_token %}
+                            <div class="edit_users">
+                                <h6>Add/Remove shared users:</h6>
+                                {{ form.users }}
+                                <button type="submit" class="btn btn-default">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
