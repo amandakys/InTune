@@ -50,10 +50,6 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 180px;
-}
-
 ol > li {
     list-style: decimal;
 }
@@ -115,6 +111,12 @@ canvas.selected {
 }
 
 /* Editor Interface Configuration */
+.editor-top {
+    height: auto;
+    overflow: auto;
+    padding-bottom: 200px;
+}
+
 .editor-interface {
     position: fixed;
     bottom: 0;
