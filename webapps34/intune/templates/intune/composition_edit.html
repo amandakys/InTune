@@ -31,6 +31,11 @@
             <a href="{% url 'intune:index' %}" class="btn btn-default">Back</a>
         </div>
         <div class="col-sm-6 text-right">
+            <button type="button" class="btn btn-lighter disabled"
+                    title="Playback not currently supported">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
+
             {# Sharing Composition #}
             <div class="btn-group">
                 <div class="dropdown">
