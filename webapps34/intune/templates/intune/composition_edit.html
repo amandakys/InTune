@@ -31,7 +31,7 @@
             <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
         </div>
         <div class="col-sm-6 text-right">
-            <button type="button" class="btn btn-lighter disabled"
+            <button type="button" class="btn btn-light disabled"
                     title="Playback not currently supported">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
             </button>
@@ -40,7 +40,7 @@
             <div class="btn-group">
                 <div class="dropdown">
                     {% if composition.owner.user == request.user %}
-                    <button type="button" class="btn btn-lighter dropdown-toggle"
+                    <button type="button" class="btn btn-light dropdown-toggle"
                             id="share_button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         Share
@@ -54,7 +54,7 @@
                             <div class="edit_users">
                                 <h6>Add/Remove shared users:</h6>
                                 {{ form.users }}
-                                <button type="submit" class="btn btn-lighter">
+                                <button type="submit" class="btn btn-light">
                                     Save
                                 </button>
                             </div>
@@ -64,12 +64,12 @@
             </div>
 
             {# Print Composition #}
-            <button type="button" class="btn btn-lighter" onclick="window.print();return false;">
+            <button type="button" class="btn btn-light" onclick="window.print();return false;">
                 Print sheets
             </button>
 
             {# Chatbox Reveal #}
-            <button class="btn btn-lighter" id="open-chat-button"
+            <button class="btn btn-light" id="open-chat-button"
                     type="button">
                 <span class="glyphicon glyphicon-comment"></span>
                 <span id="unread_chats" class="badge"></span>
@@ -128,7 +128,7 @@
                 <input type="text" id="comment_text" class="form-control"
                        placeholder="Write a comment" required/>
                 {% buttons %}
-                    <button type="submit" class="btn btn-lighter btn-xs">
+                    <button type="submit" class="btn btn-light btn-xs">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </button>
                 {% endbuttons %}
@@ -171,7 +171,7 @@
                 <label for="msg-text"></label>
                 <input id="msg-text" type="text" class="form-control" aria-label="Chat message">
                 <span class="input-group-btn">
-            <button id="send-msg" class="btn btn-lighter" type="submit">Send</button>
+            <button id="send-msg" class="btn btn-light" type="submit">Send</button>
         </span>
             </form>
         </div>
@@ -184,7 +184,7 @@
 
 {# --- Editor Interface --- #}
 {% block aux %}
-<button id="toggle-editor" class="btn btn-lighter"
+<button id="toggle-editor" class="btn btn-light"
         data-toggle="collapse" data-target="#editor-collapse"></button>
 <div id="editor-collapse" class="collapse in">
 {% include 'intune/editor.html' %}

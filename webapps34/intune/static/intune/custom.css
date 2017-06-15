@@ -86,18 +86,6 @@ form label {
     border: 5px solid rgba(255, 255, 255, 0.5);
 }
 
-.btn.btn-lighter {
-    background: #F3FEF8;
-    border: 1px solid #bbcecf;
-    color: #3c3c3c;
-}
-
-.btn.btn-lighter:hover {
-    background: #21B9B9;
-    border: 1px solid #638888;
-    color: #ffffff;
-}
-
 /* For buttons on light (--background-colour) backgrounds */
 .btn.btn-light {
     background-color: var(--background_color);
