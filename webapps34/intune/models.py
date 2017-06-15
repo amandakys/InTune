@@ -7,6 +7,14 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     unread_notifications = models.PositiveIntegerField(default=0)
 
+    def mark_unread(self):
+        self.unread_notifications = 0
+        self.save()
+
+    def get_unread(self):
+        return Notification.objects.filter(recipients=self)\
+                           .order_by("-sent_at")[:self.unread_notifications]
+
     def __str__(self):
         return self.user.username
 
