@@ -11,11 +11,14 @@ $(document).ready(function () {
         "use strict";
 
         var comment_div = $("#comment-block");
+        var comment_form = $("#comment_form");
         var room_id = comment_div.attr("data-room-id");
 
         // connect to socket at chat-<room_id>-<bar-id>
         var socket = new WebSocket("ws://" + window.location.host + "/comment/" + room_id + "/");
 
+
+        comment_form.hide();
         // refresh comments page
         socket.onmessage = function (e) {
             var data = JSON.parse(e.data);
@@ -37,8 +40,6 @@ $(document).ready(function () {
         };
 
         socket.onopen = function () {
-            var comment_form = $("#comment_form");
-
             comment_form.submit (function() {
                 var comment_text = $("#comment_text");
                 var text = comment_text.val();
@@ -60,11 +61,9 @@ $(document).ready(function () {
          * @private
          */
         function _retrieve_comments(current_bar) {
-            var comment_form = $("#comment_form");
-
             // Reset comment display
-            $("#comment-block").empty();
-            $.getJSON($("#comment-block").attr("data-ajax-target"),
+            comment_div.empty();
+            $.getJSON(comment_div.attr("data-ajax-target"),
                 {
                     composition: comment_form.attr("data-composition-id"),
                     bar: current_bar
@@ -118,14 +117,11 @@ $(document).ready(function () {
             comment_row.setAttribute("class", "comment-element");
             comment_row.appendChild(comment);
             comment_row.appendChild(date);
-            $("#comment-block").prepend(comment_row);
+            comment_div.prepend(comment_row);
         }
 
         return {
             retrieve_comments: _retrieve_comments
         }
     })();
-
-    var comment_form = $("#comment_form");
-    comment_form.hide();
 });
