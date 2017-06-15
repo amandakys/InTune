@@ -184,6 +184,26 @@ div.canvas-block {
 }
 /* ----- */
 
+/* -- Chat Box -- */
+.chat-box {
+    padding: 0 10px 0 0;
+    margin: 0 10px 0 0;
+}
+
+.message-list {
+    overflow-y: auto;
+    padding: 0 0 5px 0;
+    word-wrap: break-word;
+}
+
+.message {
+    padding: inherit;
+}
+
+.hidden {
+    display: none;
+}
+
 #chatbox-dropdown {
     line-height: 32px;
     padding: 20px;

@@ -1,6 +1,7 @@
 {% extends "intune/base_layer.html" %}
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% load humanize %}
 
 {% block title %}<title>{{ composition }}: Edit</title>{% endblock title %}
 
@@ -15,6 +16,7 @@
 <script src="{% static 'scripts/render.js' %}"></script>
 <script src="{% static 'scripts/editor.js' %}"></script>
 <script src="{% static 'scripts/comments.js' %}"></script>
+<script src="{% static 'scripts/chat.js' %}"></script>
 
 {# needed for autocomplete to work #}
 {{ form.media }}
@@ -62,18 +64,14 @@
                 Print sheets
             </button>
 
-            {# Chatbox #}
-            <button class="btn btn-default" id="chat-dropdown-toggle"
+            {# Chatbox Reveal #}
+            <button class="btn btn-default" id="open-chat-button"
                     type="button">
                 <span class="glyphicon glyphicon-comment"></span>
                 <span id="unread_chats" class="badge"></span>
                 <span class="caret"></span>
             </button>
-            <div id="chat-dropdown" class="dropdown">
-                <div class="dropdown-menu" id="chatbox-dropdown">
-                {% include "intune/chatroom.html" %}
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -152,7 +150,29 @@
 </div>
 
 {# Right Column #}
-<div class="col-xl-2 col-md-2 col-sm-4"></div>
+<div class="col-xl-2 col-md-2 col-sm-4">
+    <div class="affix">
+        <div class="chat-box" id="chat_box" data-room-id="{{ composition.id }}"
+             data-username="{{ user.username }}" data-user-id="{{ user.id }}">
+            <div class="message-list" id="message_list">
+                {% for msg in chatmessage_list %}
+                    <div class="message">
+                        <strong> {{ msg.sender.user.username }}:</strong>
+                        {{ msg }}
+                        <span class='pull-right text-muted small'> {{ msg.time|naturaltime }} </span>
+                    </div>
+                {% endfor %}
+            </div>
+            <form class="input-group" id="chat-msg">
+                <label for="msg-text"></label>
+                <input id="msg-text" type="text" class="form-control" aria-label="Chat message">
+                <span class="input-group-btn">
+            <button id="send-msg" class="btn btn-default" type="submit">Send</button>
+        </span>
+            </form>
+        </div>
+    </div>
+</div>
 
 </div>
 
