@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from json import dumps, loads
 
 
@@ -115,6 +116,13 @@ class Notification(models.Model):
     msg = models.CharField(max_length=10000)
     sent_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     composition = models.ForeignKey(Composition)
+
+    def formatDict(self):
+        return {
+            "msg": str(self.msg),
+            "time": self.sent_at.isoformat(),
+            "link": reverse("intune:song_edit", args=[self.composition.id])
+        }
 
     def __str__(self):
         return self.msg

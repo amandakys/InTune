@@ -174,5 +174,12 @@ class NotificationConsumer(WebsocketConsumer):
             "text": json.dumps({
                 "action": "unread_count",
                 "unread": self.message.user.profile.unread_notifications,
+                "notification_list": [notification.formatDict()
+                    for notification in self.message.user.profile.get_unread()]
             }),
         })
+        # TODO: send the notifications
+
+    def receive(self, text=None, bytes=None, **kwargs):
+        # There is only one message
+        self.message.user.profile.mark_unread()
