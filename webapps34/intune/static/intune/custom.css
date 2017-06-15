@@ -61,13 +61,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 form label {
-    color: var(--element);
-}
-}
-
-.create label {
-    color: var(--element);
-    vertical-align: top;
+    color: var(--element-dark);
 }
 
 .form-control:focus {
@@ -115,23 +109,20 @@ form label {
     border-color: var(--element);
 }
 
+/* For buttons on (--element) coloured backgrounds */
 .btn.btn-dark {
-    background-color: #21B9B9;
-    font-weight: 400;
+    background-color: var(--element);
     opacity: 0.8;
-    filter: alpha(opacity=80);
-    padding: 8px 16px;
-    border: 4px var(--background_color);
     color: var(--background_color);
 }
 
 .btn.btn-dark:hover {
-    background-color: #2fb1b1;
+    background-color: var(--element-dark);
+    opacity: 1;
 }
 
 .btn:hover, .btn:focus {
     opacity: 1;
-    filter: alpha(opacity=100);
     outline: 0 !important;
 }
 

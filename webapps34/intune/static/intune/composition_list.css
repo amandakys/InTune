@@ -18,7 +18,7 @@ h2.title {
 }
 
 .composition-element {
-    background-color: var(--element-dark);
+    background-color: var(--element);
     margin: 1em 0 1em 0;
     padding: 1em 1em 1em 1em;
     border-radius: 10px;
@@ -36,11 +36,13 @@ h2.title {
     color: var(--background_color);
     font-weight: 800;
     font-size: 20px;
+    opacity: 0.85;
 }
 
 .composition-title:hover {
-    color: var(--element-darker);
+    color: var(--background_color);
     text-decoration: none;
+    opacity: 1;
 }
 
 .actions {
