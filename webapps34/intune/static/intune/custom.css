@@ -1,17 +1,17 @@
 /* Base Colours */
 :root {
-    --background_color: #FFFFFF;
+    --background_color: white;
     --element_color: #34CABF;
     --light_color: #3ff4e8;
     --dark_color: #21B9B9;
+    --element_dim: #9FC9C7;
     --darker_color: #005C55;
 }
 
 /* Overriding navbar defaults for consistent navbar behaviour */
 .navbar-default {
-    background: #005F5F;
+    background: var(--darker_color);
     border-radius: 0;
-    /*border-bottom: 2px solid #252525;*/
 }
 
 .navbar-default .navbar-brand {
@@ -24,13 +24,12 @@
 }
 
 .navbar-default .navbar-nav > li > a {
-    color: var(--background_color);
+    color: var(--element_dim);
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
     color: white;
-    font-weight: 600;
 }
 
 body {
