@@ -16,22 +16,6 @@ class CompositionList(generic.ListView):
                                           ).distinct().order_by("-lastEdit")
 
 
-class CompositionDetail(generic.DetailView):
-    def get(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Http404:
-            # TODO: add error message
-            return redirect("intune:index")
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
-    def get_queryset(self):
-        return Composition.objects.filter(Q(owner__user=self.request.user) |
-                                          Q(users__user=self.request.user)
-                                          ).distinct()
-
-
 class CompositionCreate(generic.edit.CreateView):
     model = Composition
     fields = ["title", "users"]

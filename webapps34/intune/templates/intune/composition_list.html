@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="col-md-7 col-sm-7">
-                <a class="composition-title" href="{% url 'intune:song' composition.id %}">
+                <a class="composition-title" href="{% url 'intune:song_edit' composition.id %}">
                     {{ composition.title }}
                 </a>
                 <p>Last Edited: {{ composition.lastEdit|naturalday }}</p>

@@ -27,14 +27,14 @@ class ViewTests(TestCase):
     def test_can_view_owned_compositions(self):
         self.client.force_login(self.users[0])
         pk = self.composition.id
-        response = self.client.get(reverse('intune:song', args=[pk]))
+        response = self.client.get(reverse('intune:song_edit', args=[pk]))
         self.assertEqual(response.context['composition'], self.composition)
         self.client.logout()
 
     def test_cannot_view_compositions_not_owned_or_shared(self):
         self.client.force_login(self.users[1])
         pk = self.user0_composition.id
-        response = self.client.get(reverse('intune:song', args=[pk]))
+        response = self.client.get(reverse('intune:song_edit', args=[pk]))
         if response.context and 'composition' in response.context:
             self.assertIsNone(response.context['composition'])
         else:
