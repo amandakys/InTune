@@ -25,7 +25,7 @@ $(document).ready(function () {
         var composition_id = -1;
         var user_id = -1;
         var bar_count = 0;
-        var current_bar = 0;
+        var current_bar = -1;
         var socket = null;
 
         // List of editable bars as JSON Objects
@@ -222,27 +222,42 @@ $(document).ready(function () {
         function _select(bar_id) {
             // Deselect the previous canvas
             _deselect(current_bar);
-            // Highlight the selected canvas
-            socket.send(JSON.stringify({
-                'action': "select",
-                'bar_id': bar_id
-            }));
 
-            $("#bar_outer_" + bar_id).addClass("selected");
+            // only select bar_id if its not the current_bar
+            if (current_bar != bar_id) {
+                // show editor
+                $("#toggle-editor").removeClass("collapsed");
+                $("#editor-collapse").addClass("in");
 
-            current_bar = bar_id;
+                // Highlight the selected canvas
+                socket.send(JSON.stringify({
+                    'action': "select",
+                    'bar_id': bar_id
+                }));
 
-            var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
-            var vt_json = JSON.parse(vt_json_string);
+                $("#bar_outer_" + bar_id).addClass("selected");
 
-            // Display vextab notes to editor textbox
-            $("#edit_text").val(vt_json["notes"]);
-            _rerender_bar(bar_id);
+                current_bar = bar_id;
 
-            // Display to user which bar is selected
-            $('label[for="edit_text"]').html("Editing Bar " + (bar_id + 1));
+                var vt_json_string = $("#vt_" + bar_id).data(VT_DATA_NAME);
+                var vt_json = JSON.parse(vt_json_string);
 
-            BarComment.retrieve_comments(current_bar);
+                // Display vextab notes to editor textbox
+                $("#edit_text").val(vt_json["notes"]);
+                _rerender_bar(bar_id);
+
+                // Display to user which bar is selected
+                $('label[for="edit_text"]').html("Editing Bar " + (bar_id + 1));
+
+                BarComment.retrieve_comments(current_bar);
+            } else {
+                // hide editor
+                $("#toggle-editor").addClass("collapsed");
+                $("#editor-collapse").removeClass("in");
+
+                // no bar selected
+                current_bar = -1;
+            }
         }
 
         function _build_vextab(json) {

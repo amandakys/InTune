@@ -152,7 +152,6 @@ div.canvas-block {
 .comment-block {
     background: #f7f7f7;
     word-wrap: break-word;
-    padding: 1em 1em 1em 1em;
     margin-bottom: 30px;
     border-radius: 10px;
 }
@@ -160,7 +159,7 @@ div.canvas-block {
 .comment-element {
     background: transparent;
     border-bottom: 1px solid #d2d2d2;
-    padding: 3px;
+    padding: 7px;
 }
 
 .comment-user {
@@ -212,6 +211,10 @@ div.canvas-block {
     z-index: 1;
 }
 
+#help-dropdown {
+    margin-top: 30px;
+}
+
 #canvas-help-menu {
     line-height: 30px;
     padding: 10px;
@@ -221,4 +224,30 @@ div.canvas-block {
 
 .edit_users {
     margin: 10px;
+}
+
+.sticky-div {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 60px;
+}
+
+#toggle-editor.collapsed {
+    position: fixed;
+    bottom: 5px;
+    right: 20px;
+}
+
+#toggle-editor.collapsed::before {
+    content: 'View Editor';
+}
+
+#toggle-editor {
+    position: fixed;
+    bottom: 200px;
+    right: 20px;
+}
+
+#toggle-editor::before {
+    content: 'Hide Editor';
 }

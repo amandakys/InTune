@@ -83,12 +83,12 @@
         <div class="col-md-2"></div>
 
         <div class="col-md-8">
-            <div class="dropdown pull-right">
-                <span class="glyphicon glyphicon-question-sign dropdown-toggle"
+            <div class="dropdown">
+                <span class="glyphicon glyphicon-question-sign dropdown-toggle pull-right"
                       data-toggle="dropdown"
                       style="cursor:help; font-size:20px"></span>
-                <div class="dropdown-menu">
-                    <div class="container text-center">
+                <div class="dropdown-menu pull-right" id="help-dropdown">
+                    <div class="text-center">
                         <strong>What do the colours mean?</strong>
                     </div>
                     <ul id="canvas-help-menu">
@@ -106,17 +106,16 @@
 </div>
 
 {# --- Main Block --- #}
-<div class="editor-top">
-{# Left Column #}
-<div class="col-xl-2 col-md-2 col-sm-4">
-    {# -- Comments -- #}
-    <div class="dropdown">
+
+{# -- Comments -- #}
+
+<div class="dropdown sticky-div">
+    <div class="col-xl-4 col-md-3 col-sm-6">
         <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle"
                 type="button" data-toggle="collapse" data-target="#comments-div">
             Comments <span id="total-comments" class="badge">Select Bar</span>
             <span class="caret"></span>
         </button>
-
         <div class="collapse" id="comments-div">
             <form action="{% url 'intune:comment_create' %}" method="post" id="comment_form"
                   class="form-inline" data-composition-id="{{ composition.id }}"
@@ -131,7 +130,7 @@
                 {% endbuttons %}
             </form>
 
-            <div id="comment-block" class="comment-block"
+            <div id="comment-block" class="comment-block pre-scrollable"
                  data-room-id="{{ composition.id }}"
                  data-username="{{ user.username }}"
                  data-ajax-target="{% url 'intune:comments' %}">
@@ -140,6 +139,7 @@
     </div>
 </div>
 
+<div class="editor-top">
 {# Center Column #}
 <div class="col-xl-8 col-md-8 col-sm-4 text-center">
     <div class="canvas-block" id="render_block"
@@ -180,5 +180,9 @@
 
 {# --- Editor Interface --- #}
 {% block aux %}
+<button id="toggle-editor" class="btn btn-default"
+        data-toggle="collapse" data-target="#editor-collapse"></button>
+<div id="editor-collapse" class="collapse in">
 {% include 'intune/editor.html' %}
+</div>
 {% endblock aux %}
