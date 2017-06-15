@@ -12,9 +12,10 @@ class Profile(models.Model):
         self.unread_notifications = 0
         self.save()
 
-    def get_unread(self):
+    def get_recent(self):
         return Notification.objects.filter(recipients=self)\
-                           .order_by("-sent_at")[:self.unread_notifications]
+                           .order_by("-sent_at")\
+                           [:max(self.unread_notifications, 5)]
 
     def __str__(self):
         return self.user.username
