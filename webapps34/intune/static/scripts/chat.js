@@ -55,7 +55,7 @@ $(document).ready(function() {
         "use strict";
         var window_height = $(window).height();
         // Hardcoded
-        var max_height = window_height - 450;
+        var max_height = window_height - 375;
         if (max_height < 0) {
             max_height = 0;
         }

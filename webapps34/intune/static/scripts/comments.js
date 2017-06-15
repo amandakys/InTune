@@ -63,6 +63,7 @@ $(document).ready(function () {
         function _retrieve_comments(current_bar) {
             // Reset comment display
             comment_div.empty();
+            $("#comment_form").removeClass("hide")
             $.getJSON(comment_div.attr("data-ajax-target"),
                 {
                     composition: comment_form.attr("data-composition-id"),

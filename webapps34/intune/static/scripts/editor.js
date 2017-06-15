@@ -224,7 +224,7 @@ $(document).ready(function () {
             _deselect(current_bar);
 
             // only select bar_id if its not the current_bar
-            if (current_bar != bar_id) {
+            if (current_bar !== bar_id) {
                 // show editor
                 $("#toggle-editor").removeClass("collapsed");
                 $("#editor-collapse").addClass("in");
@@ -257,6 +257,7 @@ $(document).ready(function () {
 
                 // no bar selected
                 current_bar = -1;
+                _reset_comments();
             }
         }
 
@@ -361,6 +362,13 @@ $(document).ready(function () {
 
         function _get_current_bar() {
             return current_bar;
+        }
+
+        /* Clear comments when bar is deselected */
+        function _reset_comments() {
+            $("#total-comments").text("Select Bar");
+            $("#comment-block").empty();
+            $("#comment_form").addClass("hide");
         }
 
         /* Initialisation code */
