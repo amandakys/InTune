@@ -3,7 +3,7 @@
     --background_color: #FFFFFF;
     --element_color: #34CABF;
     --light_color: #3ff4e8;
-    --dark_color: #008972;
+    --dark_color: #21B9B9;
     --darker_color: #005C55;
 }
 
@@ -49,7 +49,7 @@ li {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--element_color);
+    color: var(--dark_color);
 }
 
 .login {
