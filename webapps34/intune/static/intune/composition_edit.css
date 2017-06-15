@@ -201,3 +201,9 @@ div.canvas-block {
 .edit_users {
     margin: 10px;
 }
+
+.sticky-div {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 60px;
+}
