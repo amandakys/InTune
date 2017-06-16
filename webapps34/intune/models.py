@@ -17,6 +17,12 @@ class Profile(models.Model):
                            .order_by("-sent_at")\
                            [:max(self.unread_notifications, 5)]
 
+    def add_notification(self, composition, message):
+        notification = Notification.objects.create(composition=composition,
+                                                   msg=message)
+        notification.recipients.add(self)
+        return notification
+
     def __str__(self):
         return self.user.username
 

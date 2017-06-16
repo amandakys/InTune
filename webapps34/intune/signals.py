@@ -18,11 +18,9 @@ def user_added(**kwargs):
                         "shared" if action == "post_add" else "removed",
                         str(composition))
 
-    notification = Notification.objects.create(composition=composition, msg=msg)
-
     for pid in profile_ids:
         profile = model.objects.get(id=pid)
-        notification.recipients.add(profile)
+        notification = profile.add_notification(composition, msg)
 
         Group("notify-%s" % profile.user.id).send({
             "text": json.dumps(notification.formatDict()),
