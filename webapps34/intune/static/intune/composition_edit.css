@@ -32,7 +32,7 @@
 .hint-text {
     position: relative;
     font-size: x-small;
-    color: #9f9f9f;
+    color: #797979;
     background-color: inherit;
     /* Offset from notation on the left */
     top: 3px;
@@ -253,11 +253,23 @@ div.canvas-block {
 
 #toggle-editor {
     position: fixed;
-    bottom: 150px;
+    bottom: 200px;
     right: 20px;
     z-index: 10;
 }
 
 #toggle-editor::before {
-    content: 'Hide Editor';
+    content: 'Hide';
+}
+
+@media screen and (max-width: 700px) {
+    .hint-text, #edit_error, #save_error {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #notation-select-grp {
+        display: none;
+    }
 }

@@ -2,7 +2,7 @@
 
 <div class="editor-interface">
     {# Left Column #}
-    <div class="col-md-3">
+    <div class="col-md-2">
         <button type="button" class="btn btn-dark pull-right"
                 data-toggle="modal" data-target="#user-guide">
             User Guide
@@ -10,57 +10,58 @@
     </div>
 
     {# Middle Column #}
-    <div class="col-md-6">
-        <div class="row text-center">
-            <div class="btn-group" role="group" aria-label="Notation Selection">
+    <div class="col-md-8">
+        <div class="row">
+            <div id="notation-select-grp" class="btn-group btn-group-justified text-center"
+                 role="group" aria-label="Notation Selection">
                 {# Semibreve #}
-                <button type="button" class="notation-select btn btn-default" data-text=":w">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text=":w">
                     <span class="bravura">&#xE1D2;</span><span class="hint-text">(:w)</span>
-                </button>
+                </a>
                 {# Minim #}
-                <button type="button" class="notation-select btn btn-default" data-text=":h">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text=":h">
                     <span class="bravura">&#xE1D3;</span><span class="hint-text">(:h)</span>
-                </button>
+                </a>
                 {# Crotchet #}
-                <button type="button" class="notation-select btn btn-default" data-text=":q">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text=":q">
                     <span class="bravura">&#xE1D5;</span><span class="hint-text">(:q)</span>
-                </button>
+                </a>
                 {# Quaver #}
-                <button type="button" class="notation-select btn btn-default" data-text=":8">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text=":8">
                     <span class="bravura">&#xE1D7;</span><span class="hint-text">(:8)</span>
-                </button>
+                </a>
                 {# Semiquaver #}
-                <button type="button" class="notation-select btn btn-default" data-text=":16">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text=":16">
                     <span class="bravura">&#xE1D9;</span><span class="hint-text">(:16)</span>
-                </button>
+                </a>
                 {# Dotted Note #}
-                <button type="button" class="notation-select btn btn-default" data-text="d">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="d">
                     <span class="bravura">&#xE1E7;</span><span class="hint-text">(d)</span>
-                </button>
+                </a>
                 {# Rest #}
-                <button type="button" class="notation-select btn btn-default" data-text="##">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="##">
                     <span class="bravura">&#xE4E5;</span><span class="hint-text">(##)</span>
-                </button>
+                </a>
                 {# Flat #}
-                <button type="button" class="notation-select btn btn-default" data-text="@">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="@">
                     <span class="bravura">&#xE260;</span><span class="hint-text">(@)</span>
-                </button>
+                </a>
                 {# Double Flat #}
-                <button type="button" class="notation-select btn btn-default" data-text="@@">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="@@">
                     <span class="bravura">&#xE264;</span><span class="hint-text">(@@)</span>
-                </button>
+                </a>
                 {# Natural #}
-                <button type="button" class="notation-select btn btn-default" data-text="n">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="n">
                     <span class="bravura">&#xE261;</span><span class="hint-text">(n)</span>
-                </button>
+                </a>
                 {# Sharp #}
-                <button type="button" class="notation-select btn btn-default" data-text="#">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="#">
                     <span class="bravura">&#xE262;</span><span class="hint-text">(#)</span>
-                </button>
+                </a>
                 {# Double Sharp #}
-                <button type="button" class="notation-select btn btn-default" data-text="##">
+                <a href="#" type="button" class="notation-select btn btn-default" data-text="##">
                     <span class="bravura">&#xE263;</span><span class="hint-text">(##)</span>
-                </button>
+                </a>
             </div>
         </div>
         <div class="row text-center">
@@ -81,10 +82,10 @@
     </div>
 
     {# Right Column #}
-    <div class="col-md-3">
+    <div class="col-md-2">
         {# Error Messages to User #}
-        <div id="edit_error"></div>
-        <div id="save_error"></div>
+        <div id="edit_error" class="small"></div>
+        <div id="save_error" class="small"></div>
     </div>
 </div>
 
