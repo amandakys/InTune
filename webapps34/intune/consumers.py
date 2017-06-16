@@ -3,7 +3,7 @@ from channels.generic.websockets import WebsocketConsumer
 from django.contrib.auth.models import User
 import json
 
-from .models import ChatMessage, Composition, Profile, Comment
+from .models import ChatMessage, Composition, Comment, Version
 
 
 class CompositionChannel:
@@ -58,6 +58,7 @@ class Editor(CompositionChannel):
         DELETE = "delete_last"
         SELECT = "select"
         DESELECT = "deselect"
+        VERSION_GET = "version_get"
 
     def send(self, bar, action, contents=None):
         if bar >= 0:
@@ -94,6 +95,11 @@ class Editor(CompositionChannel):
             self.send(bar, Editor.Action.DESELECT)
         else:
             Editor.compositions[self.composition] = {}
+
+    def get_version(self, version, **kwargs):
+        data = Version.objects.filter(composition=self.composition)\
+            .order_by('date')[version].get_bar_list()
+        self.send(-1, Editor.Action.VERSION_GET, list(data))
 
     def get_selection(self):
         # For newly connected users
@@ -170,6 +176,7 @@ class EditorConsumer(WebsocketConsumer):
             Editor.Action.DELETE: comp_editor.delete_last,
             Editor.Action.SELECT: comp_editor.select,
             Editor.Action.DESELECT: comp_editor.deselect,
+            Editor.Action.VERSION_GET: comp_editor.get_version,
         }[action](bar=bar_id, contents=bar_contents)
 
     def disconnect(self, message, **kwargs):
