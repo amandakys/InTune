@@ -59,6 +59,7 @@ class Editor(CompositionChannel):
         SELECT = "select"
         DESELECT = "deselect"
         VERSION_GET = "version_get"
+        VERSION_SAVE = "version_save"
 
     def send(self, bar, action, contents=None):
         if bar >= 0:
@@ -95,6 +96,9 @@ class Editor(CompositionChannel):
             self.send(bar, Editor.Action.DESELECT)
         else:
             Editor.compositions[self.composition] = {}
+
+    def save_version(self, comment, **kwargs):
+        self.composition.save_version(comment)
 
     def get_version(self, version, **kwargs):
         data = Version.objects.filter(composition=self.composition)\
@@ -182,6 +186,7 @@ class EditorConsumer(WebsocketConsumer):
             Editor.Action.SELECT: comp_editor.select,
             Editor.Action.DESELECT: comp_editor.deselect,
             Editor.Action.VERSION_GET: comp_editor.get_version,
+            Editor.Action.VERSION_SAVE: comp_editor.save_version,
         }[action](bar=bar_id, contents=bar_contents)
 
     def disconnect(self, message, **kwargs):

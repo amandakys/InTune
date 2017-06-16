@@ -190,6 +190,13 @@ $(document).ready(function () {
             // TODO: update current version flag
         }
 
+        function _version_save(comment) {
+            socket.send(JSON.stringify({
+                'action': "version_save",
+                'bar_contents': comment
+            }))
+        }
+
         function _load_composition(bar_list) {
             save_enabled = current_version;
             for (var i = 0; i < bar_list.length; i++) {
@@ -407,6 +414,7 @@ $(document).ready(function () {
         return {
             version_checkout: _version_checkout,
             version_name_update: _version_name_update,
+            version_save: _version_save,
             send_append_bar: _send_append_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,
