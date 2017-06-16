@@ -31,15 +31,14 @@ class CommentHandler(CompositionChannel):
 
 class ChatHandler(CompositionChannel):
     def receive(self, message: str):
-        ChatMessage.objects.create(
+        chat_message = ChatMessage.objects.create(
             room=self.composition,
             msg=message,
             sender=self.user.profile,
         )
         Group("chat-%s" % self.composition.id).send({
             "text": json.dumps({
-                "user": str(self.user),
-                "msg": message,
+                "messages": [chat_message.formatDict()],
             })
         })
 

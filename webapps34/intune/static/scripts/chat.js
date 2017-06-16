@@ -27,9 +27,15 @@ $(document).ready(function() {
         msg_list.scrollTop(msg_list[0].scrollHeight);
     }
 
+    function _append_messages(messages) {
+        for (var i = 0; i < messages.length; i++)
+            _append_message(messages[i]);
+    }
+
     // Socket message receiver
     socket.onmessage = function (msg_json) {
-        _append_message(JSON.parse(msg_json.data));
+        data = JSON.parse(msg_json.data);
+        _append_messages(data["messages"]);
 
         // If chat is hidden, message can't be read, so update unread counter
         if ($("#chat_box").hasClass("hidden")) {

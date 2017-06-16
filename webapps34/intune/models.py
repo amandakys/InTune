@@ -97,6 +97,13 @@ class ChatMessage(models.Model):
     sender = models.ForeignKey(Profile, related_name='sender', default=1)
     time = models.DateTimeField(auto_now_add=True)
 
+    def formatDict(self):
+        return {
+            "msg": str(self.msg),
+            "time": self.time.isoformat(),
+            "user": str(self.sender),
+        }
+
     def __str__(self):
         return self.msg
 
