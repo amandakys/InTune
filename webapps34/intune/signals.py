@@ -5,6 +5,7 @@ import sys
 
 from .models import Composition, Notification
 
+
 def user_added(**kwargs):
     action = kwargs['action']
     if (action == "pre_add") or (action == "pre_remove"):
@@ -23,6 +24,9 @@ def user_added(**kwargs):
     for pid in profile_ids:
         profile = model.objects.get(id=pid)
         notification.recipients.add(profile)
+        profile.unread_notifications = profile.unread_notifications + 1
+        profile.save()
+        print("unread: ", profile.unread_notifications)
 
         Group("notify-%s" % profile.user.id).send({
             "text": json.dumps(notification.formatDict()),

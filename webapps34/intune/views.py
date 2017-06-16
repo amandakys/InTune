@@ -10,6 +10,11 @@ from .models import Composition, Profile, ChatMessage, Comment, Notification
 
 
 class CompositionList(generic.ListView):
+    def get_context_data(self, **kwargs):
+         context = super(CompositionList, self).get_context_data(**kwargs)
+         context["unread"] = Profile.objects.get(id=self.request.user.id).unread_notifications
+         return context
+
     def get_queryset(self):
         return Composition.objects.filter(Q(owner__user=self.request.user) |
                                           Q(users__user=self.request.user)
@@ -20,6 +25,11 @@ class CompositionCreate(generic.edit.CreateView):
     model = Composition
     fields = ["title", "users"]
     success_url = reverse_lazy("intune:index")
+
+    def get_context_data(self, **kwargs):
+         context = super(CompositionCreate, self).get_context_data(**kwargs)
+         context["unread"] = Profile.objects.get(id=self.request.user.id).unread_notifications
+         return context
 
     def get_form(self):
         form = super(CompositionCreate, self).get_form()
@@ -39,6 +49,11 @@ class InTuneRegister(generic.edit.CreateView):
     form_class = UserCreationForm
     template_name = "intune/register.html"
     success_url = reverse_lazy("intune:index")
+
+    def get_context_data(self, **kwargs):
+         context = super(InTuneRegister, self).get_context_data(**kwargs)
+         context["unread"] = Profile.objects.get(id=self.request.user.id).unread_notifications
+         return context
 
     def dispatch(self, *args, **kwargs):
         if self.request.user.is_authenticated():
@@ -66,6 +81,7 @@ class CompositionEdit(generic.edit.UpdateView):
     def get_context_data(self, **kwargs):
          context = super(CompositionEdit, self).get_context_data(**kwargs)
          context["chatmessage_list"] = ChatMessage.objects.filter(room__id=self.kwargs['pk']).order_by('time')
+         context["unread"] = Profile.objects.get(id=self.request.user.id).unread_notifications
          return context
 
     def get_form(self):

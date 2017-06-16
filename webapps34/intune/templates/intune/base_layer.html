@@ -39,7 +39,7 @@
                            data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false">NOTIFICATIONS
                             <span id="notification_counter" class="badge"
-                                  data-user-id = "{{ request.user.id }}"></span>
+                                  data-user-id="{{ request.user.id }}">{% if unread %}{{ unread }}{% endif %}</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" id="notification-menu">
