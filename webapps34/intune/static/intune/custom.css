@@ -125,7 +125,9 @@ form label {
 }
 
 @media print {
-    form, .dropdown-toggle, .dropdown, div.modal, div.modal-dialog, textarea, .edit_users, .btn, #edit_text {
+    form, div.modal, div.modal-dialog, textarea, .btn,
+    .dropdown-toggle, .dropdown, .dropdown-menu, .collapse,
+    .chat-box, .edit_users, #editor-collapse {
         display: none;
     }
 
