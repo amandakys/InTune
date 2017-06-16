@@ -20,6 +20,7 @@ $(document).ready(function() {
         var msg_div = $(
             "<div class='message'><strong>" +  msg_data["user"] + ": </strong>" + msg_data["msg"] + "</div>"
         ).append(date_span);
+        Moments.relative_date(date_span);
 
         var msg_list = $("#message_list");
         msg_list.append(msg_div);
