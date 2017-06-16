@@ -200,6 +200,10 @@ div.canvas-block {
     word-wrap: break-word;
 }
 
+#chat-msg {
+    z-index: 0;
+}
+
 .message {
     padding: inherit;
 }
@@ -241,7 +245,7 @@ div.canvas-block {
 #toggle-editor.collapsed {
     position: fixed;
     bottom: 5px;
-    right: 20px;
+    right: 10px;
 }
 
 #toggle-editor.collapsed::before {
@@ -250,8 +254,8 @@ div.canvas-block {
 
 #toggle-editor {
     position: fixed;
-    bottom: 200px;
-    right: 20px;
+    bottom: 150px;
+    right: 10px;
     z-index: 10;
 }
 
