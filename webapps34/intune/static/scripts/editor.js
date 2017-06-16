@@ -139,6 +139,8 @@ $(document).ready(function () {
             socket.onopen = function() {
                 $("#edit_form").submit(Editor.save_bar_click);
                 $("#new_bar").click(Editor.send_append_bar);
+                $("#version-form").submit(Editor.version_checkout);
+                $("#version-save-btn").click(Editor.version_save);
             };
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
@@ -182,10 +184,11 @@ $(document).ready(function () {
         }
 
         function _version_name_update(version_id) {
-            $("version-name").html(version_names[version_id]);
+            $("#version-name").html(version_names[version_id]);
         }
 
-        function _version_checkout(version_id) {
+        function _version_checkout(event) {
+            var version_id = parseInt(version_slider.val());
             _deselect(current_bar);
             current_version = (version_id == version_names.length - 1);
 
@@ -193,9 +196,11 @@ $(document).ready(function () {
                 'action': "version_get",
                 'bar_contents': version_id
             }));
+            event.preventDefault();
         }
 
-        function _version_save(comment) {
+        function _version_save() {
+            var comment = $("#version-new-name").val();
             socket.send(JSON.stringify({
                 'action': "version_save",
                 'bar_contents': comment

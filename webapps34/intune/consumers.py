@@ -97,17 +97,18 @@ class Editor(CompositionChannel):
         else:
             Editor.compositions[self.composition] = {}
 
-    def save_version(self, comment, **kwargs):
-        self.composition.save_version(comment)
+    def save_version(self, contents, **kwargs):
+        self.composition.save_version(contents)
 
-    def get_version(self, version, **kwargs):
+    def get_version(self, contents, **kwargs):
+        contents = int(contents)
         versions = Version.objects.filter(composition=self.composition)\
             .order_by('date')
-        if len(versions) > version:
-            data = versions[version].get_bar_list()
+        if len(versions) > contents:
+            data = versions[contents].get_bar_list()
         else:
             data = self.composition.get_bar_list()
-        self.send(-1, Editor.Action.VERSION_GET, list(data))
+        self.send(0, Editor.Action.VERSION_GET, list(data))
 
     def get_version_list(self):
         return [str(version) for version in Version.objects\
