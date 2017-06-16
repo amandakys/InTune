@@ -13,10 +13,13 @@ $(document).ready(function() {
     socket.onmessage = function (msg_json) {
         var msg_data = JSON.parse(msg_json.data);
 
+        var date_span = $('<span>', {
+            "class": 'pull-right text-muted small moment-date',
+            "data-date": Date()
+        });
         var msg_div = $(
-            "<div class='message'><strong>" +  msg_data["user"] + ": </strong>" + msg_data["msg"] +
-            "<span class='pull-right text-muted small'> Just now</span></div>"
-        );
+            "<div class='message'><strong>" +  msg_data["user"] + ": </strong>" + msg_data["msg"] + "</div>"
+        ).append(date_span);
 
         var msg_list = $("#message_list");
         msg_list.append(msg_div);
