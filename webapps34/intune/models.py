@@ -92,8 +92,31 @@ class Composition(models.Model):
             Comment.objects.filter(composition=self, bar=bar_count-1).delete()
         return bar_count - 1
 
+    def save_version(self, comment):
+        Version.objects.create(composition=self, comment=comment,
+                               data=self.data)
+
     def __str__(self):
         return self.title
+
+
+class Version(models.Model):
+    composition = models.ForeignKey(Composition, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=60)
+    data = models.CharField(max_length=10000, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def get_bar_list(self):
+        return self.get_data()['bars']
+
+    def get_data(self):
+        try:
+            return loads(self.data)
+        except ValueError:
+            return {'bars': []}
+
+    def __str__(self):
+        return self.comment
 
 
 class ChatMessage(models.Model):
