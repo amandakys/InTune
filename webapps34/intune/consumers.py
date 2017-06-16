@@ -101,6 +101,10 @@ class Editor(CompositionChannel):
             .order_by('date')[version].get_bar_list()
         self.send(-1, Editor.Action.VERSION_GET, list(data))
 
+    def get_version_list(self):
+        return [str(version) for version in Version.objects\
+            .filter(composition=self.composition).order_by('date')]
+
     def get_selection(self):
         # For newly connected users
         self.deselect()
@@ -153,12 +157,13 @@ class EditorConsumer(WebsocketConsumer):
 
     def connect(self, message, **kwargs):
         # This enforces Composition.has_access
-        selection = Editor(kwargs.get("comp"), message.user).get_selection()
+        editor = Editor(kwargs.get("comp"), message.user)
         self.message.reply_channel.send({"accept": True})
         self.message.reply_channel.send({
             "text": json.dumps({
-                "bar_mod": "fresh_selects",
-                "selection": selection,
+                "bar_mod": "connect_message",
+                "selection": editor.get_selection(),
+                "version_list": editor.get_version_list(),
             }),
         })
 

@@ -28,6 +28,10 @@ $(document).ready(function () {
         var current_bar = -1;
         var socket = null;
 
+        // For version history
+        var save_enabled = true;
+        var current_version = true;
+
         // List of editable bars as JSON Objects
         var editable_bars = [];
 
@@ -146,7 +150,7 @@ $(document).ready(function () {
                 } else if (data.bar_mod === "deselect") {
                     if (data.user !== user_id)
                         $("#bar_outer_" + data.bar_id).removeClass("oth-user");
-                } else if (data.bar_mod === "fresh_selects") {
+                } else if (data.bar_mod === "connect_message") {
                     for (var user in data.selection) {
                         // Property check for JS
                         if (data.selection.hasOwnProperty(user)) {
@@ -163,9 +167,33 @@ $(document).ready(function () {
                     bar_count--;
 
                     $("#bar_outer_" + to_remove).remove();
+                } else if (data.bar_mod === "version_get") {
+                    _load_composition(data.bar_contents);
                 } else {
                     console.log("Invalid WebSocket message received, data: " + JSON.stringify(data));
                 }
+            }
+        }
+
+        function _version_name_update(version_id) {
+            // Update the output tag
+        }
+
+        function _version_checkout(version_id) {
+            _deselect(current_bar);
+
+            socket.send(JSON.stringify({
+                'action': "version_get",
+                'bar_contents': version_id
+            }));
+
+            // TODO: update current version flag
+        }
+
+        function _load_composition(bar_list) {
+            save_enabled = current_version;
+            for (var i = 0; i < bar_list.length; i++) {
+                _update_bar_div(i, bar_list[i]);
             }
         }
 
@@ -328,7 +356,9 @@ $(document).ready(function () {
         }
 
         function _save_bar(bar_id) {
-            if (bar_id < 0 || bar_id >= editable_bars.length) {
+            if (save_enabled === false) {
+                // Can't save
+            } else if (bar_id < 0 || bar_id >= editable_bars.length) {
                 // Verify valid bar
                 $("#save_error").html("Please select a bar to edit!");
             } else {
@@ -375,6 +405,8 @@ $(document).ready(function () {
         _load_init();
 
         return {
+            version_checkout: _version_checkout,
+            version_name_update: _version_name_update,
             send_append_bar: _send_append_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,
