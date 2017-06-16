@@ -30,6 +30,10 @@ class CommentHandler(CompositionChannel):
 
 
 class ChatHandler(CompositionChannel):
+    def old_message_list(self):
+        return ChatMessage.objects.filter(room=self.composition)\
+            .order_by('time')
+
     def receive(self, message: str):
         chat_message = ChatMessage.objects.create(
             room=self.composition,
@@ -38,6 +42,7 @@ class ChatHandler(CompositionChannel):
         )
         Group("chat-%s" % self.composition.id).send({
             "text": json.dumps({
+                "initial": False,
                 "messages": [chat_message.formatDict()],
             })
         })
@@ -114,9 +119,19 @@ class ChatConsumer(WebsocketConsumer):
     http_user = True
 
     def connection_groups(self, **kwargs):
-        # Enforce permissions
-        ChatHandler(kwargs.get("comp"), self.message.user)
         return ["chat-%s" % kwargs.get("comp")]
+
+    def connect(self, message, **kwargs):
+        # Enforce permissions
+        initial = ChatHandler(kwargs.get("comp"), self.message.user)\
+            .old_message_list()
+        self.message.reply_channel.send({"accept": True})
+        self.message.reply_channel.send({
+            "text": json.dumps({
+                "initial": True,
+                "messages": [msg.formatDict() for msg in initial],
+            }),
+        })
 
     def receive(self, text=None, bytes=None, **kwargs):
         contents = json.loads(text)

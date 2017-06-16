@@ -6,13 +6,14 @@ $(document).ready(function() {
     var username = chat_box.attr("data-username");
     var user_id = chat_box.attr("data-user-id");
     var socket = new WebSocket("ws://" + window.location.host + "/chat/" + room_id + "/");
+    var message_list = $("#message_list");
 
     var unread_chat = $("#unread_chats");
 
     function _append_message(msg_data) {
         var date_span = $('<span>', {
             "class": 'pull-right text-muted small moment-date',
-            "data-date": Date()
+            "data-date": msg_data["time"]
         });
         var msg_div = $('<div>', {
             "class": "message",
@@ -20,16 +21,15 @@ $(document).ready(function() {
         }).append(date_span);
         Moments.relative_date(date_span);
 
-        var msg_list = $("#message_list");
-        msg_list.append(msg_div);
-
-        // auto scroll to bottom of chat
-        msg_list.scrollTop(msg_list[0].scrollHeight);
+        message_list.append(msg_div);
     }
 
     function _append_messages(messages) {
         for (var i = 0; i < messages.length; i++)
             _append_message(messages[i]);
+
+        // auto scroll to bottom of chat
+        message_list.scrollTop(message_list[0].scrollHeight);
     }
 
     // Socket message receiver
@@ -38,7 +38,7 @@ $(document).ready(function() {
         _append_messages(data["messages"]);
 
         // If chat is hidden, message can't be read, so update unread counter
-        if ($("#chat_box").hasClass("hidden")) {
+        if (!data["initial"] && $("#chat_box").hasClass("hidden")) {
             var current_unread = unread_chat.html();
             if (current_unread) {
                 current_unread = parseInt(current_unread);

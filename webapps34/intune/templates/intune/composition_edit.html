@@ -159,13 +159,6 @@
         <div class="chat-box" id="chat_box" data-room-id="{{ composition.id }}"
              data-username="{{ user.username }}" data-user-id="{{ user.id }}">
             <div class="message-list" id="message_list">
-                {% for msg in chatmessage_list %}
-                    <div class="message">
-                        <strong> {{ msg.sender.user.username }}:</strong>
-                        {{ msg }}
-                        <span class='pull-right text-muted small'> {{ msg.time|naturaltime }} </span>
-                    </div>
-                {% endfor %}
             </div>
             <form class="input-group" id="chat-msg">
                 <label for="msg-text"></label>
