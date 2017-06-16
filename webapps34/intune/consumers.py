@@ -101,8 +101,12 @@ class Editor(CompositionChannel):
         self.composition.save_version(comment)
 
     def get_version(self, version, **kwargs):
-        data = Version.objects.filter(composition=self.composition)\
-            .order_by('date')[version].get_bar_list()
+        versions = Version.objects.filter(composition=self.composition)\
+            .order_by('date')
+        if len(versions) > version:
+            data = versions[version].get_bar_list()
+        else:
+            data = self.composition.get_bar_list()
         self.send(-1, Editor.Action.VERSION_GET, list(data))
 
     def get_version_list(self):

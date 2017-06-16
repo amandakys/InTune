@@ -36,6 +36,33 @@
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
             </button>
 
+            <div class="btn-group">
+                <div class="dropdown">
+                    {% if composition.owner.user == request.user %}
+                    <button type="button" class="btn btn-light dropdown-toggle"
+                            id="version_button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Versions
+                        <span class="caret"></span>
+                    </button>
+                    {% endif %}
+
+                    <div class="dropdown-menu">
+                        <form method="post" action="" id="version-form">
+                            {% csrf_token %}
+                            <div style="margin: 10px">
+                                <label for="version-slider">Select version</label>
+                                <input type="range" min="0" max="0" value="0" id="version-slider" step="1" oninput="Editor.version_name_update(value)">
+                                <output for="version-slider" id="version-name">Current</output>
+                                <button type="submit" class="btn btn-light">
+                                    Checkout
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             {# Sharing Composition #}
             <div class="btn-group">
                 <div class="dropdown">

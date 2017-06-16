@@ -31,6 +31,8 @@ $(document).ready(function () {
         // For version history
         var save_enabled = true;
         var current_version = true;
+        var version_names = [];
+        var version_slider = $("#version-slider");
 
         // List of editable bars as JSON Objects
         var editable_bars = [];
@@ -157,6 +159,10 @@ $(document).ready(function () {
                             _oth_user_select(data.selection[user]);
                         }
                     }
+                    version_names = data.version_list;
+                    version_slider.attr("max", version_names.length);
+                    version_slider.attr("value", version_names.length);
+                    version_names.push("Current");
                 } else if (data.bar_mod === "delete_last") {
                     var to_remove = bar_count - 1;
 
@@ -176,18 +182,17 @@ $(document).ready(function () {
         }
 
         function _version_name_update(version_id) {
-            // Update the output tag
+            $("version-name").html(version_names[version_id]);
         }
 
         function _version_checkout(version_id) {
             _deselect(current_bar);
+            current_version = (version_id == version_names.length - 1);
 
             socket.send(JSON.stringify({
                 'action': "version_get",
                 'bar_contents': version_id
             }));
-
-            // TODO: update current version flag
         }
 
         function _version_save(comment) {
