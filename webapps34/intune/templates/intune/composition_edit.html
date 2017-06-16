@@ -31,10 +31,14 @@
             <a href="{% url 'intune:index' %}" class="btn btn-light">Back</a>
         </div>
         <div class="col-sm-6 text-right">
-            <button type="button" class="btn btn-light disabled"
+            <button type="button" id="audio-playback" class="btn btn-light"
                     title="Playback not currently supported">
-                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-play" aria-hidden="true" data-play="play"></span>
             </button>
+        <audio id="placeholder-audio">
+          <source src="{% static 'intune/sample_music.wav' %}" type="audio/wav">
+        Your browser does not support the audio element.
+        </audio>
 
             {# Sharing Composition #}
             <div class="btn-group">

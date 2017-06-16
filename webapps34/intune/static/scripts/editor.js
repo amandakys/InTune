@@ -416,4 +416,31 @@ $(document).ready(function () {
         // auto scroll to bottom of chat
         chat_box.scrollTop(chat_box[0].scrollHeight);
     });
+
+    // audio playing
+    var audio_playback = $("#audio-playback");
+    var audio = $("#placeholder-audio")[0];
+    var icon = $("#audio-playback").find("span");
+
+    audio_playback.click(function () {
+        var play = icon.attr("data-play");
+        icon.removeClass();
+        if (play === "play") {
+            icon.addClass("glyphicon glyphicon-pause");
+            audio.play();
+            icon.attr("data-play", "pause");
+        } else {
+            icon.addClass("glyphicon glyphicon-play");
+            audio.pause();
+            icon.attr("data-play", "play");
+        }
+    });
+
+    // change back to play button when audio ends
+    audio.onended = function() {
+        icon.removeClass();
+        icon.addClass("glyphicon glyphicon-play");
+        icon.attr("data-play", "play");
+    };
+
 });
