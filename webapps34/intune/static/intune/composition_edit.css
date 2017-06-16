@@ -121,7 +121,6 @@ div.canvas-block {
 
 /* Editor Interface Configuration */
 .editor-top {
-    height: auto;
     overflow: auto;
     padding-bottom: 200px;
 }
@@ -191,15 +190,13 @@ div.canvas-block {
 
 /* -- Chat Box -- */
 .chat-box {
-    padding: 0 10px 0 0;
-    margin: -45px 10px 0 0;
     background: white;
-
 }
 
-.message-list {
+.chat-box .message-list {
     overflow-y: auto;
     padding: 0 0 5px 0;
+    max-height: 230px !important;
     word-wrap: break-word;
 }
 
@@ -271,5 +268,42 @@ div.canvas-block {
 @media screen and (max-width: 480px) {
     #notation-select-grp {
         display: none;
+    }
+}
+
+
+/* Affix CSS */
+
+@media (max-width: 767px) {
+    .affix-limiter > .affix {
+        position: relative !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .affix-limiter > .affix {
+        position: fixed !important;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .affix-limiter > .affix {
+        position: fixed !important;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .affix-limiter > .affix {
+        position: fixed !important;
+        max-width: 220px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .affix-limiter > .affix {
+        position: fixed !important;
+        max-width: 250px;
     }
 }

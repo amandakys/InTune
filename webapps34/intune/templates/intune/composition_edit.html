@@ -115,67 +115,70 @@
 </div>
 
 {# --- Main Block --- #}
-
-{# -- Comments -- #}
-
-<div class="dropdown sticky-div">
-    <div class="col-xl-4 col-md-3 col-sm-6">
-        <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle"
-                type="button" data-toggle="collapse" data-target="#comments-div">
-            Comments <span id="total-comments" class="badge">Select Bar</span>
-            <span class="caret"></span>
-        </button>
-        <div class="collapse" id="comments-div">
-            <form action="" method="post" id="comment_form"
-                  class="form-inline hide" data-composition-id="{{ composition.id }}"
-                  autocomplete="off">
-                {% csrf_token %}
-                <input type="text" id="comment_text" class="form-control"
-                       placeholder="Write a comment" required/>
-                {% buttons %}
-                    <button type="submit" class="btn btn-light btn-xs">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+<div class="container-fluid editor-top">
+    {# Comment #}
+    <div class="col-md-2 col-sm-3">
+        <div class="affix-limiter">
+            <div data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                <div class="dropdown">
+                    <button style="margin-bottom: 1%" class="btn btn-dark dropdown-toggle"
+                            type="button" data-toggle="collapse" data-target="#comments-div">
+                        Comments <span id="total-comments" class="badge">Select Bar</span>
+                        <span class="caret"></span>
                     </button>
-                {% endbuttons %}
-            </form>
+                    <div class="collapse" id="comments-div">
+                        <form action="" method="post" id="comment_form"
+                              class="form-inline hide" data-composition-id="{{ composition.id }}"
+                              autocomplete="off">
+                            {% csrf_token %}
+                            <input type="text" id="comment_text" class="form-control"
+                                   placeholder="Write a comment" required/>
+                            {% buttons %}
+                                <button type="submit" class="btn btn-light btn-xs">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            {% endbuttons %}
+                        </form>
 
-            <div id="comment-block" class="comment-block pre-scrollable"
-                 data-room-id="{{ composition.id }}"
-                 data-username="{{ user.username }}"
-                 data-ajax-target="{% url 'intune:comments' %}">
+                        <div id="comment-block" class="comment-block pre-scrollable"
+                             data-room-id="{{ composition.id }}"
+                             data-username="{{ user.username }}"
+                             data-ajax-target="{% url 'intune:comments' %}">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="editor-top">
-{# Center Column #}
-<div class="col-xl-8 col-md-8 col-sm-4 text-center">
-    <div class="canvas-block" id="render_block"
-         data-placeholder="Add a new bar by clicking the button below"
-         data-composition-id="{{ composition.id }}"
-         data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
-         data-user-id="{{ request.user.id }}"></div>
-</div>
+    {# Center Column #}
+    <div class="col-md-8 col-sm-6 text-center">
+        <div class="canvas-block" id="render_block"
+             data-placeholder="Add a new bar by clicking the button below"
+             data-composition-id="{{ composition.id }}"
+             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
+             data-user-id="{{ request.user.id }}"></div>
+    </div>
 
-{# Right Column #}
-<div class="col-xl-2 col-md-2 col-sm-4">
-    <div class="affix">
-        <div class="chat-box" id="chat_box" data-room-id="{{ composition.id }}"
-             data-username="{{ user.username }}" data-user-id="{{ user.id }}">
-            <div class="message-list" id="message_list">
+    {# Right Column #}
+    <div class="col-md-2 col-sm-3">
+        <div class="affix-limiter">
+            <div data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                <div class="chat-box" id="chat_box" data-room-id="{{ composition.id }}"
+                     data-username="{{ user.username }}" data-user-id="{{ user.id }}">
+                    <div class="message-list" id="message_list">
+                    </div>
+                    <form class="input-group" id="chat-msg">
+                        <label for="msg-text"></label>
+                        <input id="msg-text" type="text" class="form-control" aria-label="Chat message">
+                        <span class="input-group-btn">
+                <button id="send-msg" class="btn btn-light" type="submit">Send</button>
+            </span>
+                    </form>
+                </div>
             </div>
-            <form class="input-group" id="chat-msg">
-                <label for="msg-text"></label>
-                <input id="msg-text" type="text" class="form-control" aria-label="Chat message">
-                <span class="input-group-btn">
-            <button id="send-msg" class="btn btn-light" type="submit">Send</button>
-        </span>
-            </form>
         </div>
     </div>
-</div>
-
 </div>
 
 {% endblock content %}
