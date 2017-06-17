@@ -220,6 +220,7 @@ div.canvas-block {
     z-index: 1;
 }
 
+/* -- Help menu -- */
 #help-dropdown {
     margin-top: -40px;
     margin-right: 120px;
@@ -232,8 +233,13 @@ div.canvas-block {
     z-index: 1;
 }
 
+/* -- Edit shared users -- */
 .edit_users {
     margin: 10px;
+}
+
+.edit_users button {
+    margin-top: 5px;
 }
 
 .sticky-div {
@@ -242,6 +248,7 @@ div.canvas-block {
     top: 60px;
 }
 
+/* -- Editor toggle -- */
 #toggle-editor.collapsed {
     position: fixed;
     bottom: 5px;
