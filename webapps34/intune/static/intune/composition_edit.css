@@ -226,9 +226,10 @@ div.canvas-block {
 }
 
 /* -- Help menu -- */
-#help-dropdown {
-    margin-top: -40px;
-    margin-right: 120px;
+.colour-help {
+    text-align: right;
+    padding-left: 5em;
+    padding-right: 5em;
 }
 
 #canvas-help-menu {

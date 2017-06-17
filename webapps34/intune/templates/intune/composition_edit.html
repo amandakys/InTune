@@ -87,31 +87,6 @@
     <div class="row">
         <h1>{{ composition.title }}</h1>
     </div>
-
-    <div class="row">
-        <div class="col-md-2"></div>
-
-        <div class="col-md-8">
-            <div class="dropdown pull-right" id="help-dropdown">
-                <span class="glyphicon glyphicon-question-sign dropdown-toggle"
-                      data-toggle="dropdown"
-                      style="cursor:help; font-size:20px"></span>
-                <div class="dropdown-menu">
-                    <div class="text-center">
-                        <strong>What do the colours mean?</strong>
-                    </div>
-                    <ul id="canvas-help-menu">
-                        <li><span class="render-error">Render error</span></li>
-                        <li><span class="selected">Currently selected bar</span></li>
-                        <li><span class="oth-user">Other users are editing that bar</span></li>
-                        <li>(changes made to that bar might be overwritten)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2"></div>
-    </div>
 </div>
 
 {# --- Main Block --- #}
@@ -152,16 +127,36 @@
     </div>
 
     {# Center Column #}
-    <div class="col-md-8 col-sm-6 text-center">
-        <div class="canvas-block" id="render_block"
-             data-placeholder="Add a new bar by clicking the button below"
-             data-composition-id="{{ composition.id }}"
-             data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
-             data-user-id="{{ request.user.id }}"></div>
+    <div class="col-md-8 col-sm-6">
+        <div class="row">
+            <div class="dropdown colour-help">
+                <span class="glyphicon glyphicon-question-sign dropdown-toggle"
+                      data-toggle="dropdown"
+                      style="cursor:help; font-size:20px"></span>
+                <div class="dropdown-menu">
+                    <div class="text-center">
+                        <strong>What do the colours mean?</strong>
+                    </div>
+                    <ul id="canvas-help-menu">
+                        <li><span class="render-error">Render error</span></li>
+                        <li><span class="selected">Currently selected bar</span></li>
+                        <li><span class="oth-user">Other users are editing that bar</span></li>
+                        <li>(changes made to that bar might be overwritten)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="canvas-block" id="render_block"
+                 data-placeholder="Add a new bar by clicking the button below"
+                 data-composition-id="{{ composition.id }}"
+                 data-ajax-target="{% url 'intune:composition_attribute' composition.id %}"
+                 data-user-id="{{ request.user.id }}"></div>
+        </div>
     </div>
 
     {# Right Column #}
-    <div class="col-md-2 col-sm-3">
+    <div class="col-md-2 col-sm-3" id="chat_div">
         <div class="affix-limiter">
             <div data-spy="affix" data-offset-top="60" data-offset-bottom="200">
                 <div class="chat-box" id="chat_box" data-room-id="{{ composition.id }}"

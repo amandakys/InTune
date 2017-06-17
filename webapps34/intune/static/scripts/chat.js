@@ -66,7 +66,7 @@ $(document).ready(function() {
 
     function _adapt_chat_width() {
         "use strict";
-        var col_2_width = $(".col-md-2.col-sm-3").width();
+        var col_2_width = $("#chat_div").width();
 
         var chat_box = $("#chat_box");
         chat_box.width(col_2_width);
