@@ -33,7 +33,7 @@ $(document).ready(function() {
     }
 
     // Socket message receiver
-    socket.onmessage = function (msg_json) {
+    socket.onmessage = function(msg_json) {
         data = JSON.parse(msg_json.data);
         _append_messages(data["messages"]);
 
@@ -64,6 +64,15 @@ $(document).ready(function() {
         });
     };
 
+    function _adapt_chat_width() {
+        "use strict";
+        var col_2_width = $(".col-md-2.col-sm-3").width();
+
+        var chat_box = $("#chat_box");
+        chat_box.width(col_2_width);
+        chat_box.css("padding-right", "15px");
+    }
+
     function _adapt_chat_height() {
         "use strict";
         var window_height = $(window).height();
@@ -72,7 +81,7 @@ $(document).ready(function() {
         if (max_height < 0) {
             max_height = 0;
         }
-        console.log("Max Height: " + max_height);
+
         $("#message_list").css("max-height", max_height + "px");
     }
 
@@ -88,16 +97,22 @@ $(document).ready(function() {
         }
     });
 
+    /**
+     * Resize listener to adapt chat dimensions
+     */
     $(window).resize(function() {
         "use strict";
        _adapt_chat_height();
+       _adapt_chat_width();
     });
 
     /* Initialisation Code */
 
-    // Resize height on first load
+    // Resize dimensions on first load
     _adapt_chat_height();
-    // Hide chat
+    _adapt_chat_width();
+
+    // Hide chat initially
     if (!chat_box.hasClass("hidden")) {
         chat_box.addClass("hidden");
     }

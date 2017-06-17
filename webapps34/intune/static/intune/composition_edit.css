@@ -189,6 +189,11 @@ div.canvas-block {
 /* ----- */
 
 /* -- Chat Box -- */
+/* Fixed padding to compensate for affix properties */
+.affix > .chat-box {
+    padding-right: 15px;
+}
+
 .chat-box {
     background: white;
 }
@@ -284,7 +289,6 @@ div.canvas-block {
 
 
 /* Affix CSS */
-
 @media (max-width: 767px) {
     .affix-limiter > .affix {
         position: relative !important;
