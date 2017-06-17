@@ -121,8 +121,27 @@ $(document).ready(function () {
             comment_div.prepend(comment_row);
         }
 
+        function _adapt_chat_width() {
+            "use strict";
+            var cd_width = $("#comment_container").width();
+
+            var comment_div = $("#comments-div");
+            comment_div.width(cd_width);
+            comment_div.css("padding-right", "15px");
+        }
+
         return {
-            retrieve_comments: _retrieve_comments
+            retrieve_comments: _retrieve_comments,
+            adapt_chat_width: _adapt_chat_width
         }
     })();
+
+    BarComment.adapt_chat_width();
+
+    $(window).resize(function() {
+        "use strict";
+        BarComment.adapt_chat_width();
+    })
+
+
 });
