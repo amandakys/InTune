@@ -43,14 +43,12 @@
 
             <div class="btn-group">
                 <div class="dropdown">
-                    {% if composition.owner.user == request.user %}
                     <button type="button" class="btn btn-light dropdown-toggle"
                             id="version_button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         Versions
                         <span class="caret"></span>
                     </button>
-                    {% endif %}
 
                     <div class="dropdown-menu">
                         <form method="post" action="" id="version-form">
