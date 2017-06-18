@@ -36,12 +36,10 @@ var Render = (function () {
             vextab.parse(vex_string);
             artist.render(renderer);
             $("#edit_error").text("");
-            var css_classes = $("#bar_outer_" + canvas_id).attr("class");
-            $("#bar_outer_" + canvas_id).attr("class", css_classes.replace(/render-error/, ""));
+            $("#bar_outer_" + canvas_id).removeClass("render-error");
         } catch (e) {
             $("#edit_error").html(e.message.replace(/[\n]/g, "<br/>"));
-            var css_classes = $("#bar_outer_" + canvas_id).attr("class");
-            $("#bar_outer_" + canvas_id).attr("class", css_classes + " render-error");
+            $("#bar_outer_" + canvas_id).addClass("render-error");
         }
     }
 
