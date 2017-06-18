@@ -21,6 +21,8 @@ class Profile(models.Model):
         notification = Notification.objects.create(composition=composition,
                                                    msg=message)
         notification.recipients.add(self)
+        self.unread_notifications += 1
+        self.save()
         return notification
 
     def __str__(self):
