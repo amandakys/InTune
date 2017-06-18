@@ -3,7 +3,7 @@ from channels.generic.websockets import WebsocketConsumer
 from django.contrib.auth.models import User
 import json
 
-from .models import ChatMessage, Composition, Profile, Comment
+from .models import ChatMessage, Composition, Comment, Version
 
 
 class CompositionChannel:
@@ -58,6 +58,8 @@ class Editor(CompositionChannel):
         DELETE = "delete_last"
         SELECT = "select"
         DESELECT = "deselect"
+        VERSION_GET = "version_get"
+        VERSION_SAVE = "version_save"
 
     def send(self, bar, action, contents=None):
         if bar >= 0:
@@ -94,6 +96,23 @@ class Editor(CompositionChannel):
             self.send(bar, Editor.Action.DESELECT)
         else:
             Editor.compositions[self.composition] = {}
+
+    def save_version(self, contents, **kwargs):
+        self.composition.save_version(contents)
+
+    def get_version(self, contents, **kwargs):
+        contents = int(contents)
+        versions = Version.objects.filter(composition=self.composition)\
+            .order_by('date')
+        if len(versions) > contents:
+            data = versions[contents].get_bar_list()
+        else:
+            data = self.composition.get_bar_list()
+        self.send(0, Editor.Action.VERSION_GET, list(data))
+
+    def get_version_list(self):
+        return [str(version) for version in Version.objects\
+            .filter(composition=self.composition).order_by('date')]
 
     def get_selection(self):
         # For newly connected users
@@ -147,12 +166,13 @@ class EditorConsumer(WebsocketConsumer):
 
     def connect(self, message, **kwargs):
         # This enforces Composition.has_access
-        selection = Editor(kwargs.get("comp"), message.user).get_selection()
+        editor = Editor(kwargs.get("comp"), message.user)
         self.message.reply_channel.send({"accept": True})
         self.message.reply_channel.send({
             "text": json.dumps({
-                "bar_mod": "fresh_selects",
-                "selection": selection,
+                "bar_mod": "connect_message",
+                "selection": editor.get_selection(),
+                "version_list": editor.get_version_list(),
             }),
         })
 
@@ -170,6 +190,8 @@ class EditorConsumer(WebsocketConsumer):
             Editor.Action.DELETE: comp_editor.delete_last,
             Editor.Action.SELECT: comp_editor.select,
             Editor.Action.DESELECT: comp_editor.deselect,
+            Editor.Action.VERSION_GET: comp_editor.get_version,
+            Editor.Action.VERSION_SAVE: comp_editor.save_version,
         }[action](bar=bar_id, contents=bar_contents)
 
     def disconnect(self, message, **kwargs):

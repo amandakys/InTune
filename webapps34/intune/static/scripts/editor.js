@@ -28,6 +28,12 @@ $(document).ready(function () {
         var current_bar = -1;
         var socket = null;
 
+        // For version history
+        var save_enabled = true;
+        var current_version = true;
+        var version_names = [];
+        var version_slider = $("#version-slider");
+
         // List of editable bars as JSON Objects
         var editable_bars = [];
 
@@ -133,6 +139,8 @@ $(document).ready(function () {
             socket.onopen = function() {
                 $("#edit_form").submit(Editor.save_bar_click);
                 $("#new_bar").click(Editor.send_append_bar);
+                $("#version-form").submit(Editor.version_checkout);
+                $("#version-save-btn").click(Editor.version_save);
             };
             socket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
@@ -146,13 +154,17 @@ $(document).ready(function () {
                 } else if (data.bar_mod === "deselect") {
                     if (data.user !== user_id)
                         $("#bar_outer_" + data.bar_id).removeClass("oth-user");
-                } else if (data.bar_mod === "fresh_selects") {
+                } else if (data.bar_mod === "connect_message") {
                     for (var user in data.selection) {
                         // Property check for JS
                         if (data.selection.hasOwnProperty(user)) {
                             _oth_user_select(data.selection[user]);
                         }
                     }
+                    version_names = data.version_list;
+                    version_slider.attr("max", version_names.length);
+                    version_slider.attr("value", version_names.length);
+                    version_names.push("Current");
                 } else if (data.bar_mod === "delete_last") {
                     var to_remove = bar_count - 1;
 
@@ -163,9 +175,42 @@ $(document).ready(function () {
                     bar_count--;
 
                     $("#bar_outer_" + to_remove).remove();
+                } else if (data.bar_mod === "version_get") {
+                    _load_composition(data.bar_contents);
                 } else {
                     console.log("Invalid WebSocket message received, data: " + JSON.stringify(data));
                 }
+            }
+        }
+
+        function _version_name_update(version_id) {
+            $("#version-name").html(version_names[version_id]);
+        }
+
+        function _version_checkout(event) {
+            var version_id = parseInt(version_slider.val());
+            _deselect(current_bar);
+            current_version = (version_id == version_names.length - 1);
+
+            socket.send(JSON.stringify({
+                'action': "version_get",
+                'bar_contents': version_id
+            }));
+            event.preventDefault();
+        }
+
+        function _version_save() {
+            var comment = $("#version-new-name").val();
+            socket.send(JSON.stringify({
+                'action': "version_save",
+                'bar_contents': comment
+            }))
+        }
+
+        function _load_composition(bar_list) {
+            save_enabled = current_version;
+            for (var i = 0; i < bar_list.length; i++) {
+                _update_bar_div(i, bar_list[i]);
             }
         }
 
@@ -328,7 +373,9 @@ $(document).ready(function () {
         }
 
         function _save_bar(bar_id) {
-            if (bar_id < 0 || bar_id >= editable_bars.length) {
+            if (save_enabled === false) {
+                // Can't save
+            } else if (bar_id < 0 || bar_id >= editable_bars.length) {
                 // Verify valid bar
                 $("#save_error").html("Please select a bar to edit!");
             } else {
@@ -375,6 +422,9 @@ $(document).ready(function () {
         _load_init();
 
         return {
+            version_checkout: _version_checkout,
+            version_name_update: _version_name_update,
+            version_save: _version_save,
             send_append_bar: _send_append_bar,
             remove_bar: _remove_bar,
             edit_bar: _edit_bar,

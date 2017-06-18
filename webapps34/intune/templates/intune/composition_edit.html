@@ -41,6 +41,43 @@
         Your browser does not support the audio element.
         </audio>
 
+            <div class="btn-group">
+                <div class="dropdown">
+                    {% if composition.owner.user == request.user %}
+                    <button type="button" class="btn btn-light dropdown-toggle"
+                            id="version_button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Versions
+                        <span class="caret"></span>
+                    </button>
+                    {% endif %}
+
+                    <div class="dropdown-menu">
+                        <form method="post" action="" id="version-form">
+                            {% csrf_token %}
+                            <div style="margin: 10px">
+                                <fieldset>
+                                    <label for="version-slider">Select version</label>
+                                    <input type="range" min="0" max="0" value="0" id="version-slider" step="1" oninput="Editor.version_name_update(value)">
+                                    <output for="version-slider" id="version-name">Current</output>
+                                    <button type="submit" class="btn btn-light">
+                                        Checkout
+                                    </button>
+                                </fieldset>
+
+                                <fieldset>
+                                    <label for="version-new-name">Version name</label>
+                                    <input type="text" id="version-new-name" max_length="60" placeholder="Version name">
+                                    <button type="submit" class="btn btn-light" id="version-save-btn">
+                                        Save
+                                    </button>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             {# Sharing Composition #}
             <div class="btn-group">
                 <div class="dropdown">
